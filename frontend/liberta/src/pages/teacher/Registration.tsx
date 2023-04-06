@@ -2,6 +2,9 @@ import { makeStyles, Theme } from '@material-ui/core'
 import { Button, Card, CardContent, CardHeader, Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Radio, Select, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import { SelectChangeEvent } from '@mui/material';
+import { TeacherProfileCreateParams } from 'interfaces';
+import { createTeacherProfile } from 'pages/api/teacher';
+import { useRouter } from 'next/router';
 
 const useStyles = makeStyles((theme: Theme) => ({
     container: {
@@ -29,6 +32,8 @@ const useStyles = makeStyles((theme: Theme) => ({
   
 
 const registration:React.FC = () => {
+
+const router = useRouter()
 
 const classes = useStyles()
 
@@ -69,19 +74,37 @@ const handleAgeChange =(event:SelectChangeEvent) =>{
   setAge(event.target.value)
 }
 
-const handleSubmit =(event:React.FormEvent<HTMLFormElement>)=>{
+const handleSubmit =async(e: React.MouseEvent<HTMLButtonElement>)=>{
 
-  event.preventDefault();
-  console.log(`性別: ${gender}`)
-  console.log(`指導可能教科: ${selectedSubjects}`)
-  console.log(`大学: ${university}`)
-  console.log(`年齢: ${age}`)
+  const params:TeacherProfileCreateParams = {
+    gender: parseInt(gender), 
+    university: university,
+    age: parseInt(age),
+    subjects: selectedSubjects
+  }
+
+try{
+    const res = await createTeacherProfile(params)
+
+    if(res.status === 200){
+      router.push('/student/Home')
+      
+
+    }else{
+      
+    }
+
+
+}catch(e){
+  console.log(e)
+    
+}
     
 }
 
   return (
     <div className={classes.container}>
-      <form noValidate autoComplete='off' onSubmit={handleSubmit}>
+      <form noValidate autoComplete='off' >
         <Card className={classes.card}>
           <CardHeader className={classes.header} title="先生詳細登録"/>
           <CardContent>
@@ -138,6 +161,7 @@ const handleSubmit =(event:React.FormEvent<HTMLFormElement>)=>{
                 fullWidth
                 disabled={!gender || !university || !gender ? true : false}
                 className={classes.submitBtn}
+                onClick={handleSubmit}
                 >
                 この内容で登録する
                 </Button>
