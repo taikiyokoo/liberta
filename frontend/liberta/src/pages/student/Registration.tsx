@@ -1,11 +1,12 @@
 import { makeStyles, Theme } from '@material-ui/core'
 import { Button, Card, CardContent, CardHeader, Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Radio, Select, TextField, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { SelectChangeEvent } from '@mui/material';
 import { Container } from '@mui/system';
 import { createStudentProfile } from 'pages/api/student';
 import { StudentProfileCreateParams } from 'interfaces';
 import { useRouter } from 'next/router';
+import { AuthContext } from 'pages/_app';
 
 const useStyles = makeStyles((theme: Theme) => ({
     container: {
@@ -30,9 +31,12 @@ const useStyles = makeStyles((theme: Theme) => ({
       textDecoration: "none"
     }
   }))
+
   
 
 const registration:React.FC = () => {
+
+  const {currentUser} = useContext(AuthContext)
 
 const classes = useStyles()
 const router = useRouter()
@@ -87,19 +91,14 @@ const handleSubmit =async(e: React.MouseEvent<HTMLButtonElement>)=>{
     grade: parseInt(grade),
     age: parseInt(age),
     school: school,
-    subjects: selectedSubjects
+    subjects: selectedSubjects,
+    user_id: currentUser?.id
   }
 
 try{
     const res = await createStudentProfile(params)
-
-    if(res.status === 200){
-      router.push('/student/Home')
-      
-
-    }else{
-      
-    }
+    console.log(res.data)
+    router.push("/student/Home")
 
 
 }catch(e){

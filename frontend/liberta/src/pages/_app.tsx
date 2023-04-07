@@ -28,6 +28,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   //ページ遷移時にログイン状態確認、currentUser格納
   const handleGetCurrentUser = async()=>{
+
     try{
       const res  = await getCurrentUser()
 
@@ -39,6 +40,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         console.log(res?.data.message)
         if(!(router.pathname ==="/student/SignIn")&&!(router.pathname ==="/student/SignUp")&&!(router.pathname ==="/teacher/SignIn")&&!(router.pathname ==="/teacher/SignUp")&&!(router.pathname ==="/teacher/Registration")&&!(router.pathname ==="/student/Registration"))router.push("/Top")
       }else{
+        console.log(res)
         console.log("No current User")
         if(!(router.pathname ==="/student/SignIn")&&!(router.pathname ==="/student/SignUp")&&!(router.pathname ==="/teacher/SignIn")&&!(router.pathname ==="/teacher/SignUp")&&!(router.pathname ==="/teacher/Registration")&&!(router.pathname ==="/student/Registration"))router.push("/Top")
       }
