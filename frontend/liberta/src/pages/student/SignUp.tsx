@@ -51,7 +51,8 @@ const SignUp = () => {
       name: name,
       email: email,
       password: password,
-      passwordConfirmation: passwordConfirmation
+      passwordConfirmation: passwordConfirmation,
+      user_type: "student"
     }
 
     try{

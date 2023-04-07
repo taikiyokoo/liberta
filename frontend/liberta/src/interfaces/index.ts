@@ -4,6 +4,7 @@ export interface SignUpParams {
     email: string
     password: string
     passwordConfirmation: string
+    user_type: string
   }
   
   // サインイン
@@ -31,6 +32,7 @@ export interface SignUpParams {
     gender: number
     university: string
     subjects: string[]
+    user_id :number | undefined
   }
 
   export interface StudentProfileCreateParams{
@@ -39,6 +41,7 @@ export interface SignUpParams {
     age: number
     subjects: string[]
     school: string
+    user_id :number | undefined
   }
 
   export interface TeacherProfile {
@@ -49,6 +52,7 @@ export interface SignUpParams {
     introduction: string | undefined
     oneLiner: string | undefined
     hourlyPay: number
+    user_id:  number 
 
   }
 
@@ -60,5 +64,6 @@ export interface SignUpParams {
     school: string
     oneLiner: string | undefined
     introduction: string | undefined
+    user_id: number 
 
   }

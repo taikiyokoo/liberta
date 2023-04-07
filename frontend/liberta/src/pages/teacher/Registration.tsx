@@ -1,10 +1,11 @@
 import { makeStyles, Theme } from '@material-ui/core'
 import { Button, Card, CardContent, CardHeader, Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Radio, Select, TextField, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { SelectChangeEvent } from '@mui/material';
 import { TeacherProfileCreateParams } from 'interfaces';
 import { createTeacherProfile } from 'pages/api/teacher';
 import { useRouter } from 'next/router';
+import { AuthContext } from 'pages/_app';
 
 const useStyles = makeStyles((theme: Theme) => ({
     container: {
@@ -32,6 +33,8 @@ const useStyles = makeStyles((theme: Theme) => ({
   
 
 const registration:React.FC = () => {
+
+  const {currentUser} = useContext(AuthContext)
 
 const router = useRouter()
 
@@ -76,23 +79,20 @@ const handleAgeChange =(event:SelectChangeEvent) =>{
 
 const handleSubmit =async(e: React.MouseEvent<HTMLButtonElement>)=>{
 
+  e.preventDefault();
+  
   const params:TeacherProfileCreateParams = {
     gender: parseInt(gender), 
     university: university,
     age: parseInt(age),
-    subjects: selectedSubjects
+    subjects: selectedSubjects,
+    user_id: currentUser?.id
   }
 
 try{
     const res = await createTeacherProfile(params)
 
-    if(res.status === 200){
-      router.push('/student/Home')
-      
-
-    }else{
-      
-    }
+    router.push("teacher/Home")
 
 
 }catch(e){
