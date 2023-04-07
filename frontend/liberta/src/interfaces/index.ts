@@ -29,14 +29,14 @@ export interface SignUpParams {
 
   export interface TeacherProfileCreateParams {
     age: number
-    gender: number
+    gender: string
     university: string
     subjects: string[]
     user_id :number | undefined
   }
 
   export interface StudentProfileCreateParams{
-    gender: number
+    gender: string
     grade: number
     age: number
     subjects: string[]
@@ -46,7 +46,7 @@ export interface SignUpParams {
 
   export interface TeacherProfile {
     age: number
-    gender: number
+    gender: string
     university: string
     subjects: string[]
     introduction: string | undefined
@@ -57,7 +57,7 @@ export interface SignUpParams {
   }
 
   export interface StudentProfile{
-    gender: number
+    gender: string
     grade: number
     age: number
     subjects: string[]

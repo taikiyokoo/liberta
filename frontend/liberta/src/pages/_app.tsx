@@ -31,32 +31,34 @@ function MyApp({ Component, pageProps }: AppProps) {
 
     try{
       const res  = await getCurrentUser()
-
+      
       if (res?.data.isLogin === true){
         setCurrentUser(res?.data.data)
         setIsSignedIn(true)
         console.log(res?.data.data)
       }else if(res?.data.isLogin === false){
         console.log(res?.data.message)
-        if(!(router.pathname ==="/student/SignIn")&&!(router.pathname ==="/student/SignUp")&&!(router.pathname ==="/teacher/SignIn")&&!(router.pathname ==="/teacher/SignUp")&&!(router.pathname ==="/teacher/Registration")&&!(router.pathname ==="/student/Registration"))router.push("/Top")
+        if(!(router.pathname ==="/student/SignIn")&&!(router.pathname ==="/student/SignUp")&&!(router.pathname ==="/teacher/SignIn")&&!(router.pathname ==="/teacher/SignUp"))router.push("/Top")
       }else{
-        console.log(res)
         console.log("No current User")
-        if(!(router.pathname ==="/student/SignIn")&&!(router.pathname ==="/student/SignUp")&&!(router.pathname ==="/teacher/SignIn")&&!(router.pathname ==="/teacher/SignUp")&&!(router.pathname ==="/teacher/Registration")&&!(router.pathname ==="/student/Registration"))router.push("/Top")
+        if(!(router.pathname ==="/student/SignIn")&&!(router.pathname ==="/student/SignUp")&&!(router.pathname ==="/teacher/SignIn")&&!(router.pathname ==="/teacher/SignUp"))router.push("/Top")
       }
 
     } catch (err){
       console.log(err)
-      if(!(router.pathname ==="/student/SignIn")&&!(router.pathname ==="/student/SignUp")&&!(router.pathname ==="/teacher/SignIn")&&!(router.pathname ==="/teacher/SignUp")&&!(router.pathname ==="/teacher/Registration")&&!(router.pathname ==="/student/Registration"))router.push("/Top")
+      if(!(router.pathname ==="/student/SignIn")&&!(router.pathname ==="/student/SignUp")&&!(router.pathname ==="/teacher/SignIn")&&!(router.pathname ==="/teacher/SignUp"))router.push("/Top")
     }
     setLoading(false)
   }
 
   useEffect(()=>{
     handleGetCurrentUser()
-  },[router.pathname])
+  },[])
 
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
       <AuthContext.Provider value={{loading,setLoading,isSignedIn,setIsSignedIn,currentUser,setCurrentUser}}>

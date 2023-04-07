@@ -80,9 +80,9 @@ const handleAgeChange =(event:SelectChangeEvent) =>{
 const handleSubmit =async(e: React.MouseEvent<HTMLButtonElement>)=>{
 
   e.preventDefault();
-  
+
   const params:TeacherProfileCreateParams = {
-    gender: parseInt(gender), 
+    gender: gender,
     university: university,
     age: parseInt(age),
     subjects: selectedSubjects,
@@ -127,8 +127,8 @@ try{
                     label="gender"
                     onChange={handleGenderChange}
                 >
-                    <MenuItem value={1}>男</MenuItem>
-                    <MenuItem value={2}>女</MenuItem>
+                    <MenuItem value="male">男</MenuItem>
+                    <MenuItem value="female">女</MenuItem>
                 </Select>
             </FormControl>
             <TextField
