@@ -6,6 +6,7 @@ import Cookies from 'js-cookie'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { signUp } from 'pages/api/auth'
+import AlertMessage from 'pages/components/AlertMessage'
 import { AuthContext } from 'pages/_app'
 import React, { useContext, useState } from 'react'
 
@@ -34,6 +35,7 @@ const SignUp = () => {
 
   const classes = useStyles()
   const router = useRouter()
+  const [AlertMessageOpen,setAlertMessageOpen] = useState<boolean>(false)
 
   //認証用context
   const { setIsSignedIn,setCurrentUser } = useContext(AuthContext)
@@ -60,8 +62,7 @@ const SignUp = () => {
       console.log(res)
 
       if(res.status === 200){
-
-        Cookies.set("_acccess_token",res.headers["access-token"])
+        Cookies.set("_access_token",res.headers["access-token"])
         Cookies.set("_client",res.headers["client"])
         Cookies.set("_uid",res.headers["uid"])
 
@@ -73,11 +74,12 @@ const SignUp = () => {
         console.log("Successed in Sign Up")
 
       }else{
-        
+        setAlertMessageOpen(true)
       }
 
     }catch(err){
       console.log(err)
+      setAlertMessageOpen(true)
       
     }
   }
@@ -86,7 +88,7 @@ const SignUp = () => {
     <>
       <form noValidate autoComplete='off'>
       <Card className={classes.card}>
-        <CardHeader className={classes.header} title = "アカウント作成" />
+        <CardHeader className={classes.header} title = "生徒アカウント作成" />
         <CardContent>
           <TextField 
             variant='outlined'
@@ -144,7 +146,7 @@ const SignUp = () => {
           <Box textAlign="center" className={classes.box}>
               <Typography variant='body2'>
                   既にアカウントをお持ちですか？ &nbsp;
-                <Link href="/SignIn">
+                <Link href="/student/SignIn">
                   ログイン
                 </Link>
               </Typography>
@@ -152,6 +154,12 @@ const SignUp = () => {
 
         </CardContent>
       </Card>
+      <AlertMessage 
+                open={AlertMessageOpen}
+                setOpen={setAlertMessageOpen}
+                severity="error"
+                message="Invalid Email or Password"
+        />
     </ form>
     </>
   )

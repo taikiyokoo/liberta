@@ -1,6 +1,8 @@
 class Api::V1::StudentProfilesController < ApplicationController
 
     def create
+        params[:subjects] = params[:subjects].to_json
+
         student = StudentProfile.new(student_profile_params)
 
         if student.save
@@ -13,5 +15,6 @@ class Api::V1::StudentProfilesController < ApplicationController
     private
 
     def student_profile_params
-        params.permit(:gender,:grade,:age,:subjects,:school,:user_id)
+        params.permit(:gender,:grade,:age,:school,:user_id,:subjects)
     end
+end

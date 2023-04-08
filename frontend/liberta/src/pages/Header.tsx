@@ -39,7 +39,7 @@ const handleSignOut = async()=>{
             Cookies.remove("_uid")
   
             setIsSignedIn(false)
-           router.push("/SignIn")
+           router.push("/Top")
   
             console.log("succeed in sign out")
         }else{
@@ -71,18 +71,24 @@ const handleSignOut = async()=>{
             }else{
                 return(
                     <>
-                        <Button
-                            color="inherit"
-                            className ={classes.linkBtn}
-                        >
-                        先生の方はこちら
-                        </Button>               
-                        <Button
-                            color="inherit"
-                            className ={classes.linkBtn}
-                        >
-                        生徒の方はこちら
-                        </Button>
+                        <Link href= "/teacher/SignIn">
+                            <Button
+                                color="inherit"
+                                className ={classes.linkBtn}
+                                sx={{color: "white"}}
+                            >
+                            先生の方はこちら
+                            </Button>
+                        </Link>
+                        <Link href="/student/SignIn">        
+                            <Button
+                                color="inherit"
+                                className ={classes.linkBtn}
+                                sx={{color: "white"}}
+                            >
+                            生徒の方はこちら
+                            </Button>
+                        </Link>     
                     </>
                 )
 

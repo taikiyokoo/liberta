@@ -5,6 +5,7 @@ import Cookies from 'js-cookie'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { signIn } from 'pages/api/auth'
+import AlertMessage from 'pages/components/AlertMessage'
 import { AuthContext } from 'pages/_app'
 import React, { useContext, useState } from 'react'
 
@@ -37,6 +38,7 @@ const SignIn: React.FC = () => {
 
   const router = useRouter()
   const classes = useStyles()
+  const [AlertMessageOpen,setAlertMessageOpen] = useState<boolean>(false)
 
   // フォームの内容をuseStateで管理
   const [email,setEmail] = useState<string>("")
@@ -71,9 +73,11 @@ const SignIn: React.FC = () => {
 
       }else{
         console.log("エラーが発生しました")
+        setAlertMessageOpen(true)
       }
     }catch(err){
       console.log(err)
+      setAlertMessageOpen(true)
     }
   }
 
@@ -81,7 +85,7 @@ const SignIn: React.FC = () => {
     <>
       <form noValidate autoComplete='off'>
         <Card className={classes.card}>
-          <CardHeader className={classes.header} title="ログイン"/>
+          <CardHeader className={classes.header} title="先生ログイン"/>
           <CardContent>
             <TextField
               variant='outlined'
@@ -124,9 +128,13 @@ const SignIn: React.FC = () => {
               </Typography>
             </Box>
           </CardContent>
-
         </Card>
-
+        <AlertMessage 
+                open={AlertMessageOpen}
+                setOpen={setAlertMessageOpen}
+                severity="error"
+                message="Invalid Email or Password"
+        />
     </form>
     </>
   )
