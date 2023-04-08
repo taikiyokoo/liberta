@@ -1,17 +1,19 @@
 class Api::V1::TeacherProfilesController < ApplicationController
-def create
-    teacher = TeacherProfile.new(teacher_profile_params)
 
-    if teacher.save
-        render :json => teacher
-    else
-        render :json => teacher.errors, :status => :unprocessable_entity
+    def create
+        params[:subjects] = params[:subjects].to_json
+        teacher = TeacherProfile.new(teacher_profile_params)
+
+        if teacher.save
+            render :json => teacher
+        else
+            render :json => teacher.errors, :status => :unprocessable_entity
+        end
     end
-end
 
-private
+    private
 
-def teacher_profile_params
-    params.permit(:age,:gender,:subjects,:university,:user_id)
-end
+    def teacher_profile_params
+        params.permit(:age,:gender,:subjects,:university,:user_id)
+    end
 end

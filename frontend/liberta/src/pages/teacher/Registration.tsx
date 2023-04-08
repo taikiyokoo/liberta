@@ -92,7 +92,7 @@ const handleSubmit =async(e: React.MouseEvent<HTMLButtonElement>)=>{
 try{
     const res = await createTeacherProfile(params)
 
-    router.push("teacher/Home")
+    router.push("/teacher/Home")
 
 
 }catch(e){
