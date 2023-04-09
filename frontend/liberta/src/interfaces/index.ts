@@ -25,6 +25,9 @@ export interface SignUpParams {
     allowPasswordChange: boolean
     created_at: Date
     updated_at: Date
+    teacherProfile: TeacherProfile
+    studentProfile: StudentProfile
+    userType: string
   }
 
   export interface TeacherProfileCreateParams {

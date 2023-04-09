@@ -1,15 +1,26 @@
 import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-import styles from '@/styles/Home.module.css'
 import { useRouter } from 'next/router'
 import { useContext, useEffect } from 'react'
 import { AuthContext } from './_app'
 import { Typography } from '@material-ui/core'
 
 export default function Home() {
-
   const {currentUser,isSignedIn} = useContext(AuthContext)
+  const router = useRouter()
+
+  const navigatePageByUserType = () => {
+    console.log(currentUser)
+    if(isSignedIn){
+      if(currentUser?.userType === "teacher"){
+        router.push('/teacher/Home')
+      }else if(currentUser?.userType === "student"){
+        router.push('/student/Home')
+      }
+    }
+  }
+
+
+  useEffect(()=>{navigatePageByUserType()},[])
 
   return (
     <>
@@ -19,7 +30,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <main >
-       {isSignedIn&&<Typography>hello next  {currentUser?.name}</Typography>}
+        {isSignedIn&&<Typography>hello next  {currentUser?.name}</Typography>}
       </main>
     </>
   )
