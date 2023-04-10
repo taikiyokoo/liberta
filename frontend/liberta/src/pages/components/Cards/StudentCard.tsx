@@ -1,5 +1,6 @@
-import { Box, CardMedia, makeStyles } from '@material-ui/core'
+import { Box,makeStyles } from '@material-ui/core'
 import { Avatar, Button, Card, CardActions, CardContent, CardHeader, Chip, LinearProgress, Typography } from '@mui/material'
+import { red } from '@mui/material/colors'
 import { User } from 'interfaces'
 import React from 'react'
 
@@ -25,13 +26,17 @@ const classes = useStyles()
     <div>
       <Card className ={classes.card} >
         <Box>
-          <CardMedia
-            component="img"
-            height= "150"
-            style={{ borderRadius: 8 }} 
-          />
+        <CardHeader
+        avatar={
+          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+            {user.name}
+          </Avatar>
+        }
+        title={user.name}
+        subheader={user.teacherProfile.university}
+      />
           <CardContent>
-            <Typography variant="subtitle1">{user.teacherProfile.university}</Typography>
+            <Typography variant="subtitle1">{user.studentProfile.school}</Typography>
           </CardContent>
           <CardActions>
           </CardActions>

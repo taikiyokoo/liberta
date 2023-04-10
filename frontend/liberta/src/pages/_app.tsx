@@ -15,6 +15,13 @@ export const AuthContext = createContext({} as {
   setCurrentUser: React.Dispatch<React.SetStateAction<User | undefined>>
 })
 
+//プロフィール編集モーダル用context
+export const UserEditModalContext = createContext({} as {
+  open: boolean
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+})
+
+
 
 function MyApp({ Component, pageProps }: AppProps) {
 
@@ -22,6 +29,9 @@ function MyApp({ Component, pageProps }: AppProps) {
   const [loading,setLoading] = useState<boolean>(true)
   const [isSignedIn,setIsSignedIn] =  useState<boolean>(false)
   const [currentUser,setCurrentUser] = useState<User | undefined>()
+
+  //プロフィール編集モーダル管理
+  const [open,setOpen] = useState<boolean>(false)
 
 
   const router = useRouter();
@@ -62,9 +72,11 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
       <AuthContext.Provider value={{loading,setLoading,isSignedIn,setIsSignedIn,currentUser,setCurrentUser}}>
+        <UserEditModalContext.Provider value={{open,setOpen}}>
         <CommonLayout>
           <Component {...pageProps} />
         </CommonLayout>
+        </UserEditModalContext.Provider>
       </AuthContext.Provider>
   );
 }

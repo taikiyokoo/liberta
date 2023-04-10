@@ -1,11 +1,11 @@
 import { makeStyles, Theme } from '@material-ui/core'
-import { AppBar, Box, Button, Toolbar, Typography } from '@mui/material'
+import { AppBar, Avatar, Box, Button, Toolbar, Typography } from '@mui/material'
 import Cookies from 'js-cookie'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useContext} from 'react'
 import { signOut } from './api/auth'
-import { AuthContext } from './_app'
+import { AuthContext, UserEditModalContext } from './_app'
 
 const useStyles = makeStyles((theme: Theme)=>({
     iconButton: {
@@ -23,7 +23,13 @@ const useStyles = makeStyles((theme: Theme)=>({
 
 const Header: React.FC = () => {
 
-const { loading, isSignedIn,setIsSignedIn} = useContext(AuthContext)
+//認証用のコンテキストを使用
+const { loading, isSignedIn,setIsSignedIn,currentUser} = useContext(AuthContext)
+
+//プロフィール編集モーダルのコンテキストを使用
+const {open,setOpen} = useContext(UserEditModalContext)
+
+//スタイルを適用
 const classes = useStyles()
 const router = useRouter()
 
@@ -58,6 +64,15 @@ const handleSignOut = async()=>{
             if(isSignedIn){
                 return (
                     <>
+                        {currentUser&&
+                        <Avatar
+                            onClick={()=> {
+                                console.log("クリック")
+                                setOpen(true)
+                                }}
+                        >
+                            {currentUser.name}
+                        </Avatar>}
                         <Button
                         color="inherit"
                         className ={classes.linkBtn}
