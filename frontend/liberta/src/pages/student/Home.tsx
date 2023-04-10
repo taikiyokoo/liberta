@@ -1,9 +1,8 @@
 import { Grid } from '@mui/material'
 import { User } from 'interfaces'
 import { getUsers } from 'pages/api/user'
-import StudentCard from 'pages/components/Cards/StudentCard'
 import TeacherCard from 'pages/components/Cards/TeacherCard'
-import UserCard from 'pages/components/UserCard'
+import UserEdit from 'pages/components/Modal/UserEdit'
 import { AuthContext } from 'pages/_app'
 import React, { useContext, useEffect, useState } from 'react'
 
@@ -36,11 +35,12 @@ const Home = () => {
             {teachers.map((user: User)=>{
               return(
                 <Grid item key={user.id} >
-                  <StudentCard  user={user}/>
+                  <TeacherCard  user={user}/>
                 </Grid>
               )
             })}
           </Grid>
+          <UserEdit />
     </div>
   )
 }
