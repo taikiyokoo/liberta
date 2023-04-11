@@ -33,7 +33,7 @@ const classes = useStyles()
           </Avatar>
         }
         title={user.name}
-        subheader={user.teacherProfile.university}
+        subheader={user.studentProfile?.school}
       />
           <CardContent>
             <Typography variant="subtitle1">{user.studentProfile.school}</Typography>

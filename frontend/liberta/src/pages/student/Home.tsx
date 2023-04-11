@@ -1,15 +1,17 @@
-import { Grid } from '@mui/material'
+import { Container, Dialog, Grid, Modal } from '@mui/material'
 import { User } from 'interfaces'
 import { getUsers } from 'pages/api/user'
 import TeacherCard from 'pages/components/Cards/TeacherCard'
-import UserEdit from 'pages/components/Modal/UserEdit'
-import { AuthContext } from 'pages/_app'
+import UserEdit from 'pages/components/Dialog/UserEdit'
+import { AuthContext, UserEditModalContext } from 'pages/_app'
 import React, { useContext, useEffect, useState } from 'react'
 
-const Home = () => {
+const Home:React.FC = () => {
 
   const [teachers,setTeachers] = useState<User[]>([])
   const {loading,setLoading} =useContext(AuthContext)
+
+
 
   const handleGetUsers = async () => {
 
@@ -18,10 +20,9 @@ const Home = () => {
       const users:User[] = res.data
       users.forEach((user: User)=>{
         if(user.teacherProfile){
-          setTeachers([...teachers, user])
+          setTeachers((prevTeachers) => [...prevTeachers, user]);
         }
       })
-
     }catch(err){
       console.log(err)
     }
@@ -29,18 +30,20 @@ const Home = () => {
   }
 
   useEffect(() => {handleGetUsers()}, [])
+  if(loading) return (<div>Loading...</div>)
+
   return (
     <div>
-          <Grid container sx={{width: "100%"}} rowSpacing={6} columnSpacing={{ xs: 1, sm: 2, md: 3 }} justifyContent="center">
+          <Grid container sx={{width: "100%"}} rowSpacing={6} columnSpacing={{ xs: 1, sm: 2, md: 3 }} justifyContent="center" >
             {teachers.map((user: User)=>{
               return(
                 <Grid item key={user.id} >
-                  <TeacherCard  user={user}/>
+                  <TeacherCard  user={user} />
                 </Grid>
               )
             })}
           </Grid>
-          <UserEdit />
+      <UserEdit />
     </div>
   )
 }
