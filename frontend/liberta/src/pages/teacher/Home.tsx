@@ -2,11 +2,11 @@ import { Grid } from '@mui/material'
 import { User } from 'interfaces'
 import { getUsers } from 'pages/api/user'
 import StudentCard from 'pages/components/Cards/StudentCard'
-import UserEdit from 'pages/components/Modal/UserEdit'
+import UserEdit from 'pages/components/Dialog/UserEdit'
 import { AuthContext } from 'pages/_app'
 import React, { useContext, useEffect, useState } from 'react'
 
-const Home = () => {
+const Home:React.FC = () => {
 
   const [students, setStudents] = useState<User[]>([])
   
@@ -20,13 +20,14 @@ const Home = () => {
       console.log(users)
       users.forEach((user: User)=>{
         if(user.studentProfile){
-          setStudents([...students, user])
+          setStudents((prevStudents) => [...prevStudents, user]);
         }
       })
     }catch(err){
       console.log(err)
     }
     setLoading(false)
+    console.log(students)
   }
 
   useEffect(() => {handleGetStudents()}, [])
