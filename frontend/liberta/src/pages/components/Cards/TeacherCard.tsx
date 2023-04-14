@@ -1,13 +1,13 @@
 import { Box, makeStyles } from '@material-ui/core'
-import { Avatar, Card, CardActions, CardContent, CardHeader, IconButton, Typography } from '@mui/material'
+import { Avatar, Card, CardActions, CardContent, CardHeader, Chip, Grid, IconButton, Typography } from '@mui/material'
 import { red } from '@mui/material/colors'
 import { User } from 'interfaces'
 import React from 'react'
 
 const useStyles = makeStyles({
 card :{
-  width:200,
-  height:300,
+  width:250,
+  height:250,
   padding:10,
   transition: 'box-shadow 0.3s,transform 0.3s',
   '&:hover': {
@@ -36,10 +36,13 @@ const classes = useStyles()
         subheader={user.teacherProfile?.university}
       />
           <CardContent>
-           
+            <Typography variant="subtitle1">{user.teacherProfile.introduction}</Typography>
           </CardContent>
-          <CardActions>
-          </CardActions>
+        {user.teacherProfile?.subjects.map((subject)=>{
+          return (
+                <Chip label={subject} />
+          )
+        }) }
         </Box>
       </Card>
     </div>

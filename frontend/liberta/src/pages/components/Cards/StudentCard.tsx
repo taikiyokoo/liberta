@@ -6,8 +6,8 @@ import React from 'react'
 
 const useStyles = makeStyles({
 card :{
-  width:200,
-  height:300,
+  width:250,
+  height:250,
   padding:10,
   transition: 'box-shadow 0.3s,transform 0.3s',
   '&:hover': {
@@ -37,9 +37,14 @@ const classes = useStyles()
       />
           <CardContent>
             <Typography variant="subtitle1">{user.studentProfile.school}</Typography>
+            <Typography variant="subtitle2">{user.studentProfile.grade}</Typography>
           </CardContent>
-          <CardActions>
-          </CardActions>
+        {user.studentProfile?.subjects.map((subject)=>{
+          return (
+                    <Chip label={subject} />
+          )
+        })
+      }
         </Box>
       </Card>
     </div>

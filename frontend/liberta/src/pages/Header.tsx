@@ -123,6 +123,7 @@ const handleSignOut = async()=>{
                         variant="h6"
                         className={classes.title}
                         sx={{flexGrow: 1 }}
+                        onClick={()=>router.push("/Top")}
                     >
                         liberta
                     </Typography>
