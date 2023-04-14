@@ -48,15 +48,15 @@ function MyApp({ Component, pageProps }: AppProps) {
         console.log(res?.data.data)
       }else if(res?.data.isLogin === false){
         console.log(res?.data.message)
-        if(!(router.pathname ==="/student/SignIn")&&!(router.pathname ==="/student/SignUp")&&!(router.pathname ==="/teacher/SignIn")&&!(router.pathname ==="/teacher/SignUp"))router.push("/Top")
+        if(!(router.pathname ==="/student/SignIn")&&!(router.pathname ==="/student/SignUp")&&!(router.pathname ==="/teacher/SignIn")&&!(router.pathname ==="/teacher/SignUp"))router.push("/TopPage")
       }else{
         console.log("No current User")
-        if(!(router.pathname ==="/student/SignIn")&&!(router.pathname ==="/student/SignUp")&&!(router.pathname ==="/teacher/SignIn")&&!(router.pathname ==="/teacher/SignUp"))router.push("/Top")
+        if(!(router.pathname ==="/student/SignIn")&&!(router.pathname ==="/student/SignUp")&&!(router.pathname ==="/teacher/SignIn")&&!(router.pathname ==="/teacher/SignUp"))router.push("/TopPage")
       }
 
     } catch (err){
       console.log(err)
-      if(!(router.pathname ==="/student/SignIn")&&!(router.pathname ==="/student/SignUp")&&!(router.pathname ==="/teacher/SignIn")&&!(router.pathname ==="/teacher/SignUp"))router.push("/Top")
+      if(!(router.pathname ==="/student/SignIn")&&!(router.pathname ==="/student/SignUp")&&!(router.pathname ==="/teacher/SignIn")&&!(router.pathname ==="/teacher/SignUp"))router.push("/TopPage")
     }
     setLoading(false)
   }
@@ -65,19 +65,27 @@ function MyApp({ Component, pageProps }: AppProps) {
     handleGetCurrentUser()
   },[])
 
+  const isTopPage = Component.displayName === "TopPage";
+
 
   if (loading) {
     return <div>Loading...</div>;
   }
 
   return (
+    <>
       <AuthContext.Provider value={{loading,setLoading,isSignedIn,setIsSignedIn,currentUser,setCurrentUser}}>
         <UserEditModalContext.Provider value={{open,setOpen}}>
-        <CommonLayout>
-          <Component {...pageProps} />
-        </CommonLayout>
+        {isTopPage ? (
+            <Component {...pageProps} />
+          ) : (
+            <CommonLayout>
+              <Component {...pageProps} />
+            </CommonLayout>
+          )}
         </UserEditModalContext.Provider>
       </AuthContext.Provider>
+    </>
   );
 }
 

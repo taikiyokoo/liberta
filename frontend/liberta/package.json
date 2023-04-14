@@ -27,6 +27,10 @@
     "next": "13.2.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-intersection-observer": "^9.4.3",
+    "react-scroll-trigger": "^0.6.14",
+    "react-spring": "^9.7.1",
+    "react-visibility-sensor": "^5.1.1",
     "styled-components": "^5.3.9",
     "typescript": "5.0.2"
   },

@@ -1,8 +1,9 @@
-import { Container, Dialog, Grid, Modal } from '@mui/material'
+import { Chip, Container, Dialog, Grid, Modal } from '@mui/material'
 import { User } from 'interfaces'
 import { getUsers } from 'pages/api/user'
 import TeacherCard from 'pages/components/Cards/TeacherCard'
 import UserEdit from 'pages/components/Dialog/UserEdit'
+import SearchItem from 'pages/components/Search/SearchItem'
 import { AuthContext, UserEditModalContext } from 'pages/_app'
 import React, { useContext, useEffect, useState } from 'react'
 
@@ -34,11 +35,42 @@ const Home:React.FC = () => {
 
   return (
     <div>
-          <Grid container sx={{width: "100%"}} rowSpacing={6} columnSpacing={{ xs: 1, sm: 2, md: 3 }} justifyContent="center" >
+      <SearchItem />
+      <Grid container spacing={5} justifyContent="center" sx={{mb:7}}>
+        <Grid item>
+          <Chip label="数学"/>
+        </Grid>
+        <Grid item>
+          <Chip label="英語"/>
+        </Grid>
+        <Grid item>
+          <Chip label="物理"/>
+        </Grid>
+        <Grid item>
+          <Chip label="化学"/>
+        </Grid>
+        <Grid item>
+          <Chip label="生物"/>
+        </Grid>
+        <Grid item>
+          <Chip label="地学"/>
+        </Grid>
+        <Grid item>
+          <Chip label="日本史"/>
+        </Grid>
+        <Grid item>
+          <Chip label="世界史"/>
+        </Grid>
+        <Grid item>
+          <Chip label="地理"/>
+        </Grid>
+      </Grid>
+
+          <Grid container sx={{width: "100%"}} rowSpacing={6} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
             {teachers.map((user: User)=>{
               return(
                 <Grid item key={user.id} >
-                  <TeacherCard  user={user} />
+                  <TeacherCard key={user.id}  user={user} />
                 </Grid>
               )
             })}
