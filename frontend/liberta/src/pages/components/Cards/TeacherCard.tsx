@@ -30,9 +30,7 @@ const router = useRouter()
         <Box>
         <CardHeader
         avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            {user.name}
-          </Avatar>
+          <Avatar src="/images/dog.jpg" aria-label="recipe" />
         }
         title={user.name}
         subheader={user.teacherProfile?.university}
@@ -42,7 +40,7 @@ const router = useRouter()
           </CardContent>
         {user.teacherProfile?.subjects.map((subject)=>{
           return (
-                <Chip label={subject} />
+                <Chip label={subject} variant="outlined" color="success" sx={{marginRight: 2}} />
           )
         }) }
         </Box>

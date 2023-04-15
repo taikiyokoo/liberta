@@ -30,9 +30,7 @@ const classes = useStyles()
         <Box>
         <CardHeader
         avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            {user.name}
-          </Avatar>
+          <Avatar src="/images/dog.jpg" aria-label="recipe" />
         }
         title={user.name}
         subheader={user.studentProfile?.school}
@@ -43,7 +41,7 @@ const classes = useStyles()
           </CardContent>
         {user.studentProfile?.subjects.map((subject)=>{
           return (
-                    <Chip label={subject} />
+                    <Chip label={subject} color="info" />
           )
         })
       }

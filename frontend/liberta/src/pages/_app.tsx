@@ -16,10 +16,17 @@ export const AuthContext = createContext({} as {
 })
 
 //プロフィール編集モーダル用context
-export const UserEditModalContext = createContext({} as {
-  userEditOpen: boolean
-  setUserEditOpen: React.Dispatch<React.SetStateAction<boolean>>
+export const TeacherEditModalContext = createContext({} as {
+  teacherEditOpen: boolean
+  setTeacherEditOpen: React.Dispatch<React.SetStateAction<boolean>>
 })
+
+export const StudentEditModalContext = createContext({} as {
+  studentEditOpen: boolean
+  setStudentEditOpen: React.Dispatch<React.SetStateAction<boolean>>
+})
+
+
 
 export const SearchModalContext = createContext({} as {
   searchOpen: boolean
@@ -36,7 +43,8 @@ function MyApp({ Component, pageProps }: AppProps) {
   const [currentUser,setCurrentUser] = useState<User | undefined>()
 
   //プロフィール編集モーダル管理
-  const [userEditOpen,setUserEditOpen] = useState<boolean>(false)
+  const [teacherEditOpen,setTeacherEditOpen] = useState<boolean>(false)
+  const [studentEditOpen,setStudentEditOpen] = useState<boolean>(false)
 
   //検索モーダル管理
   const [searchOpen,setSearchOpen]= useState<boolean>(false)
@@ -83,17 +91,19 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <AuthContext.Provider value={{loading,setLoading,isSignedIn,setIsSignedIn,currentUser,setCurrentUser}}>
-        <UserEditModalContext.Provider value={{userEditOpen,setUserEditOpen}}>
-          <SearchModalContext.Provider value={{searchOpen,setSearchOpen}}>
-            {isTopPage ? (
-                <Component {...pageProps} />
-              ) : (
-                <CommonLayout>
+        <TeacherEditModalContext.Provider value={{teacherEditOpen,setTeacherEditOpen}}>
+          <StudentEditModalContext.Provider value={{studentEditOpen,setStudentEditOpen}}>
+            <SearchModalContext.Provider value={{searchOpen,setSearchOpen}}>
+              {isTopPage ? (
                   <Component {...pageProps} />
-                </CommonLayout>
-              )}
-          </SearchModalContext.Provider>
-        </UserEditModalContext.Provider>
+                ) : (
+                  <CommonLayout>
+                    <Component {...pageProps} />
+                  </CommonLayout>
+                )}
+            </SearchModalContext.Provider>
+          </StudentEditModalContext.Provider>
+        </TeacherEditModalContext.Provider>
       </AuthContext.Provider>
     </>
   );
