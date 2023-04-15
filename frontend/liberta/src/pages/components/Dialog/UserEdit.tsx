@@ -10,7 +10,7 @@ import Slide from '@mui/material/Slide';
 const UserEdit:React.FC = () => {
 
     const {currentUser} = useContext(AuthContext)
-    const {open,setOpen} = useContext(UserEditModalContext)
+    const {userEditOpen,setUserEditOpen} = useContext(UserEditModalContext)
 
     const Transition = React.forwardRef(function Transition(
       props: TransitionProps & {
@@ -24,8 +24,8 @@ const UserEdit:React.FC = () => {
 
   return (
       <Dialog
-      open={open}
-      onClose={()=>{setOpen(false)}}
+      open={userEditOpen}
+      onClose={()=>{setUserEditOpen(false)}}
       aria-describedby="dialog-slide-description"
       >
         <Card>

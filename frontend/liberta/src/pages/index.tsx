@@ -16,6 +16,8 @@ export default function Home() {
       }else if(currentUser?.userType === "student"){
         router.push('/student/Home')
       }
+    }else{
+      router.push('/TopPage')
     }
   }
 
@@ -30,7 +32,6 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <main >
-        {isSignedIn&&<Typography>hello next  {currentUser?.name}</Typography>}
       </main>
     </>
   )

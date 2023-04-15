@@ -2,6 +2,7 @@ import { Box, makeStyles } from '@material-ui/core'
 import { Avatar, Card, CardActions, CardContent, CardHeader, Chip, Grid, IconButton, Typography } from '@mui/material'
 import { red } from '@mui/material/colors'
 import { User } from 'interfaces'
+import { useRouter } from 'next/router'
 import React from 'react'
 
 const useStyles = makeStyles({
@@ -21,10 +22,11 @@ card :{
 const TeacherCard: React.FC<{user:User}>= ({user}) => {
   
 const classes = useStyles()
+const router = useRouter()
 
   return (
     <div>
-      <Card className ={classes.card} >
+      <Card className ={classes.card} onClick={()=> router.push(`/teacher/${user.id}`)} >
         <Box>
         <CardHeader
         avatar={
