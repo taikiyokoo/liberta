@@ -17,8 +17,13 @@ export const AuthContext = createContext({} as {
 
 //プロフィール編集モーダル用context
 export const UserEditModalContext = createContext({} as {
-  open: boolean
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  userEditOpen: boolean
+  setUserEditOpen: React.Dispatch<React.SetStateAction<boolean>>
+})
+
+export const SearchModalContext = createContext({} as {
+  searchOpen: boolean
+  setSearchOpen: React.Dispatch<React.SetStateAction<boolean>>
 })
 
 
@@ -31,7 +36,10 @@ function MyApp({ Component, pageProps }: AppProps) {
   const [currentUser,setCurrentUser] = useState<User | undefined>()
 
   //プロフィール編集モーダル管理
-  const [open,setOpen] = useState<boolean>(false)
+  const [userEditOpen,setUserEditOpen] = useState<boolean>(false)
+
+  //検索モーダル管理
+  const [searchOpen,setSearchOpen]= useState<boolean>(false)
 
 
   const router = useRouter();
@@ -75,14 +83,16 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <AuthContext.Provider value={{loading,setLoading,isSignedIn,setIsSignedIn,currentUser,setCurrentUser}}>
-        <UserEditModalContext.Provider value={{open,setOpen}}>
-        {isTopPage ? (
-            <Component {...pageProps} />
-          ) : (
-            <CommonLayout>
-              <Component {...pageProps} />
-            </CommonLayout>
-          )}
+        <UserEditModalContext.Provider value={{userEditOpen,setUserEditOpen}}>
+          <SearchModalContext.Provider value={{searchOpen,setSearchOpen}}>
+            {isTopPage ? (
+                <Component {...pageProps} />
+              ) : (
+                <CommonLayout>
+                  <Component {...pageProps} />
+                </CommonLayout>
+              )}
+          </SearchModalContext.Provider>
         </UserEditModalContext.Provider>
       </AuthContext.Provider>
     </>

@@ -1,25 +1,15 @@
 import { makeStyles, Theme } from '@material-ui/core'
-import { AppBar, Avatar, Box, Button, Toolbar, Typography } from '@mui/material'
+import { AccountCircle, FormatListNumberedRtlSharp, Search } from '@mui/icons-material'
+import { AppBar, Avatar, Box, Button, IconButton, InputBase, Toolbar, Typography, alpha, styled  } from '@mui/material'
 import Cookies from 'js-cookie'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useContext} from 'react'
 import { signOut } from './api/auth'
+import SearchItem from './components/Search/SearchBar'
 import { AuthContext, UserEditModalContext } from './_app'
 
-const useStyles = makeStyles((theme: Theme)=>({
-    iconButton: {
-        marginRight: theme.spacing(2)
-    },
-    title: {
-        flexgrow: 1,
-        textDecoration: "none",
-        color: "inherit"
-    },
-    linkBtn: {
-        textTransform: "none"
-    }
-}))
+
 
 const Header: React.FC = () => {
 
@@ -27,10 +17,9 @@ const Header: React.FC = () => {
 const { loading, isSignedIn,setIsSignedIn,currentUser} = useContext(AuthContext)
 
 //プロフィール編集モーダルのコンテキストを使用
-const {open,setOpen} = useContext(UserEditModalContext)
+const {userEditOpen,setUserEditOpen} = useContext(UserEditModalContext)
 
 //スタイルを適用
-const classes = useStyles()
 const router = useRouter()
 
 const handleSignOut = async()=>{
@@ -59,23 +48,19 @@ const handleSignOut = async()=>{
   }
 
 
+
     const AuthButtons = () =>{
         if(!loading){
             if(isSignedIn){
                 return (
                     <>
                         {currentUser&&
-                        <Avatar
-                            onClick={()=> {
-                                console.log("クリック")
-                                setOpen(true)
-                                }}
-                        >
-                            {currentUser.name}
-                        </Avatar>}
+                            <IconButton edge="end" color="inherit" aria-label="account" sx={{marginRight: 2}} onClick={()=> setUserEditOpen(true)}>
+                                <AccountCircle />
+                            </IconButton>
+                        }
                         <Button
-                        color="inherit"
-                        className ={classes.linkBtn}
+                        color="success"
                         onClick={handleSignOut}
                         >
                             Logout
@@ -88,18 +73,14 @@ const handleSignOut = async()=>{
                     <>
                         <Link href= "/teacher/SignIn">
                             <Button
-                                color="inherit"
-                                className ={classes.linkBtn}
-                                sx={{color: "white"}}
+                                variant='text'
                             >
                             先生の方はこちら
                             </Button>
                         </Link>
                         <Link href="/student/SignIn">        
                             <Button
-                                color="inherit"
-                                className ={classes.linkBtn}
-                                sx={{color: "white"}}
+                                variant='text'
                             >
                             生徒の方はこちら
                             </Button>
@@ -114,27 +95,43 @@ const handleSignOut = async()=>{
         }
     }
 
+    const SearchButton = styled(Button)(({ theme }) => ({
+        padding: theme.spacing(1, 2),
+        borderRadius: '9999px',
+        backgroundColor: theme.palette.common.white,
+        color: theme.palette.common.black,
+        boxShadow: '0 2px 4px rgba(32,33,36,0.14)',
+        '&:hover': {
+          backgroundColor: theme.palette.common.white,
+          boxShadow: '0 4px 6px rgba(32,33,36,0.28)',
+        },
+        marginRight: theme.spacing(2),
+        display: 'flex',
+        alignItems: 'center',
+      }));
+
+
     return (
-    <div>
-        <Box sx={{ flexGrow: 1 }}>
-            <AppBar position = "static">
-                <Toolbar>
-                    <Typography
-                        variant="h6"
-                        className={classes.title}
-                        sx={{flexGrow: 1 }}
-                        onClick={()=>router.push("/Top")}
-                    >
-                        liberta
-                    </Typography>
-                    <AuthButtons />
-                </Toolbar>
-            </AppBar>
-        </Box>
-    
-    </div>
-    )
+        <AppBar position="static" color="inherit" elevation={0} sx={{ borderBottom: '1px solid rgba(0,0,0,0.1)' }}>
+        <Toolbar>
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{ flexGrow: 1, cursor: 'pointer' }}
+            onClick={()=> router.push("/")}
+          >
+            Liberta
+          </Typography>
+          <Box sx={{ flexGrow: 0.5 }} />
+          {isSignedIn&&<SearchItem />}
+          <Box sx={{ flexGrow: 1.5 }} />
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <AuthButtons />
+          </Box>
+        </Toolbar>
+      </AppBar>
+      
+    );
 }
 
 export default Header
-
