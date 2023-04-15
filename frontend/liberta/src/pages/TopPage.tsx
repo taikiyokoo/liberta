@@ -41,6 +41,8 @@ const CustomButton = styled(Button)`
 
 const useStyles = makeStyles((theme) => ({
   featureCard: {
+    height: 300,
+    width: 300,
     padding: theme.spacing(4),
     textAlign: "center",
   },
@@ -312,14 +314,14 @@ const TopPage = () => {
         </Box>
         <Grid container spacing={4}>
           <FeatureCard
-            title="自分に合った先生を探せる"
-            description="実際に難関大学に合格した数多くの先生の中からあなたに合った先生を探せます。"
+            title="さまざまな指導形態"
+            description="実際に難関大学に合格した数多くの先生が自分の受験経験から導き出すそれぞれの効率的な指導形態を提案します。あなたはその中から自分に合ったやり方、先生を探すことができます。"
             icon={<SchoolIcon fontSize="large" sx={{color: "white"}}/>}
             isTypingCompleted={typingComplete}
           />
            <FeatureCard
-            title="幅広い指導方法"
-            description="それぞれの先生自身が提案した実際の受験勉強に特化した様々な指導形態の中から選択できます"
+            title="最新のAIを使用した24時間質問対応"
+            description="最新のAI技術を活用した質問対応システムを導入しています。24時間質問対応可能となっています。"
             icon={<SchoolIcon fontSize="large" sx={{color: "white"}} />}
             isTypingCompleted={typingComplete}
           />

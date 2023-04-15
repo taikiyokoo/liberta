@@ -3,55 +3,57 @@ import { User } from 'interfaces'
 import { GetServerSideProps } from 'next'
 import { getUsers } from 'pages/api/user'
 import TeacherCard from 'pages/components/Cards/TeacherCard'
-import UserEdit from 'pages/components/Dialog/UserEdit'
-import { AuthContext, UserEditModalContext } from 'pages/_app'
+import StudentEdit from 'pages/components/Dialog/StudentEdit'
+import TeacherEdit from 'pages/components/Dialog/TeacherEdit'
+import { AuthContext} from 'pages/_app'
 import React, { ReactEventHandler, useContext, useEffect, useState } from 'react'
 
 const Home:React.FC = () => {
 
+  const [users,setUsers] = useState<User[]>([]) //全員の情報
   const [teachers,setTeachers] = useState<User[]>([])
   const {loading,setLoading} =useContext(AuthContext)
-  const [subjectSearch,setSubjectSearch] =useState<boolean>(false)
-  const [selectedSubject,setSubject] = useState<string>("")
+  const [selectedSubjects,setSubject] = useState<string[]>([]) //フロント教科で絞る用のstate
 
-  //教科検索
+
   const subjects:string[] = ["数学","英語","物理","化学","生物","地学","日本史","世界史","地理"]
 
+  //フロントで教科で絞る
   const handleSubjectSearch = (subject:string) => {
-    setSubject(subject)
-    setSubjectSearch(true)
+    if(selectedSubjects.includes(subject)){
+      const newSelectedSubjects = selectedSubjects.filter((selectedSubject)=>selectedSubject !== subject)
+      let filteredUsers:User[] = []
+      filteredUsers = users.filter((user:User)=>user.teacherProfile)
+      filteredUsers = filteredUsers.filter((user:User)=>newSelectedSubjects.every((newSelectedSubject)=>user.teacherProfile?.subjects.includes(newSelectedSubject)))
+      setSubject(newSelectedSubjects)
+      setTeachers(filteredUsers)
+      console.log(newSelectedSubjects)
+      return
+    }
+    let filteredUsers:User[] = []
+    const newSelectedSubjects = selectedSubjects
+    newSelectedSubjects.push(subject)
+    filteredUsers = users.filter((user:User)=>user.teacherProfile)
+    filteredUsers = filteredUsers.filter((user:User)=>newSelectedSubjects.every((newSelectedSubject)=>user.teacherProfile?.subjects.includes(newSelectedSubject)))
+    setTeachers(filteredUsers)
+    setSubject(newSelectedSubjects)
   }
 
 
+  //マウント時に実行、全てのユーザーを取得して教師のみ格納
   const handleGetUsers = async () => {
-
       try{
         const res = await getUsers()
         const users:User[] = res.data
-        const filteredUsers:User[] =[]
-
-        if(subjectSearch){
-          users.forEach((user: User)=>{
-            if(user.teacherProfile){
-                user.teacherProfile?.subjects.includes(selectedSubject)&&filteredUsers.push(user)
-              }
-            })
-        }else{
-          users.forEach((user: User)=>{
-            if(user.teacherProfile){
-            filteredUsers.push(user)
-            }
-          })
-        }
-        setTeachers(filteredUsers)
+        setUsers(users)
+        setTeachers(users.filter((user:User)=>user.teacherProfile))
       }catch(err){
         console.log(err)
       }
     setLoading(false)
-    console.log(teachers)
   }
 
-  useEffect(() => {handleGetUsers()}, [subjectSearch,selectedSubject])
+  useEffect(() => {handleGetUsers()}, [])
 
 
   if(loading) return (<div>Loading...</div>)
@@ -62,7 +64,7 @@ const Home:React.FC = () => {
         {subjects.map((subject:string)=>{
           return(
             <Grid item key={subject}>
-              {selectedSubject===subject ? <Chip label={subject} color="success" onClick= {()=>handleSubjectSearch(subject)}/> : <Chip label={subject} variant="outlined" onClick= {()=>handleSubjectSearch(subject)}/>}
+              {selectedSubjects.includes(subject) ? <Chip label={subject} color="success" onClick= {()=>handleSubjectSearch(subject)}/> : <Chip label={subject} variant="outlined" onClick= {()=>handleSubjectSearch(subject)}/>}
             </Grid>
           )
         })}
@@ -77,7 +79,8 @@ const Home:React.FC = () => {
               )
             })}
           </Grid>
-      <UserEdit />
+      <TeacherEdit />
+      <StudentEdit />
     </div>
   )
 }

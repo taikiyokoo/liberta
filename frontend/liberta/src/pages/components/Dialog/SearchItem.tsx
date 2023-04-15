@@ -137,7 +137,7 @@ const SearchItem:React.FC = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="warning">キャンセル</Button>
-          <Button onClick={handleClose} color="success" variant="contained">検索</Button>
+          <Button onClick={handleClose} color="primary" variant="contained">検索</Button>
         </DialogActions>
       </Dialog>
       

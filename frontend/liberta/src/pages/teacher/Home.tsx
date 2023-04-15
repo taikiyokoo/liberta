@@ -2,30 +2,54 @@ import { Chip, Grid } from '@mui/material'
 import { User } from 'interfaces'
 import { getUsers } from 'pages/api/user'
 import StudentCard from 'pages/components/Cards/StudentCard'
-import UserEdit from 'pages/components/Dialog/UserEdit'
+import UserEdit from 'pages/components/Dialog/TeacherEdit'
 import SearchItem from 'pages/components/Search/SearchBar'
 import { AuthContext } from 'pages/_app'
 import React, { useContext, useEffect, useState } from 'react'
 
 const Home:React.FC = () => {
 
+  const [users,setUsers] = useState<User[]>([]) //全員の情報
   const [students, setStudents] = useState<User[]>([])
   
   const {loading,setLoading} =useContext(AuthContext)
 
   const subjects:string[] = ["数学","英語","物理","化学","生物","地学","日本史","世界史","地理"]
 
+  const [selectedSubjects,setSubject] = useState<string[]>([]) //フロント教科で絞る用のstate
+
+    //フロントで教科で絞る
+    const handleSubjectSearch = (subject:string) => {
+      if(selectedSubjects.includes(subject)){
+        const newSelectedSubjects = selectedSubjects.filter((selectedSubject)=>selectedSubject !== subject)
+        if(newSelectedSubjects.length === 0){
+          setStudents(users.filter((user:User)=>user.studentProfile))
+          setSubject(newSelectedSubjects)
+          return
+        }
+        let filteredUsers:User[] = []
+        filteredUsers = users.filter((user:User)=>user.studentProfile)
+        filteredUsers = filteredUsers.filter((user:User)=>newSelectedSubjects.some((newSelectedSubject)=>user.studentProfile?.subjects.includes(newSelectedSubject)))
+        setSubject(newSelectedSubjects)
+        setStudents(filteredUsers)
+        return
+      }
+      let filteredUsers:User[] = []
+      const newSelectedSubjects = selectedSubjects
+      newSelectedSubjects.push(subject)
+      filteredUsers = users.filter((user:User)=>user.studentProfile)
+      filteredUsers = filteredUsers.filter((user:User)=>newSelectedSubjects.some((newSelectedSubject)=>user.studentProfile?.subjects.includes(newSelectedSubject)))
+      setStudents(filteredUsers)
+      setSubject(newSelectedSubjects)
+    }
+
   const handleGetStudents = async () => {
 
     try{
-      const res = await getUsers()
-      const users:User[] = res.data
-      console.log(users)
-      users.forEach((user: User)=>{
-        if(user.studentProfile){
-          setStudents((prevStudents) => [...prevStudents, user]);
-        }
-      })
+           const res = await getUsers()
+        const users:User[] = res.data
+        setUsers(users)
+        setStudents(users.filter((user:User)=>user.studentProfile))
     }catch(err){
       console.log(err)
     }
@@ -43,7 +67,7 @@ const Home:React.FC = () => {
           {subjects.map((subject:string)=>{
             return(
               <Grid item key={subject}>
-                <Chip label={subject}/>
+                {selectedSubjects.includes(subject) ? <Chip label={subject} color="success" onClick= {()=>handleSubjectSearch(subject)}/> : <Chip label={subject} variant="outlined" onClick= {()=>handleSubjectSearch(subject)}/>}
               </Grid>
             )
           })}

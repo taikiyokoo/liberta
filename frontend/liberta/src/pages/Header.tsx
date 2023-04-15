@@ -7,7 +7,7 @@ import { useRouter } from 'next/router'
 import React, { useContext} from 'react'
 import { signOut } from './api/auth'
 import SearchItem from './components/Search/SearchBar'
-import { AuthContext, UserEditModalContext } from './_app'
+import { AuthContext, StudentEditModalContext, TeacherEditModalContext } from './_app'
 
 
 
@@ -17,7 +17,8 @@ const Header: React.FC = () => {
 const { loading, isSignedIn,setIsSignedIn,currentUser} = useContext(AuthContext)
 
 //プロフィール編集モーダルのコンテキストを使用
-const {userEditOpen,setUserEditOpen} = useContext(UserEditModalContext)
+const {teacherEditOpen,setTeacherEditOpen} = useContext(TeacherEditModalContext)
+const {studentEditOpen,setStudentEditOpen} = useContext(StudentEditModalContext)
 
 //スタイルを適用
 const router = useRouter()
@@ -34,7 +35,7 @@ const handleSignOut = async()=>{
             Cookies.remove("_uid")
   
             setIsSignedIn(false)
-           router.push("/Top")
+           router.push("/TopPage")
   
             console.log("succeed in sign out")
         }else{
@@ -55,7 +56,19 @@ const handleSignOut = async()=>{
                 return (
                     <>
                         {currentUser&&
-                            <IconButton edge="end" color="inherit" aria-label="account" sx={{marginRight: 2}} onClick={()=> setUserEditOpen(true)}>
+                            <IconButton
+                                edge="end"
+                                color="inherit"
+                                aria-label="account"
+                                sx={{marginRight: 2}}
+                                onClick={()=>{
+                                    if(currentUser.userType === "teacher"){
+                                        setTeacherEditOpen(true)
+                                    }else if(currentUser.userType === "student"){
+                                        setStudentEditOpen(true)
+                                    }
+                                }}
+                            >
                                 <AccountCircle />
                             </IconButton>
                         }
@@ -119,6 +132,7 @@ const handleSignOut = async()=>{
             component="div"
             sx={{ flexGrow: 1, cursor: 'pointer' }}
             onClick={()=> router.push("/")}
+            color= "teal"
           >
             Liberta
           </Typography>
