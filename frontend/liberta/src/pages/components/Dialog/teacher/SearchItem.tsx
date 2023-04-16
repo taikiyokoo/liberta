@@ -11,11 +11,54 @@ import {
   Typography,
   Slider,
   SelectChangeEvent,
+  ThemeProvider,
+  createTheme,
+  styled,
+  DialogTitle,
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { SearchModalContext } from 'pages/_app'
 import  { useContext } from 'react'
 import Slide from '@mui/material/Slide';
+import { Search } from '@mui/icons-material';
+
+//バーのスタイル
+const customTheme = createTheme({
+    components: {
+      MuiSlider: {
+        styleOverrides: {
+          thumb: {
+            backgroundColor: 'teal',
+          },
+          track: {
+            backgroundColor: 'teal',
+          },
+          rail: {
+            backgroundColor: 'teal',
+          },
+        },
+      },
+    },
+  });
+
+//「条件から絞る」のスタイル
+  const StyledDialogTitle = styled(DialogTitle)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+//検索アイコンのスタイル
+const SearchIconWrapper = styled('div')`
+  border-radius: 50%;
+  background-color: teal;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  margin-left: 8px;
+`;
+
 
 
 
@@ -44,6 +87,12 @@ const SearchItem:React.FC = () => {
             transitionDuration={{ enter: 500, exit: 500 }}
             keepMounted
         >
+        <StyledDialogTitle variant="subtitle1">
+            条件から絞る
+        <SearchIconWrapper>
+          <Search sx={{color: "white"}}/>
+        </SearchIconWrapper>
+      </StyledDialogTitle>
         <DialogContent>
         {/* 学年 */}
         <Box marginBottom={2}>
@@ -118,23 +167,41 @@ const SearchItem:React.FC = () => {
         {/* 偏差値 */}
         <Box marginBottom={2}>
             <Typography>
-                偏差値 <Button onClick={() => {}}>解除</Button>
+                偏差値 <Button color="error" onClick={() => {}}>解除</Button>
             </Typography>
-            <Slider
-            defaultValue={[20, 100]}
-            valueLabelDisplay="auto"
-            min={20}
-            max={100}
-            marks={[
-                { value: 20, label: '20' },
-                { value: 100, label: '100' },
-            ]}
-            />
+            <ThemeProvider theme={customTheme}>
+                <Slider
+                defaultValue={[20, 100]}
+                valueLabelDisplay="auto"
+                min={20}
+                max={100}
+                marks={[
+                    { value: 20, label: '20' },
+                    { value: 100, label: '100' },
+                ]}
+                />
+            </ThemeProvider>
         </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="warning">キャンセル</Button>
-          <Button onClick={handleClose} color="primary" variant="contained">検索</Button>
+            <Button onClick={handleClose} color="error">キャンセル</Button>
+            <Button
+                onClick={handleClose}
+                variant="contained"
+                sx={{
+                    backgroundColor: 'teal',
+                    boxShadow: 'none',
+                    borderRadius: 30,
+                    padding: 1.8,
+                    '&:hover': {
+                        backgroundColor: 'teal',
+                        boxShadow: '0 8px 12px rgba(0, 0, 0, 0.2), 0 2px 5px rgba(0, 0, 0, 0.15)',
+                    },
+                }}
+                >
+                <Search sx={{ marginRight: 0.2 }} />
+                    検索
+            </Button>
         </DialogActions>
       </Dialog>
       

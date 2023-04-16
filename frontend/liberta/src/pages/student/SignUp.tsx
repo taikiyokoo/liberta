@@ -140,6 +140,7 @@ const SignUp = () => {
             disabled = {!name || !email || !password || !passwordConfirmation ? true:false}
             className = {classes.submitBtn}
             onClick={handleSubmit}
+            color= "success"
           >
             アカウントを作成
           </Button>

@@ -13,9 +13,11 @@ import {
   Chip,
   SelectChangeEvent,
   Slide,
+  Box,
 } from '@mui/material';
 import { UserEditModalContext } from 'pages/_app';
 import { TransitionProps } from '@mui/material/transitions';
+import { AccountCircle } from '@mui/icons-material';
 
 
 const Transition = React.forwardRef(function Transition(
@@ -65,7 +67,12 @@ const [introduction, setIntroduction] = useState('');
         TransitionComponent={Slide}
         transitionDuration={{ enter: 500, exit: 500 }}
         >
-      <DialogTitle>アカウント編集</DialogTitle>
+      <DialogTitle variant="subtitle1">
+        <Box display="flex" alignItems="center">
+          アカウント編集
+          <AccountCircle sx={{ marginLeft: 1 }} />
+        </Box>
+      </DialogTitle>
       <DialogContent>
         <TextField
           autoFocus

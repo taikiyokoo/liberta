@@ -110,6 +110,7 @@ const SignIn: React.FC = () => {
             />
             <Button
               type='submit'
+              color= "success"
               variant='contained'
               size='large'
               fullWidth

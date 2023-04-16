@@ -11,6 +11,7 @@ import { AuthContext, UserEditModalContext } from './_app'
 
 
 
+
 const Header: React.FC = () => {
 
 //認証用のコンテキストを使用
@@ -80,6 +81,7 @@ const handleSignOut = async()=>{
                         <Link href= "/User/SignIn">
                             <Button
                                 variant='text'
+                                color="success"
                             >
                             先生の方はこちら
                             </Button>
@@ -87,6 +89,7 @@ const handleSignOut = async()=>{
                         <Link href="/student/SignIn">        
                             <Button
                                 variant='text'
+                                color="success"
                             >
                             生徒の方はこちら
                             </Button>
