@@ -13,7 +13,7 @@ const CustomButton = styled(Button)`
   width: 200px;
   height: 60px;
   background-color: #ffffff;
-  color: #83a4d4;
+  color: #008080; // ティールカラーに変更
   font-weight: bold;
   font-size: 14px;
   border-radius: 30px;
@@ -34,9 +34,10 @@ const CustomButton = styled(Button)`
 
   &:focus-visible {
     background-color: #c0c0c0; // フォーカス時の背景色をさらに濃いグレーに変更
-    outline: 2px solid #83a4d4; // アウトラインを青系の色に変更
+    outline: 2px solid #008080; // アウトラインをティールカラーに変更
   }
 `;
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -56,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     minHeight: "100vh",
     height: "auto",
-    background: "linear-gradient(45deg, rgba(102, 191, 226, 1), rgba(102, 191, 226, 1))",
+    background:"linear-gradient(45deg, rgba(75, 192, 183, 1), rgba(56, 142, 142, 1))",
     backgroundSize: "400% 400%",
     animation: "$colorShift 15s ease-in-out infinite",
   },

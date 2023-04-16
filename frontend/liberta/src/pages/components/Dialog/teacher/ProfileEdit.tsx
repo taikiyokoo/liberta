@@ -10,11 +10,14 @@ import {  Dialog,
   Typography,
   Slider,
   SelectChangeEvent,
+  DialogActions,
+  Button,
 } from '@mui/material'
 import { TransitionProps } from '@mui/material/transitions'
 import { AuthContext, UserEditModalContext } from 'pages/_app'
 import React, { useContext, useState } from 'react'
 import Slide from '@mui/material/Slide';
+import { AccountCircle } from '@mui/icons-material';
 
 
 const ProfileEdit:React.FC = () => {
@@ -31,6 +34,11 @@ const ProfileEdit:React.FC = () => {
     //フォームの値を管理する
     const [name,setName] = useState<string>(currentUser?.name? currentUser.name : '')
     const [email,setEmail] = useState<string>(currentUser?.email? currentUser.email : '')
+
+    const handleSubmit = () => {
+
+
+    }
 
 
     const Transition = React.forwardRef(function Transition(
@@ -52,7 +60,12 @@ const ProfileEdit:React.FC = () => {
     TransitionComponent={Slide}
     transitionDuration={{ enter: 500, exit: 500 }}
     >
-      <DialogTitle variant="subtitle1">アカウント編集</DialogTitle>
+     <DialogTitle variant="subtitle1">
+      <Box display="flex" alignItems="center">
+        アカウント編集
+        <AccountCircle sx={{ marginLeft: 1 }} />
+      </Box>
+    </DialogTitle>
       <DialogContent>
         <Box marginBottom={2} marginTop={2}>
           <TextField fullWidth label="名前" value={name} />
@@ -104,6 +117,10 @@ const ProfileEdit:React.FC = () => {
         />
       </Box>
     </DialogContent>
+    <DialogActions>
+        <Button onClick={()=> setUserEditOpen(false)}>キャンセル</Button>
+        <Button onClick={handleSubmit}>更新</Button>
+      </DialogActions>
   </Dialog>
   )
 }

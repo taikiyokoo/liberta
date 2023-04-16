@@ -11,6 +11,7 @@ card :{
   height:250,
   padding:10,
   transition: 'box-shadow 0.3s,transform 0.3s',
+  cursor: 'pointer',
   '&:hover': {
     boxShadow: '0px 30px 50px -15px rgba(0,0,0,0.3), 0px 0px 0px 3px rgba(0,0,0,0.05)',
     transform: 'translateY(-5px) scale(1.05)',
@@ -41,7 +42,7 @@ const classes = useStyles()
           </CardContent>
         {user.studentProfile?.subjects.map((subject)=>{
           return (
-                    <Chip label={subject} color="success" variant="outlined" />
+                    <Chip label={subject} color="success" variant='outlined' sx={{marginRight: 1}} />
           )
         })
       }

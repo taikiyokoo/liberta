@@ -21,6 +21,15 @@ const SearchButton = styled(Button)(({ theme }) => ({
   alignItems: 'center',
 }));
 
+const SearchIconWrapper = styled('div')`
+  border-radius: 50%;
+  background-color: teal;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+`;
+
 
 
 
@@ -33,7 +42,7 @@ const SearchBar:React.FC = () => {
     <div>
     {searchOpen ? ( //詳細検索ボタンが押されているかどうか
       currentUser?.userType ==="teacher" ? <TeacherSearchItem /> : <StudentSearchItem /> //先生か生徒かで検索項目を変える
-      
+
     ) : (
 
       <SearchButton
@@ -43,7 +52,9 @@ const SearchBar:React.FC = () => {
         <Typography variant="subtitle2" sx={{ marginRight: 5 }}>
           条件から検索する
         </Typography>
-        <Search />
+        <SearchIconWrapper>
+          <Search sx={{color: "white"}} />
+        </SearchIconWrapper>
       </SearchButton>
     )}
   </div>
