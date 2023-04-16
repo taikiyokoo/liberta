@@ -6,8 +6,8 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useContext} from 'react'
 import { signOut } from './api/auth'
-import SearchItem from './components/Search/SearchBar'
-import { AuthContext, StudentEditModalContext, TeacherEditModalContext } from './_app'
+import SearchBar from './components/Search/SearchBar'
+import { AuthContext, UserEditModalContext } from './_app'
 
 
 
@@ -17,8 +17,7 @@ const Header: React.FC = () => {
 const { loading, isSignedIn,setIsSignedIn,currentUser} = useContext(AuthContext)
 
 //プロフィール編集モーダルのコンテキストを使用
-const {teacherEditOpen,setTeacherEditOpen} = useContext(TeacherEditModalContext)
-const {studentEditOpen,setStudentEditOpen} = useContext(StudentEditModalContext)
+const {userEditOpen,setUserEditOpen} = useContext(UserEditModalContext)
 
 //スタイルを適用
 const router = useRouter()
@@ -61,13 +60,7 @@ const handleSignOut = async()=>{
                                 color="inherit"
                                 aria-label="account"
                                 sx={{marginRight: 2}}
-                                onClick={()=>{
-                                    if(currentUser.userType === "teacher"){
-                                        setTeacherEditOpen(true)
-                                    }else if(currentUser.userType === "student"){
-                                        setStudentEditOpen(true)
-                                    }
-                                }}
+                                onClick={()=>{setUserEditOpen(true)}}
                             >
                                 <AccountCircle />
                             </IconButton>
@@ -84,7 +77,7 @@ const handleSignOut = async()=>{
             }else{
                 return(
                     <>
-                        <Link href= "/teacher/SignIn">
+                        <Link href= "/User/SignIn">
                             <Button
                                 variant='text'
                             >
@@ -127,17 +120,25 @@ const handleSignOut = async()=>{
     return (
         <AppBar position="static" color="inherit" elevation={0} sx={{ borderBottom: '1px solid rgba(0,0,0,0.1)' }}>
         <Toolbar>
-          <Typography
-            variant="h6"
-            component="div"
-            sx={{ flexGrow: 1, cursor: 'pointer' }}
-            onClick={()=> router.push("/")}
-            color= "teal"
-          >
-            Liberta
-          </Typography>
+            <Box sx={{ flexGrow: 1,}}>
+                <Typography
+                variant="h6"
+                component= "caption"
+                sx={{
+                    cursor: 'pointer',
+                    transition: 'transform 0.3s',
+                    '&:hover': {
+                    transform: 'translateY(-2px)',
+                    },
+                }}
+                onClick={()=> router.push("/")}
+                color= "teal"
+                >
+                    Liberta
+                </Typography>
+            </Box>
           <Box sx={{ flexGrow: 0.5 }} />
-          {isSignedIn&&<SearchItem />}
+          {isSignedIn&&<SearchBar />}
           <Box sx={{ flexGrow: 1.5 }} />
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <AuthButtons />

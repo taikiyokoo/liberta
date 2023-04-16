@@ -16,15 +16,11 @@ export const AuthContext = createContext({} as {
 })
 
 //プロフィール編集モーダル用context
-export const TeacherEditModalContext = createContext({} as {
-  teacherEditOpen: boolean
-  setTeacherEditOpen: React.Dispatch<React.SetStateAction<boolean>>
+export const UserEditModalContext = createContext({} as {
+  userEditOpen: boolean
+  setUserEditOpen: React.Dispatch<React.SetStateAction<boolean>>
 })
 
-export const StudentEditModalContext = createContext({} as {
-  studentEditOpen: boolean
-  setStudentEditOpen: React.Dispatch<React.SetStateAction<boolean>>
-})
 
 
 
@@ -43,8 +39,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   const [currentUser,setCurrentUser] = useState<User | undefined>()
 
   //プロフィール編集モーダル管理
-  const [teacherEditOpen,setTeacherEditOpen] = useState<boolean>(false)
-  const [studentEditOpen,setStudentEditOpen] = useState<boolean>(false)
+  const [userEditOpen,setUserEditOpen] = useState<boolean>(false)
 
   //検索モーダル管理
   const [searchOpen,setSearchOpen]= useState<boolean>(false)
@@ -64,15 +59,15 @@ function MyApp({ Component, pageProps }: AppProps) {
         console.log(res?.data.data)
       }else if(res?.data.isLogin === false){
         console.log(res?.data.message)
-        if(!(router.pathname ==="/student/SignIn")&&!(router.pathname ==="/student/SignUp")&&!(router.pathname ==="/teacher/SignIn")&&!(router.pathname ==="/teacher/SignUp"))router.push("/TopPage")
+        if(!(router.pathname ==="/student/SignIn")&&!(router.pathname ==="/student/SignUp")&&!(router.pathname ==="/User/SignIn")&&!(router.pathname ==="/User/SignUp"))router.push("/TopPage")
       }else{
         console.log("No current User")
-        if(!(router.pathname ==="/student/SignIn")&&!(router.pathname ==="/student/SignUp")&&!(router.pathname ==="/teacher/SignIn")&&!(router.pathname ==="/teacher/SignUp"))router.push("/TopPage")
+        if(!(router.pathname ==="/student/SignIn")&&!(router.pathname ==="/student/SignUp")&&!(router.pathname ==="/User/SignIn")&&!(router.pathname ==="/User/SignUp"))router.push("/TopPage")
       }
 
     } catch (err){
       console.log(err)
-      if(!(router.pathname ==="/student/SignIn")&&!(router.pathname ==="/student/SignUp")&&!(router.pathname ==="/teacher/SignIn")&&!(router.pathname ==="/teacher/SignUp"))router.push("/TopPage")
+      if(!(router.pathname ==="/student/SignIn")&&!(router.pathname ==="/student/SignUp")&&!(router.pathname ==="/User/SignIn")&&!(router.pathname ==="/User/SignUp"))router.push("/TopPage")
     }
     setLoading(false)
   }
@@ -91,8 +86,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <AuthContext.Provider value={{loading,setLoading,isSignedIn,setIsSignedIn,currentUser,setCurrentUser}}>
-        <TeacherEditModalContext.Provider value={{teacherEditOpen,setTeacherEditOpen}}>
-          <StudentEditModalContext.Provider value={{studentEditOpen,setStudentEditOpen}}>
+        <UserEditModalContext.Provider value={{userEditOpen,setUserEditOpen}}>
             <SearchModalContext.Provider value={{searchOpen,setSearchOpen}}>
               {isTopPage ? (
                   <Component {...pageProps} />
@@ -102,8 +96,7 @@ function MyApp({ Component, pageProps }: AppProps) {
                   </CommonLayout>
                 )}
             </SearchModalContext.Provider>
-          </StudentEditModalContext.Provider>
-        </TeacherEditModalContext.Provider>
+        </UserEditModalContext.Provider>
       </AuthContext.Provider>
     </>
   );

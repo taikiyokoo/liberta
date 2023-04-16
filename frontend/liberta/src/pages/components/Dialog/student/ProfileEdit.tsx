@@ -14,7 +14,7 @@ import {
   SelectChangeEvent,
   Slide,
 } from '@mui/material';
-import { StudentEditModalContext } from 'pages/_app';
+import { UserEditModalContext } from 'pages/_app';
 import { TransitionProps } from '@mui/material/transitions';
 
 
@@ -27,9 +27,9 @@ const Transition = React.forwardRef(function Transition(
     return <Slide direction="up" ref={ref} {...props} />;
   });
 
-const StudentEdit: React.FC = () => {
+const ProfileEdit: React.FC = () => {
 
-const {studentEditOpen,setStudentEditOpen} =  useContext(StudentEditModalContext)
+const {userEditOpen,setUserEditOpen} =  useContext(UserEditModalContext)
 const [name, setName] = useState('');
 const [email, setEmail] = useState('');
 const [desiredSubjects, setDesiredSubjects] = useState<string[]>([]);
@@ -58,8 +58,8 @@ const [introduction, setIntroduction] = useState('');
 
   return (
     <Dialog
-        open={studentEditOpen}
-        onClose={()=> setStudentEditOpen(false)}
+        open={userEditOpen}
+        onClose={()=> setUserEditOpen(false)}
         maxWidth= "sm"
         fullWidth
         TransitionComponent={Slide}
@@ -140,11 +140,11 @@ const [introduction, setIntroduction] = useState('');
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={()=> setStudentEditOpen(false)}>キャンセル</Button>
+        <Button onClick={()=> setUserEditOpen(false)}>キャンセル</Button>
         <Button onClick={handleSubmit}>更新</Button>
       </DialogActions>
     </Dialog>
   );
 };
 
-export default StudentEdit;
+export default ProfileEdit;

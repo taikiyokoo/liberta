@@ -4,12 +4,10 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogTitle,
   FormControl,
   InputLabel,
   MenuItem,
   Select,
-  TextField,
   Typography,
   Slider,
   SelectChangeEvent,
@@ -18,7 +16,6 @@ import { Box } from '@mui/system';
 import { SearchModalContext } from 'pages/_app'
 import  { useContext } from 'react'
 import Slide from '@mui/material/Slide';
-import { styled } from '@mui/system';
 
 
 
@@ -145,4 +142,4 @@ const SearchItem:React.FC = () => {
   )
 }
 
-export default SearchItem
+export { SearchItem };

@@ -1,8 +1,9 @@
 import React, { useContext, useState } from "react";
 import {  Search } from '@mui/icons-material'
 import { Button, Typography, styled  } from '@mui/material'
-import { SearchModalContext } from "pages/_app";
-import SearchItem from "../Dialog/SearchItem";
+import { AuthContext, SearchModalContext } from "pages/_app";
+import { SearchItem as TeacherSearchItem }from "../Dialog/teacher/SearchItem";
+import { SearchItem as StudentSearchItem }from "../Dialog/student/SearchItem";
 
 const SearchButton = styled(Button)(({ theme }) => ({
   padding: theme.spacing(1, 5),
@@ -10,6 +11,7 @@ const SearchButton = styled(Button)(({ theme }) => ({
   backgroundColor: theme.palette.common.white,
   color: theme.palette.common.black,
   boxShadow: '0 2px 4px rgba(32,33,36,0.2)',
+  cursor: 'pointer',
   '&:hover': {
     backgroundColor: theme.palette.common.white,
     boxShadow: '0 4px 6px rgba(32,33,36,0.3)',
@@ -24,19 +26,27 @@ const SearchButton = styled(Button)(({ theme }) => ({
 
 const SearchBar:React.FC = () => {
   const {searchOpen,setSearchOpen} = useContext(SearchModalContext)
+  const {currentUser, setCurrentUser} = useContext(AuthContext)
   
       
   return (
     <div>
-      {searchOpen ?
-        <SearchItem />
-        :
-        <SearchButton variant="text" onClick={()=> setSearchOpen(true)}>
-          <Typography variant="subtitle2" sx={{marginRight: 5}}>条件から検索する</Typography>
-          <Search />
+    {searchOpen ? ( //詳細検索ボタンが押されているかどうか
+      currentUser?.userType ==="teacher" ? <TeacherSearchItem /> : <StudentSearchItem /> //先生か生徒かで検索項目を変える
+      
+    ) : (
+
+      <SearchButton
+        variant="text"
+        onClick={() => setSearchOpen(true)}
+      >
+        <Typography variant="subtitle2" sx={{ marginRight: 5 }}>
+          条件から検索する
+        </Typography>
+        <Search />
       </SearchButton>
-      }
-    </div>
+    )}
+  </div>
   )
 }
 

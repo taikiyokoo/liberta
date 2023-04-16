@@ -2,9 +2,8 @@ import { Chip, Container, Dialog, Grid, Modal } from '@mui/material'
 import { User } from 'interfaces'
 import { GetServerSideProps } from 'next'
 import { getUsers } from 'pages/api/user'
-import TeacherCard from 'pages/components/Cards/TeacherCard'
-import StudentEdit from 'pages/components/Dialog/StudentEdit'
-import TeacherEdit from 'pages/components/Dialog/TeacherEdit'
+import TeacherCard from 'pages/components/Cards/teacher/TeacherCard'
+import ProfileEdit from 'pages/components/Dialog/student/ProfileEdit'
 import { AuthContext} from 'pages/_app'
 import React, { ReactEventHandler, useContext, useEffect, useState } from 'react'
 
@@ -79,8 +78,7 @@ const Home:React.FC = () => {
               )
             })}
           </Grid>
-      <TeacherEdit />
-      <StudentEdit />
+        <ProfileEdit />
     </div>
   )
 }
