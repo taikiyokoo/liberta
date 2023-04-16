@@ -1,9 +1,8 @@
 import { Chip, Grid } from '@mui/material'
 import { User } from 'interfaces'
 import { getUsers } from 'pages/api/user'
-import StudentCard from 'pages/components/Cards/StudentCard'
-import UserEdit from 'pages/components/Dialog/TeacherEdit'
-import SearchItem from 'pages/components/Search/SearchBar'
+import StudentCard from 'pages/components/Cards/student/StudentCard'
+import ProfileEdit from 'pages/components/Dialog/teacher/ProfileEdit'
 import { AuthContext } from 'pages/_app'
 import React, { useContext, useEffect, useState } from 'react'
 
@@ -46,7 +45,7 @@ const Home:React.FC = () => {
   const handleGetStudents = async () => {
 
     try{
-           const res = await getUsers()
+        const res = await getUsers()
         const users:User[] = res.data
         setUsers(users)
         setStudents(users.filter((user:User)=>user.studentProfile))
@@ -82,7 +81,7 @@ const Home:React.FC = () => {
               )
             })}
           </Grid>
-          <UserEdit />
+          <ProfileEdit />
     </div>
   )
 }

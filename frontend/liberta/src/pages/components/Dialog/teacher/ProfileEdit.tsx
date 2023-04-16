@@ -12,15 +12,15 @@ import {  Dialog,
   SelectChangeEvent,
 } from '@mui/material'
 import { TransitionProps } from '@mui/material/transitions'
-import { AuthContext, TeacherEditModalContext } from 'pages/_app'
+import { AuthContext, UserEditModalContext } from 'pages/_app'
 import React, { useContext, useState } from 'react'
 import Slide from '@mui/material/Slide';
 
 
-const TeacherEdit:React.FC = () => {
+const ProfileEdit:React.FC = () => {
 
     const {currentUser} = useContext(AuthContext)
-    const {teacherEditOpen,setTeacherEditOpen} = useContext(TeacherEditModalContext)
+    const {userEditOpen,setUserEditOpen} = useContext(UserEditModalContext)
 
     //教科の値を管理する
     const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
@@ -45,8 +45,8 @@ const TeacherEdit:React.FC = () => {
 
   return (
     <Dialog 
-    open={teacherEditOpen} 
-    onClose={()=> setTeacherEditOpen(false)}
+    open={userEditOpen} 
+    onClose={()=> setUserEditOpen(false)}
     maxWidth= "sm"
     fullWidth
     TransitionComponent={Slide}
@@ -107,4 +107,4 @@ const TeacherEdit:React.FC = () => {
   </Dialog>
   )
 }
-export default TeacherEdit
+export default ProfileEdit
