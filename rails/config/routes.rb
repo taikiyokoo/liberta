@@ -6,6 +6,8 @@ Rails.application.routes.draw do
       resources :users do
         member do 
           get :check_liked
+          get :liked_users
+          get :liking_users
         end
       end
       resources :likes

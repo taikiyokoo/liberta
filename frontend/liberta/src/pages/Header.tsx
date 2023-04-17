@@ -1,11 +1,12 @@
 import { makeStyles, Theme } from '@material-ui/core'
-import { AccountCircle, FormatListNumberedRtlSharp, Search } from '@mui/icons-material'
+import { AccountCircle, Favorite, FormatListNumberedRtlSharp, Search } from '@mui/icons-material'
 import { AppBar, Avatar, Box, Button, IconButton, InputBase, Toolbar, Typography, alpha, styled  } from '@mui/material'
 import Cookies from 'js-cookie'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useContext} from 'react'
 import { signOut } from './api/auth'
+import ProfileEdit from './components/Dialog/student/ProfileEdit'
 import SearchBar from './components/Search/SearchBar'
 import { AuthContext, UserEditModalContext } from './_app'
 
@@ -13,6 +14,8 @@ import { AuthContext, UserEditModalContext } from './_app'
 
 
 const Header: React.FC = () => {
+
+
 
 //認証用のコンテキストを使用
 const { loading, isSignedIn,setIsSignedIn,currentUser} = useContext(AuthContext)
@@ -56,15 +59,28 @@ const handleSignOut = async()=>{
                 return (
                     <>
                         {currentUser&&
-                            <IconButton
-                                edge="end"
-                                color="inherit"
-                                aria-label="account"
-                                sx={{marginRight: 2}}
-                                onClick={()=>{setUserEditOpen(true)}}
-                            >
-                                <AccountCircle />
-                            </IconButton>
+                            <>
+                                <Favorite
+                                    color= "primary"
+                                    sx={{marginRight: 5}}
+                                    onClick={()=>{
+                                        if(currentUser.userType ==="student"){
+                                            router.push(`/student/${currentUser.id}/LikedUsers`)
+                                        }else{
+                                            router.push(`/teacher/${currentUser.id}/LikedUsers`)
+                                        }
+                                    }}
+                                    />
+                                <IconButton
+                                    edge="end"
+                                    color="inherit"
+                                    aria-label="account"
+                                    sx={{marginRight: 2}}
+                                    onClick={()=>{setUserEditOpen(true)}}
+                                >
+                                    <AccountCircle />
+                                </IconButton>
+                            </>
                         }
                         <Button
                         color="success"
@@ -104,22 +120,6 @@ const handleSignOut = async()=>{
         }
     }
 
-    const SearchButton = styled(Button)(({ theme }) => ({
-        padding: theme.spacing(1, 2),
-        borderRadius: '9999px',
-        backgroundColor: theme.palette.common.white,
-        color: theme.palette.common.black,
-        boxShadow: '0 2px 4px rgba(32,33,36,0.14)',
-        '&:hover': {
-          backgroundColor: theme.palette.common.white,
-          boxShadow: '0 4px 6px rgba(32,33,36,0.28)',
-        },
-        marginRight: theme.spacing(2),
-        display: 'flex',
-        alignItems: 'center',
-      }));
-
-
     return (
         <AppBar position="static" color="inherit" elevation={0} sx={{ borderBottom: '1px solid rgba(0,0,0,0.1)' }}>
         <Toolbar>
@@ -140,13 +140,14 @@ const handleSignOut = async()=>{
                     Liberta
                 </Typography>
             </Box>
-          <Box sx={{ flexGrow: 0.5 }} />
+          <Box sx={{ flexGrow: 1 }} />
           {isSignedIn&&<SearchBar />}
           <Box sx={{ flexGrow: 1.5 }} />
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <AuthButtons />
           </Box>
         </Toolbar>
+        <ProfileEdit />
       </AppBar>
       
     );

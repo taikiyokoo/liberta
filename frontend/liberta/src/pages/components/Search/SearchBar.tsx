@@ -12,6 +12,7 @@ const SearchButton = styled(Button)(({ theme }) => ({
   color: theme.palette.common.black,
   boxShadow: '0 2px 4px rgba(32,33,36,0.2)',
   cursor: 'pointer',
+  marginBottom: 10,
   '&:hover': {
     backgroundColor: theme.palette.common.white,
     boxShadow: '0 4px 6px rgba(32,33,36,0.3)',

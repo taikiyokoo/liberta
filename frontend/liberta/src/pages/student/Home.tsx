@@ -76,7 +76,6 @@ const Home:React.FC = () => {
               )
             })}
           </Grid>
-        <ProfileEdit />
     </div>
   )
 }

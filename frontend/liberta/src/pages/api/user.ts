@@ -16,3 +16,13 @@ export const confirmLiked = (id: number, user_id: number) => {
       }
     });
   };
+
+//いいねをしたユーザーを取得
+export const getLikedUsers = (id: string) => {
+    return client.get(`/users/${id}/liked_users`);
+}
+
+//いいねをされたユーザーを取得
+export const getLikingUsers = (id: string) => {
+    return client.get(`/users/${id}/liking_users`);
+}
