@@ -124,4 +124,4 @@ const ProfileEdit:React.FC = () => {
   </Dialog>
   )
 }
-export default ProfileEdit
+export  {ProfileEdit}

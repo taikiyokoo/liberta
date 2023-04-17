@@ -1,12 +1,14 @@
 import { makeStyles, Theme } from '@material-ui/core'
 import { AccountCircle, Favorite, FormatListNumberedRtlSharp, Search } from '@mui/icons-material'
-import { AppBar, Avatar, Box, Button, IconButton, InputBase, Toolbar, Typography, alpha, styled  } from '@mui/material'
+import { AppBar, Avatar, Box, Button, IconButton, InputBase, Toolbar, Typography, alpha, styled, darken  } from '@mui/material'
 import Cookies from 'js-cookie'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useContext} from 'react'
+import theme from 'theme'
 import { signOut } from './api/auth'
-import ProfileEdit from './components/Dialog/student/ProfileEdit'
+import { ProfileEdit as StudentProfileEdit } from './components/Dialog/student/ProfileEdit'
+import { ProfileEdit as TeacherProfileEdit } from './components/Dialog/teacher/ProfileEdit'
 import SearchBar from './components/Search/SearchBar'
 import { AuthContext, UserEditModalContext } from './_app'
 
@@ -62,7 +64,14 @@ const handleSignOut = async()=>{
                             <>
                                 <Favorite
                                     color= "primary"
-                                    sx={{marginRight: 5}}
+                                    sx={{
+                                        marginRight: 5,
+                                        cursor: "pointer",
+                                        ":hover": {
+                                            color: darken(theme.palette.primary.main, 0.2),
+                                            transform: "scale(1.2)",
+                                        },
+                                    }}
                                     onClick={()=>{
                                         if(currentUser.userType ==="student"){
                                             router.push(`/student/${currentUser.id}/LikedUsers`)
@@ -147,7 +156,8 @@ const handleSignOut = async()=>{
             <AuthButtons />
           </Box>
         </Toolbar>
-        <ProfileEdit />
+        {currentUser&& currentUser.userType === "student" && <StudentProfileEdit />}
+        {currentUser&& currentUser.userType === "teacher" && <TeacherProfileEdit />}   
       </AppBar>
       
     );

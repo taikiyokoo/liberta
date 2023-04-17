@@ -3,7 +3,6 @@ import { User } from 'interfaces'
 import { GetServerSideProps } from 'next'
 import { getUsers } from 'pages/api/user'
 import TeacherCard from 'pages/components/Cards/teacher/TeacherCard'
-import ProfileEdit from 'pages/components/Dialog/student/ProfileEdit'
 import { AuthContext} from 'pages/_app'
 import React, { useContext, useEffect, useState } from 'react'
 
