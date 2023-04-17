@@ -70,3 +70,10 @@ export interface SignUpParams {
     user_id: number 
 
   }
+
+  export interface CreateLikeParams {
+    liker_id: number,
+    liked_id: number
+  }
+
+

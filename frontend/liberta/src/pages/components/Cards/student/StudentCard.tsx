@@ -42,7 +42,7 @@ const classes = useStyles()
           </CardContent>
         {user.studentProfile?.subjects.map((subject)=>{
           return (
-                    <Chip label={subject} color="success" variant='outlined' sx={{marginRight: 1}} />
+              <Chip label={subject} color="success" variant='outlined' sx={{marginRight: 1}} />
           )
         })
       }

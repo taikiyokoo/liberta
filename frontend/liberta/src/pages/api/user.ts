@@ -8,3 +8,11 @@ export const getUsers = () => {
 export const getUser = (id: string) => {
     return client.get(`/users/${id}`);
 }
+
+export const confirmLiked = (id: number, user_id: number) => {
+    return client.get(`/users/${id}/liked`, {
+      params: {
+        user_id: user_id
+      }
+    });
+  };

@@ -5,7 +5,7 @@ import { getUsers } from 'pages/api/user'
 import TeacherCard from 'pages/components/Cards/teacher/TeacherCard'
 import ProfileEdit from 'pages/components/Dialog/student/ProfileEdit'
 import { AuthContext} from 'pages/_app'
-import React, { ReactEventHandler, useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 
 const Home:React.FC = () => {
 
@@ -26,7 +26,6 @@ const Home:React.FC = () => {
       filteredUsers = filteredUsers.filter((user:User)=>newSelectedSubjects.every((newSelectedSubject)=>user.teacherProfile?.subjects.includes(newSelectedSubject)))
       setSubject(newSelectedSubjects)
       setTeachers(filteredUsers)
-      console.log(newSelectedSubjects)
       return
     }
     let filteredUsers:User[] = []
@@ -53,7 +52,6 @@ const Home:React.FC = () => {
   }
 
   useEffect(() => {handleGetUsers()}, [])
-
 
   if(loading) return (<div>Loading...</div>)
 

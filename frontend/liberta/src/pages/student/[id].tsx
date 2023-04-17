@@ -2,11 +2,13 @@
 import { makeStyles } from '@material-ui/styles';
 import { ArrowBack, ThumbUp } from '@mui/icons-material';
 import { Box, Typography, Avatar, Chip, Button, Theme, styled } from '@mui/material';
-import { User } from 'interfaces';
+import { CreateLikeParams, User } from 'interfaces';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
-import { getUser } from 'pages/api/user';
-import { useState } from 'react';
+import { createLike } from 'pages/api/like';
+import { confirmLiked, getUser } from 'pages/api/user';
+import { AuthContext } from 'pages/_app';
+import { useContext, useEffect, useState } from 'react';
 
 
 interface StudentDetailProps {
@@ -18,11 +20,11 @@ export const getServerSideProps: GetServerSideProps<StudentDetailProps>= async (
     const id = context.params?.id as string;
     if(id){
         try{
-         const response = await getUser(id)
-         const user:User = response.data;
+          let res = await getUser(id)
+          const user:User = res.data;
          return {
              props: {
-               user,
+               user
              },
            };
         }catch(err){
@@ -73,13 +75,51 @@ export const getServerSideProps: GetServerSideProps<StudentDetailProps>= async (
 
 
   const StudentDetail: React.FC<StudentDetailProps> = ({ user }) => {
+ 
+    const {currentUser} = useContext(AuthContext);
+
+    const [like, setLike]= useState<boolean>(false)
 
     const router = useRouter();
 
-    const [like, setLike] = useState(false);
+    //いいねボタンを押した時の処理
+    const handleConfirmLiked = async() => {
+      if(currentUser){
+        try{
+          const res = await confirmLiked(currentUser.id,user.id)
+          const isLiked = res.data
+          console.log(isLiked)
+          setLike(isLiked)
+        }catch(error){
+          console.log(error)
+        }
+      }
+    }
 
-    const handleLikeClick = () => {
-      setLike(!like);
+
+    useEffect(() => {handleConfirmLiked()},[])
+
+    //いいねボタンを押した時の処理
+    const handleLikeClick = async() => {
+
+      if(currentUser && !like){
+        const params:CreateLikeParams = {
+          liked_id: user.id,
+          liker_id: currentUser.id
+        }
+        setLike(true)
+      try{
+        const res = await createLike(params)
+        console.log(res)
+
+      }catch(error){
+        console.log(error)
+      }
+
+      }else{
+        console.log("失敗")
+        return;
+      }
     }
 
 

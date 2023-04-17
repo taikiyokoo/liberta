@@ -41,7 +41,7 @@ const router = useRouter()
           </CardContent>
         {user.teacherProfile?.subjects.map((subject)=>{
           return (
-                <Chip label={subject} variant="outlined" color="success" sx={{marginRight: 2}} />
+                <Chip label={subject} variant="outlined" color="success" sx={{marginRight: 1}} />
           )
         }) }
         </Box>
