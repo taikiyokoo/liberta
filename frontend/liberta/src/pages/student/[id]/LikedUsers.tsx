@@ -1,8 +1,11 @@
 import { styled } from '@material-ui/core';
+import { ArrowBack } from '@mui/icons-material';
 import { Button, ButtonGroup, Grid, Tab, Tabs } from '@mui/material';
 import { teal } from '@mui/material/colors';
+import { Box } from '@mui/system';
 import { User } from 'interfaces';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
+import { useRouter } from 'next/router';
 import { getLikedUsers, getLikingUsers } from 'pages/api/user';
 import TeacherCard from 'pages/components/Cards/teacher/TeacherCard';
 import React, { useState } from 'react'
@@ -43,6 +46,8 @@ export const getServerSideProps: GetServerSideProps<LikedUsersProps>= async (con
 
 const LikedUsers:React.FC<LikedUsersProps> = ({likedUsers,likingUsers}) => {
 
+  const router =useRouter()
+
   const [selectedTab, setSelectedTab] = useState(0);
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -51,6 +56,9 @@ const LikedUsers:React.FC<LikedUsersProps> = ({likedUsers,likingUsers}) => {
 
   return (
     <div>
+      <Box sx={{minWidth: 1200}}>
+        <Button color="primary" startIcon={<ArrowBack />} sx={{ color: 'teal' }} onClick={() => router.push("/") }>戻る</Button>
+      </Box>
       <Tabs
           value={selectedTab}
           onChange={handleTabChange}
@@ -62,30 +70,39 @@ const LikedUsers:React.FC<LikedUsersProps> = ({likedUsers,likingUsers}) => {
           <Tab label="いいねしたユーザー" sx={{marginRight: 10}} />
           <Tab label="いいねされたユーザー" />
         </Tabs>
-        {selectedTab === 0 &&
-          <Grid container sx={{width: "100%"}} rowSpacing={6} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-              {likedUsers.map((user: User)=>{
-                return(
-                  <Grid item key={user.id} >
-                    <TeacherCard user={user} />
-                  </Grid>
-                )
-              })}
-          </Grid>
-        }
-        {selectedTab === 1 &&
-          <Grid container sx={{width: "100%"}} rowSpacing={6} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-              {likingUsers.map((user: User)=>{
-                return(
-                  <Grid item key={user.id} >
-                    <TeacherCard user={user} />
-                  </Grid>
-                )
-              }
-              )}
-          </Grid>
-        }
-      
+        <Box 
+           sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
+            height: "100%",
+        }}
+        >
+          {selectedTab === 0 &&
+            <Grid container sx={{width: "100%",justifyContent: 'center'}} rowSpacing={6} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+                {likedUsers.map((user: User)=>{
+                  return(
+                    <Grid item key={user.id} >
+                      <TeacherCard user={user} />
+                    </Grid>
+                  )
+                })}
+            </Grid>
+          }
+          {selectedTab === 1 &&
+            <Grid container sx={{width: "100%",justifyContent: 'center'}} rowSpacing={6} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+                {likingUsers.map((user: User)=>{
+                  return(
+                    <Grid item key={user.id} >
+                      <TeacherCard user={user} />
+                    </Grid>
+                  )
+                }
+                )}
+            </Grid>
+          }
+        </Box>
     </div>
   )
 }

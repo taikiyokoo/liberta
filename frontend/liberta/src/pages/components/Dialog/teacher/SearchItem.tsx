@@ -23,23 +23,7 @@ import Slide from '@mui/material/Slide';
 import { Search } from '@mui/icons-material';
 
 //バーのスタイル
-const customTheme = createTheme({
-    components: {
-      MuiSlider: {
-        styleOverrides: {
-          thumb: {
-            backgroundColor: 'teal',
-          },
-          track: {
-            backgroundColor: 'teal',
-          },
-          rail: {
-            backgroundColor: 'teal',
-          },
-        },
-      },
-    },
-  });
+
 
 //「条件から絞る」のスタイル
   const StyledDialogTitle = styled(DialogTitle)`
@@ -168,8 +152,7 @@ const SearchItem:React.FC = () => {
         <Box marginBottom={2}>
             <Typography>
                 偏差値 <Button color="error" onClick={() => {}}>解除</Button>
-            </Typography>
-            <ThemeProvider theme={customTheme}>
+            </Typography>     
                 <Slider
                 defaultValue={[20, 100]}
                 valueLabelDisplay="auto"
@@ -180,7 +163,6 @@ const SearchItem:React.FC = () => {
                     { value: 100, label: '100' },
                 ]}
                 />
-            </ThemeProvider>
         </Box>
         </DialogContent>
         <DialogActions>

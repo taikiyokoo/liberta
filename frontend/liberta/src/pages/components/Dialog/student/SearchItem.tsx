@@ -22,23 +22,7 @@ import { SearchModalContext } from 'pages/_app';
 import { Search } from '@mui/icons-material';
 
 //バーのスタイル
-const customTheme = createTheme({
-    components: {
-      MuiSlider: {
-        styleOverrides: {
-          thumb: {
-            backgroundColor: 'teal',
-          },
-          track: {
-            backgroundColor: 'teal',
-          },
-          rail: {
-            backgroundColor: 'teal',
-          },
-        },
-      },
-    },
-  });
+
 
   //「条件から絞る」のスタイル
   const StyledDialogTitle = styled(DialogTitle)`
@@ -131,7 +115,6 @@ const SearchItem: React.FC = () => {
           <Box marginBottom={2}>
             <Typography variant="subtitle2" >
               希望時給
-              <ThemeProvider theme={customTheme}>
                 <Slider
                     defaultValue={[1000, 2000]}
                     valueLabelDisplay="auto"
@@ -142,7 +125,6 @@ const SearchItem: React.FC = () => {
                     { value: 10000, label: '10000円以上' },
                     ]}
                 />
-               </ThemeProvider>
             </Typography>
           </Box>
         </DialogContent>

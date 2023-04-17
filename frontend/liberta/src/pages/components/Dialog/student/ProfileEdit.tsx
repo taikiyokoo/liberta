@@ -154,4 +154,4 @@ const [introduction, setIntroduction] = useState('');
   );
 };
 
-export default ProfileEdit;
+export { ProfileEdit } ;
