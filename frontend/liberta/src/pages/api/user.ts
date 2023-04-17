@@ -10,7 +10,7 @@ export const getUser = (id: string) => {
 }
 
 export const confirmLiked = (id: number, user_id: number) => {
-    return client.get(`/users/${id}/liked`, {
+    return client.get(`/users/${id}/check_liked`, {
       params: {
         user_id: user_id
       }
