@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
 
   #自分がしたいいね 
   has_many :likes_given,foreign_key: "liker_id",class_name: "Like"
-  #自分がいいねしたユーザー
+  #自分がいいねをしたユーザー
   has_many :liked_users,through: :likes_given,source: :liked
 
   #自分がもらったいいね

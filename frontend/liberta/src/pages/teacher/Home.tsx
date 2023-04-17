@@ -3,6 +3,8 @@ import { User } from 'interfaces'
 import { getUsers } from 'pages/api/user'
 import StudentCard from 'pages/components/Cards/student/StudentCard'
 import ProfileEdit from 'pages/components/Dialog/teacher/ProfileEdit'
+import SearchBar from 'pages/components/Search/SearchBar'
+import Header from 'pages/Header'
 import { AuthContext } from 'pages/_app'
 import React, { useContext, useEffect, useState } from 'react'
 
@@ -80,7 +82,6 @@ const Home:React.FC = () => {
               )
             })}
           </Grid>
-          <ProfileEdit />
     </div>
   )
 }

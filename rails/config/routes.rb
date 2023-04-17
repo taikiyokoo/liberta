@@ -5,7 +5,9 @@ Rails.application.routes.draw do
       resources :student_profiles
       resources :users do
         member do 
-          get :liked
+          get :check_liked
+          get :liked_users
+          get :liking_users
         end
       end
       resources :likes

@@ -4,7 +4,8 @@ import { createContext, useEffect, useState } from 'react';
 import CommonLayout from './CommonLayout';
 import { getCurrentUser } from './api/auth';
 import { User } from 'interfaces';
-
+import { ThemeProvider } from '@emotion/react';
+import theme from 'theme';
 //認証用context
 export const AuthContext = createContext({} as {
   loading: boolean
@@ -23,12 +24,11 @@ export const UserEditModalContext = createContext({} as {
 
 
 
-
+//検索モーダル用context
 export const SearchModalContext = createContext({} as {
   searchOpen: boolean
   setSearchOpen: React.Dispatch<React.SetStateAction<boolean>>
 })
-
 
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -43,7 +43,6 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   //検索モーダル管理
   const [searchOpen,setSearchOpen]= useState<boolean>(false)
-
 
   const router = useRouter();
 
@@ -85,19 +84,21 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <>
-      <AuthContext.Provider value={{loading,setLoading,isSignedIn,setIsSignedIn,currentUser,setCurrentUser}}>
-        <UserEditModalContext.Provider value={{userEditOpen,setUserEditOpen}}>
-            <SearchModalContext.Provider value={{searchOpen,setSearchOpen}}>
-              {isTopPage ? (
-                  <Component {...pageProps} />
-                ) : (
-                  <CommonLayout>
-                    <Component {...pageProps} />
-                  </CommonLayout>
-                )}
-            </SearchModalContext.Provider>
-        </UserEditModalContext.Provider>
-      </AuthContext.Provider>
+        <AuthContext.Provider value={{loading,setLoading,isSignedIn,setIsSignedIn,currentUser,setCurrentUser}}>
+          <UserEditModalContext.Provider value={{userEditOpen,setUserEditOpen}}>
+              <SearchModalContext.Provider value={{searchOpen,setSearchOpen}}>
+                  <ThemeProvider theme={theme}>
+                    {isTopPage ? (
+                        <Component {...pageProps} />
+                      ) : (
+                        <CommonLayout>
+                          <Component {...pageProps} />
+                        </CommonLayout>
+                      )}
+                  </ThemeProvider>
+              </SearchModalContext.Provider>
+          </UserEditModalContext.Provider>
+        </AuthContext.Provider>
     </>
   );
 }
