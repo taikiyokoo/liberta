@@ -3,7 +3,12 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :teacher_profiles
       resources :student_profiles
-      resources :users
+      resources :users do
+        member do 
+          get :liked
+        end
+      end
+      resources :likes
     end
   end
   namespace :api do

@@ -53,7 +53,6 @@ const Home:React.FC = () => {
       console.log(err)
     }
     setLoading(false)
-    console.log(students)
   }
 
   useEffect(() => {handleGetStudents()}, [])

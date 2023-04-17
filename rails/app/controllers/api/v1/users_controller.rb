@@ -10,4 +10,9 @@ class Api::V1::UsersController < ApplicationController
         render json: user.as_json(include: [:teacher_profile, :student_profile])
     end
 
+    def liked
+        user = User.find(params[:id])
+        liked = user.liked?(params[:user_id])
+            render json: liked
+    end
 end

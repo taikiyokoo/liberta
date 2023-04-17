@@ -2,11 +2,13 @@
 import { makeStyles } from '@material-ui/styles';
 import { ArrowBack, ThumbUp } from '@mui/icons-material';
 import { Box, Typography, Avatar, Chip, Button, Theme, styled } from '@mui/material';
-import { User } from 'interfaces';
+import { CreateLikeParams, User } from 'interfaces';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
-import { getUser } from 'pages/api/user';
-import { useState } from 'react';
+import { createLike } from 'pages/api/like';
+import { confirmLiked, getUser } from 'pages/api/user';
+import { AuthContext } from 'pages/_app';
+import { useContext, useEffect, useState } from 'react';
 
 
 interface TeacherDetailProps {
@@ -76,10 +78,48 @@ export const getServerSideProps: GetServerSideProps<TeacherDetailProps>= async (
 
     const router = useRouter();
 
+    const { currentUser } = useContext(AuthContext)
+
     const [like, setLike] = useState(false);
 
-    const handleLikeClick = () => {
-      setLike(!like);
+  //uesEffectでいいねの状態を確認する
+    const handleConfirmLiked = async() => {
+      if(currentUser){
+        try{
+          const res = await confirmLiked(currentUser.id,user.id)
+          const isLiked = res.data
+          console.log(isLiked)
+          setLike(isLiked)
+        }catch(error){
+          console.log(error)
+        }
+      }
+    }
+
+
+    useEffect(() => {handleConfirmLiked()},[])
+
+    //いいねボタンを押した時の処理
+    const handleLikeClick = async() => {
+
+      if(currentUser && !like){
+        const params:CreateLikeParams = {
+          liked_id: user.id,
+          liker_id: currentUser.id
+        }
+        setLike(true)
+      try{
+        const res = await createLike(params)
+        console.log(res)
+
+      }catch(error){
+        console.log(error)
+      }
+
+      }else{
+        console.log("失敗")
+        return;
+      }
     }
 
 
