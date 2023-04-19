@@ -30,6 +30,11 @@ export const SearchModalContext = createContext({} as {
   setSearchOpen: React.Dispatch<React.SetStateAction<boolean>>
 })
 
+//ホームにいるかどうか
+export const HomeContext = createContext({} as {
+  isHome: boolean
+  setIsHome: React.Dispatch<React.SetStateAction<boolean>>
+})
 
 function MyApp({ Component, pageProps }: AppProps) {
 
@@ -43,6 +48,9 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   //検索モーダル管理
   const [searchOpen,setSearchOpen]= useState<boolean>(false)
+
+  //ホームにいるかどうか
+  const [isHome,setIsHome] = useState<boolean>(false)
 
   const router = useRouter();
 
@@ -85,19 +93,21 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
         <AuthContext.Provider value={{loading,setLoading,isSignedIn,setIsSignedIn,currentUser,setCurrentUser}}>
-          <UserEditModalContext.Provider value={{userEditOpen,setUserEditOpen}}>
-              <SearchModalContext.Provider value={{searchOpen,setSearchOpen}}>
-                  <ThemeProvider theme={theme}>
-                    {isTopPage ? (
-                        <Component {...pageProps} />
-                      ) : (
-                        <CommonLayout>
+          <HomeContext.Provider value={{isHome,setIsHome}}>
+            <UserEditModalContext.Provider value={{userEditOpen,setUserEditOpen}}>
+                <SearchModalContext.Provider value={{searchOpen,setSearchOpen}}>
+                    <ThemeProvider theme={theme}>
+                      {isTopPage ? (
                           <Component {...pageProps} />
-                        </CommonLayout>
-                      )}
-                  </ThemeProvider>
-              </SearchModalContext.Provider>
-          </UserEditModalContext.Provider>
+                        ) : (
+                          <CommonLayout>
+                            <Component {...pageProps} />
+                          </CommonLayout>
+                        )}
+                    </ThemeProvider>
+                </SearchModalContext.Provider>
+            </UserEditModalContext.Provider>
+          </HomeContext.Provider>
         </AuthContext.Provider>
     </>
   );

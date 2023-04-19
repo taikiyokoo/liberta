@@ -10,11 +10,14 @@ import {
   IconButton,
   AppBar,
   Toolbar,
+  Button,
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { styled } from '@mui/system';
 import { User } from 'interfaces';
 import { getLikingUsers } from 'pages/api/user';
+import { ArrowBack } from '@mui/icons-material';
+import { useRouter } from 'next/router';
 
 
 type Props = {
@@ -57,18 +60,11 @@ const ChatCard = styled(Paper)(({ theme }) => ({
 }));
 
 const ChatList: React.FC<Props> = ({ users }) => {
+
+  const router = useRouter();
   return (
     <>
-      <AppBar position="static" sx={{ marginBottom: 3 }}>
-        <Toolbar>
-          <IconButton edge="start" color="inherit" aria-label="戻る" href="/">
-            <ArrowBackIcon />
-          </IconButton>
-          <Typography variant="h6" sx={{ marginLeft: 2 }}>
-            Chatroom
-          </Typography>
-        </Toolbar>
-      </AppBar>
+      <Button color="primary" startIcon={<ArrowBack />} sx={{ color: 'teal',marginBottom: 5 }} onClick={() => router.push("/") }>戻る</Button>
       <Container>
         <Grid container spacing={1}>
           {users.map((user) => (

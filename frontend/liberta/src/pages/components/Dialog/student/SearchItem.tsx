@@ -12,8 +12,6 @@ import {
   Slider,
   TextField,
   DialogTitle,
-  createTheme,
-  ThemeProvider,
   styled,
 } from '@mui/material';
 import { Box } from '@mui/system';

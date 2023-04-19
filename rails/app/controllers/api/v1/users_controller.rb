@@ -28,4 +28,16 @@ class Api::V1::UsersController < ApplicationController
         render json: liking_users.as_json(include: [:teacher_profile, :student_profile])
     end
 
+    def teacher_search
+        users = User.teacher_search()
+        render json: users.as_json(include: [:teacher_profile, :student_profile])
+
+    end
+
+    def student_search
+        users = User.student_search()
+        render json: users.as_json(include: [:teacher_profile, :student_profile])
+
+    end
+
 end

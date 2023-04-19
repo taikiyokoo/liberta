@@ -28,6 +28,18 @@ class User < ActiveRecord::Base
     likes_given.where(liked_id: user_id).exists?
   end
 
+  def self.teacher_search(university,major,gender,style,hourly_pay)
+    users = all
+    users = users.where('name LIKE ?', "%#{name}%") if name.present?
+    users = users.where('email LIKE ?', "%#{email}%") if email.present?
+    users
+  end
 
+  def self.student_search(desired_school,grade,major,style,duration,frequency,score)
+    users = all
+    users = users.where('name LIKE ?', "%#{name}%") if name.present?
+    users = users.where('email LIKE ?', "%#{email}%") if email.present?
+    users
+  end
 
 end

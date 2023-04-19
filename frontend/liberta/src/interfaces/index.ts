@@ -56,6 +56,8 @@ export interface SignUpParams {
     oneLiner: string | undefined
     hourlyPay: number
     user_id:  number 
+    major: string
+    style: string
 
   }
 
@@ -68,6 +70,11 @@ export interface SignUpParams {
     oneLiner: string | undefined
     introduction: string | undefined
     user_id: number 
+    major: string
+    style: string
+    duration: string
+    frequency: string
+    score: number
 
   }
 

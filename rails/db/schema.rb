@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_04_16_091452) do
+ActiveRecord::Schema.define(version: 2023_04_19_073318) do
 
   create_table "likes", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "liker_id", null: false
@@ -32,6 +32,12 @@ ActiveRecord::Schema.define(version: 2023_04_16_091452) do
     t.text "introduction"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "desired_school"
+    t.integer "major"
+    t.integer "style"
+    t.integer "duration"
+    t.integer "frequency"
+    t.integer "score"
     t.index ["user_id"], name: "index_student_profile_on_user_id"
   end
 
@@ -46,6 +52,8 @@ ActiveRecord::Schema.define(version: 2023_04_16_091452) do
     t.integer "hourly_pay"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "major"
+    t.integer "style"
     t.index ["user_id"], name: "index_teacher_profile_on_user_id"
   end
 

@@ -129,11 +129,14 @@ export const getServerSideProps: GetServerSideProps<StudentDetailProps>= async (
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: "center", borderBottom: '1px solid #e0e0e0', paddingBottom: '16px' }}>
           <Avatar src="/images/dog.jpg" sx={{ width: 250, height: 250,marginRight: 50 }} />
           <Box>
-            <Typography variant="h4" gutterBottom>{user.name}</Typography>
+            <Typography variant="h5" sx={{display: 'inline-block'}} gutterBottom>{user.name}</Typography><Chip sx={{marginLeft: 3}} label={user.studentProfile.major}></Chip>
             <Typography variant="subtitle1">年齢: {user.studentProfile.age}</Typography>
             <Typography variant="subtitle1">学校名: {user.studentProfile.school}</Typography>
-            <Typography variant="subtitle1">志望校: 大阪大学</Typography>
-            <Typography variant="subtitle1">文理選択: 理系</Typography>
+            <Typography variant="subtitle1">学年: {user.studentProfile.grade}</Typography>
+            <Typography variant="subtitle1">志望校: 早稲田大学</Typography>
+            <Typography variant="subtitle1">文理選択: {user.studentProfile.major}</Typography>
+            <Typography variant="subtitle1">希望期間: {user.studentProfile.duration}</Typography>
+            <Typography variant="subtitle1">希望頻度: {user.studentProfile.frequency}</Typography>
 
             {like ? (
               <LikedButton
@@ -164,7 +167,7 @@ export const getServerSideProps: GetServerSideProps<StudentDetailProps>= async (
         </Box>
         <Box sx={{ marginTop: '24px', borderBottom: '1px solid #e0e0e0', paddingBottom: '16px' }}>
           <Typography variant="h5" gutterBottom>希望指導形態</Typography>
-          <Typography>オンライン</Typography>
+          <Typography>{user.studentProfile.style}</Typography>
         </Box>
         <Box sx={{ marginTop: '24px',marginBottom: 10 }}>
           <Typography variant="h5" gutterBottom>自己紹介</Typography>
