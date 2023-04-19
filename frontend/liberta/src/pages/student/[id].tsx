@@ -125,9 +125,9 @@ export const getServerSideProps: GetServerSideProps<StudentDetailProps>= async (
 
     return (
       <Box sx={{ padding: '16px' }}>
-        <Box sx={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: "start", borderBottom: '1px solid #e0e0e0', paddingBottom: '16px' }}>
-          <Button color="primary" startIcon={<ArrowBack />} sx={{ position: 'absolute', top: '-40px', left: '-200px',color: 'teal' }} onClick={() => router.push("/") }>戻る</Button>
-          <Avatar src="/images/dog.jpg" sx={{ width: 250, height: 250,marginRight: 20 }} />
+        <Button color="primary" startIcon={<ArrowBack />} sx={{marginBottom :5 }} onClick={() => router.push("/") }>戻る</Button>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: "center", borderBottom: '1px solid #e0e0e0', paddingBottom: '16px' }}>
+          <Avatar src="/images/dog.jpg" sx={{ width: 250, height: 250,marginRight: 50 }} />
           <Box>
             <Typography variant="h4" gutterBottom>{user.name}</Typography>
             <Typography variant="subtitle1">年齢: {user.studentProfile.age}</Typography>
@@ -166,9 +166,9 @@ export const getServerSideProps: GetServerSideProps<StudentDetailProps>= async (
           <Typography variant="h5" gutterBottom>希望指導形態</Typography>
           <Typography>オンライン</Typography>
         </Box>
-        <Box sx={{ marginTop: '24px' }}>
+        <Box sx={{ marginTop: '24px',marginBottom: 10 }}>
           <Typography variant="h5" gutterBottom>自己紹介</Typography>
-          <Typography>こんにちは！私は数学が苦手です。よろしくお願いします。</Typography>
+          <Typography>{user.studentProfile.introduction}</Typography>
         </Box>
       </Box>
     );

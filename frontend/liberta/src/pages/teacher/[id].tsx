@@ -125,8 +125,8 @@ export const getServerSideProps: GetServerSideProps<TeacherDetailProps>= async (
 
     return (
       <Box sx={{ padding: '16px' }}>
-        <Box sx={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: "start", borderBottom: '1px solid #e0e0e0', paddingBottom: '16px' }}>
-          <Button color="primary" startIcon={<ArrowBack />} sx={{ position: 'absolute', top: '-40px', left: '-200px',color: 'teal' }} onClick={() => router.push("/") }>戻る</Button>
+        <Button color="primary" startIcon={<ArrowBack />} sx={{marginBottom: 5}} onClick={() => router.push("/") }>戻る</Button>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: "center", borderBottom: '1px solid #e0e0e0', paddingBottom: '16px' }}>
           <Avatar src="/images/dog.jpg" sx={{ width: 250, height: 250,marginRight: 20 }} />
           <Box>
             <Typography variant="h4" gutterBottom>{user.name}</Typography>
@@ -152,8 +152,6 @@ export const getServerSideProps: GetServerSideProps<TeacherDetailProps>= async (
             )}
           </Box>
       </Box>
-
-
         <Box sx={{ marginTop: '24px', borderBottom: '1px solid #e0e0e0', paddingBottom: '16px' }}>
           <Typography variant="h5" gutterBottom>指導可能科目</Typography>
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
@@ -166,9 +164,9 @@ export const getServerSideProps: GetServerSideProps<TeacherDetailProps>= async (
           <Typography variant="h5" gutterBottom>指導形態</Typography>
           <Typography>オンライン</Typography>
         </Box>
-        <Box sx={{ marginTop: '24px' }}>
+        <Box sx={{ marginTop: '24px',marginBottom: 10 }}>
           <Typography variant="h5" gutterBottom>自己紹介</Typography>
-          <Typography>こんにちは！私は東京大学の理学部で学んでいます。数学、物理、化学の指導を得意としています。よろしくお願いします。</Typography>
+          <Typography>{user.teacherProfile.introduction}</Typography>
         </Box>
       </Box>
     );

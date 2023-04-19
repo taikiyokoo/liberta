@@ -7,8 +7,8 @@ import React from 'react'
 
 const useStyles = makeStyles({
 card :{
-  width:250,
-  height:250,
+  width:300,
+  height:450,
   padding:10,
   transition: 'box-shadow 0.3s,transform 0.3s',
   cursor: 'pointer',
@@ -36,16 +36,17 @@ const classes = useStyles()
         title={user.name}
         subheader={user.studentProfile?.school}
       />
-          <CardContent>
-            <Typography variant="subtitle1">{user.studentProfile.school}</Typography>
-            <Typography variant="subtitle2">{user.studentProfile.grade}</Typography>
+          <CardContent sx={{height: 280}}>
+            <Typography variant="caption">{user.studentProfile.introduction}</Typography>
           </CardContent>
-        {user.studentProfile?.subjects.map((subject)=>{
-          return (
-              <Chip label={subject} color="success" variant='outlined' sx={{marginRight: 1}} />
-          )
-        })
-      }
+          <CardActions sx={{justifyContent: 'center'}}>
+          {user.studentProfile?.subjects.map((subject)=>{
+            return (
+                <Chip label={subject} color="success" variant='outlined' sx={{marginRight: 1}} />
+            )
+          })
+        }
+      </CardActions>
         </Box>
       </Card>
     </div>
