@@ -30,10 +30,20 @@ const router = useRouter()
       <Card className ={classes.card} onClick={()=> router.push(`/teacher/${user.id}`)} >
         <Box>
         <CardHeader
+        titleTypographyProps={{ style: { marginBottom: 4} }}
         avatar={
           <Avatar src="/images/dog.jpg" aria-label="recipe" />
         }
-        title={user.name}
+        title={
+        <>
+          <Typography variant="subtitle1" sx={{display: 'inline-block',marginRight: 1}}>{user.name}</Typography>
+          {<>
+          {user.teacherProfile.major ==="理系"&&<Chip sx={{marginLeft: 1}} label={user.teacherProfile.major} color="primary" variant="outlined"></Chip>}
+          {user.teacherProfile.major ==="文系"&&<Chip sx={{marginLeft: 1}} label={user.teacherProfile.major} color="secondary" variant="outlined"></Chip>}
+          </>
+          }
+        </>
+        }
         subheader={user.teacherProfile?.university}
       />
           <CardContent sx={{height: 280}}>
@@ -45,6 +55,7 @@ const router = useRouter()
                     <Chip label={subject} variant="outlined" color="success" sx={{marginRight: 1}} />
               )
             }) }
+            <Chip label={user.teacherProfile.style}/>
         </CardActions>
         </Box>
       </Card>

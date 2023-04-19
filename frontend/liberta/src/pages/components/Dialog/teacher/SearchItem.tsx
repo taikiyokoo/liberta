@@ -11,10 +11,9 @@ import {
   Typography,
   Slider,
   SelectChangeEvent,
-  ThemeProvider,
-  createTheme,
   styled,
   DialogTitle,
+  TextField,
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { SearchModalContext } from 'pages/_app'
@@ -94,26 +93,23 @@ const SearchItem:React.FC = () => {
             </FormControl>
         </Box>
 
-        {/* 希望教科 */}
+         {/* 専攻 */}
+         <Box marginBottom={2}>
+            <FormControl sx={{ width: "40%"}}>
+              <InputLabel>文理選択</InputLabel>
+              <Select>
+                <MenuItem value="理系">理系</MenuItem>
+                <MenuItem value="文系">文系</MenuItem>
+                <MenuItem value="">どちらでも</MenuItem>
+              </Select>
+            </FormControl>
+         </Box>
+        
+
+        {/* 大学名 */}
         <Box marginBottom={2}>
             <FormControl fullWidth>
-            <InputLabel>希望教科（複数選択可能）</InputLabel>
-            <Select
-            multiple
-            value={selectedSubjects}
-            onChange={handleChange}
-            renderValue={(selected) => (selected as string[]).join(', ')}
-            >
-                <MenuItem value="数学">数学</MenuItem>
-                <MenuItem value="英語">英語</MenuItem>
-                <MenuItem value="国語">国語</MenuItem>
-                <MenuItem value="物理">物理</MenuItem>
-                <MenuItem value="化学">化学</MenuItem>
-                <MenuItem value="生物">生物</MenuItem>
-                <MenuItem value="世界史">世界史</MenuItem>
-                <MenuItem value="日本史">日本史</MenuItem>
-                <MenuItem value="地理">地理</MenuItem>
-            </Select>
+                <TextField label="志望校" />
             </FormControl>
         </Box>
 
@@ -147,6 +143,18 @@ const SearchItem:React.FC = () => {
                 </Select>
             </FormControl>
         </Box>
+
+        {/* 指導形態 */}
+        <Box marginBottom={2}>
+            <FormControl sx={{ width: "40%" }}>
+              <InputLabel>指導形態</InputLabel>
+              <Select>
+                <MenuItem value="対面">対面</MenuItem>
+                <MenuItem value="オンライン">オンライン</MenuItem>
+                <MenuItem value="">どちらでも</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
 
         {/* 偏差値 */}
         <Box marginBottom={2}>

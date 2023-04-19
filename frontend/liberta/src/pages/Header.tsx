@@ -10,7 +10,7 @@ import { signOut } from './api/auth'
 import { ProfileEdit as StudentProfileEdit } from './components/Dialog/student/ProfileEdit'
 import { ProfileEdit as TeacherProfileEdit } from './components/Dialog/teacher/ProfileEdit'
 import SearchBar from './components/Search/SearchBar'
-import { AuthContext, UserEditModalContext } from './_app'
+import { AuthContext, HomeContext, UserEditModalContext } from './_app'
 
 
 
@@ -24,6 +24,9 @@ const { loading, isSignedIn,setIsSignedIn,currentUser} = useContext(AuthContext)
 
 //プロフィール編集モーダルのコンテキストを使用
 const {userEditOpen,setUserEditOpen} = useContext(UserEditModalContext)
+
+//ホームにいるかどうか
+const {isHome,setIsHome} = useContext(HomeContext)
 
 //スタイルを適用
 const router = useRouter()
@@ -62,6 +65,8 @@ const handleSignOut = async()=>{
                     <>
                         {currentUser&&
                             <>
+                                {isHome&&
+                                <>
                                 <Chat
                                     color= "primary"
                                     sx={{
@@ -79,7 +84,7 @@ const handleSignOut = async()=>{
                                             router.push(`/teacher/${currentUser.id}/ChatList`)
                                         }
                                     }}
-                                 />
+                                />
                                 <Favorite
                                     color= "primary"
                                     sx={{
@@ -98,6 +103,8 @@ const handleSignOut = async()=>{
                                         }
                                     }}
                                     />
+                                    </>
+                                    }
                                 <IconButton
                                     edge="end"
                                     color= "primary"
@@ -128,7 +135,7 @@ const handleSignOut = async()=>{
             }else{
                 return(
                     <>
-                        <Link href= "/User/SignIn">
+                        <Link href= "/teacher/SignIn">
                             <Button
                                 variant='text'
                                 color="success"
@@ -175,7 +182,7 @@ const handleSignOut = async()=>{
                 </Typography>
             </Box>
           <Box sx={{ flexGrow: 1 }} />
-          {isSignedIn&&<SearchBar />}
+          {isHome&&<SearchBar />}
           <Box sx={{ flexGrow: 1.5 }} />
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <AuthButtons />

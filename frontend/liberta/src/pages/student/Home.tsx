@@ -3,15 +3,17 @@ import { User } from 'interfaces'
 import { GetServerSideProps } from 'next'
 import { getUsers } from 'pages/api/user'
 import TeacherCard from 'pages/components/Cards/teacher/TeacherCard'
-import { AuthContext} from 'pages/_app'
+import { AuthContext, HomeContext} from 'pages/_app'
 import React, { useContext, useEffect, useState } from 'react'
 
 const Home:React.FC = () => {
 
   const [users,setUsers] = useState<User[]>([]) //全員の情報
   const [teachers,setTeachers] = useState<User[]>([])
-  const {loading,setLoading} =useContext(AuthContext)
   const [selectedSubjects,setSubject] = useState<string[]>([]) //フロント教科で絞る用のstate
+
+  const {loading,setLoading} =useContext(AuthContext)
+  const {isHome,setIsHome} = useContext(HomeContext)
 
 
   const subjects:string[] = ["数学","英語","物理","化学","生物","地学","日本史","世界史","地理"]
@@ -51,6 +53,14 @@ const Home:React.FC = () => {
   }
 
   useEffect(() => {handleGetUsers()}, [])
+
+   //ホームにいることをcontextに通知
+   useEffect(() => {
+    setIsHome(true)
+    return () => {
+      setIsHome(false)
+    }
+  }, [])
 
   if(loading) return (<div>Loading...</div>)
 
