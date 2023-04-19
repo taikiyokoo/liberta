@@ -66,7 +66,7 @@ const Home:React.FC = () => {
         })}
       </Grid>
 
-          <Grid container sx={{width: "100%"}} rowSpacing={6} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+          <Grid container sx={{width: "100%"}}  justifyContent="center" rowSpacing={6} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
             {teachers.map((user: User)=>{
               return(
                 <Grid item key={user.id} >

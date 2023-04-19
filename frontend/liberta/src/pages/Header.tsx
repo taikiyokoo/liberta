@@ -1,5 +1,5 @@
 import { makeStyles, Theme } from '@material-ui/core'
-import { AccountCircle, Favorite, FormatListNumberedRtlSharp, Search } from '@mui/icons-material'
+import { AccountCircle, Chat, Favorite, FormatListNumberedRtlSharp, Search } from '@mui/icons-material'
 import { AppBar, Avatar, Box, Button, IconButton, InputBase, Toolbar, Typography, alpha, styled, darken  } from '@mui/material'
 import Cookies from 'js-cookie'
 import Link from 'next/link'
@@ -62,6 +62,24 @@ const handleSignOut = async()=>{
                     <>
                         {currentUser&&
                             <>
+                                <Chat
+                                    color= "primary"
+                                    sx={{
+                                        marginRight: 5,
+                                        cursor: "pointer",
+                                        ":hover": {
+                                            color: darken(theme.palette.primary.main, 0.2),
+                                            transform: "scale(1.2)",
+                                        },
+                                    }}
+                                    onClick={()=>{
+                                        if(currentUser.userType ==="student"){
+                                            router.push(`/student/${currentUser.id}/ChatList`)
+                                        }else{
+                                            router.push(`/teacher/${currentUser.id}/ChatList`)
+                                        }
+                                    }}
+                                 />
                                 <Favorite
                                     color= "primary"
                                     sx={{
@@ -82,9 +100,16 @@ const handleSignOut = async()=>{
                                     />
                                 <IconButton
                                     edge="end"
-                                    color="inherit"
+                                    color= "primary"
                                     aria-label="account"
-                                    sx={{marginRight: 2}}
+                                    sx={{
+                                        marginRight: 2,
+                                        cursor: "pointer",
+                                        ":hover": {
+                                            color: darken(theme.palette.primary.main, 0.2),
+                                            transform: "scale(1.2)",
+                                        },
+                                    }}
                                     onClick={()=>{setUserEditOpen(true)}}
                                 >
                                     <AccountCircle />
