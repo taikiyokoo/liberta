@@ -1,17 +1,18 @@
-import { Chip, Grid, Tab, Tabs, Typography } from '@mui/material'
+import { Chip, Grid, Skeleton, Tab, Tabs, Typography } from '@mui/material'
 import { User } from 'interfaces'
 import { getUsers } from 'pages/api/user'
 import StudentCard from 'pages/components/Cards/student/StudentCard'
-import { AuthContext, HomeContext } from 'pages/_app'
+import { SearchItem } from 'pages/components/Dialog/teacher/SearchItem'
+import { HomeContext } from 'pages/_app'
 import React, { useContext, useEffect, useState } from 'react'
 
 const Home:React.FC = () => {
 
+  const [loading,setLoading] =useState(true) //ホーム用のloadingState skeltonを表示
+
   const [users,setUsers] = useState<User[]>([]) //全員の情報
-  const [students, setStudents] = useState<User[]>([])
-  
-  const {loading,setLoading} =useContext(AuthContext) //認証用context
-  
+  const [students, setStudents] = useState<User[]>([]) //生徒のみの情報
+
   const {isHome,setIsHome} = useContext(HomeContext) //ホームにいるかどうか
 
   const subjects:string[] = ["数学","英語","物理","化学","生物","地学","日本史","世界史","地理"]
@@ -61,6 +62,7 @@ const Home:React.FC = () => {
       console.log(err)
     }
     setLoading(false)
+
   }
 
   useEffect(() => {handleGetStudents()}, [])
@@ -73,7 +75,21 @@ const Home:React.FC = () => {
     }
   }, [])
 
-  if(loading) return (<div>Loading...</div>)
+  if(loading){
+    const skeletonCount = 50;
+    return (
+      <div>
+        <Skeleton  animation="wave" variant="text" sx={{ fontSize: 100,mb: 10 }} />
+        <Grid container spacing={4}>
+          {Array.from({ length: skeletonCount }).map((_, index) => (
+            <Grid item key={index}>
+              <Skeleton animation="wave" variant="rounded" width={250} height={300} />
+            </Grid>
+          ))}
+        </Grid>
+      </div>
+  )
+   }
 
   return (
     <div>
@@ -143,6 +159,7 @@ const Home:React.FC = () => {
               )
             })}
           </Grid>
+          <SearchItem setUsers={setUsers} setStudents={setStudents} setLoading={setLoading} />
     </div>
   )
 }

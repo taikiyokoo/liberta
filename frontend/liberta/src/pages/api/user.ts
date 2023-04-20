@@ -1,3 +1,4 @@
+import { SearchStudentsParams } from "interfaces";
 import Cookies from "js-cookie";
 import client from "./client";
 
@@ -26,3 +27,11 @@ export const getLikedUsers = (id: string) => {
 export const getLikingUsers = (id: string) => {
     return client.get(`/users/${id}/liking_users`);
 }
+
+//生徒検索api
+
+export const SearchStudents = (params: SearchStudentsParams) => {
+    return client.get("/users/students_search", {
+      params: params
+    });
+  }
