@@ -29,20 +29,17 @@ class Api::V1::UsersController < ApplicationController
     end
 
     def teachers_search
-        users = User.teacher_search()
+        users = User.teacher_search(params)
         render json: users.as_json(include: [:teacher_profile, :student_profile])
 
     end
 
     def students_search
-        users = User.student_search(students_search_params)
+        users = User.student_search(params)
         render json: users.as_json(include: [:teacher_profile, :student_profile])
     end
 
-    private
+  
 
-    def students_search_params
-        params.permit(:desired_school, :grade, :major, :style, :duration, :frequency)
-    end
 
 end

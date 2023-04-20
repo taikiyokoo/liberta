@@ -56,6 +56,7 @@ const router = useRouter()
               )
             }) }
             <Chip label={user.teacherProfile.style}/>
+            <Chip label={`${user.teacherProfile.hourlyPay}円`} />
         </CardActions>
         </Box>
       </Card>

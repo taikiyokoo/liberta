@@ -100,7 +100,7 @@ const Home:React.FC = () => {
               )
             })}
           </Grid>
-          <SearchItem />
+          <SearchItem setUsers={setUsers} setTeachers={setTeachers} setLoading={setLoading}/>
     </div>
   )
 }

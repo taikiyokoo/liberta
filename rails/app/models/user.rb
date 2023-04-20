@@ -21,17 +21,38 @@ class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+        :recoverable, :rememberable, :validatable
   include DeviseTokenAuth::Concerns::User
 
   def liked?(user_id)
     likes_given.where(liked_id: user_id).exists?
   end
 
-  def self.teacher_search(university,major,gender,style,hourly_pay)
+  def self.teacher_search(params)
     users = User.where(user_type: :teacher)
-    users = users.joins(:teacher_profile).where('name LIKE ?', "%#{name}%") if name.present?
-    users = users.joins(:teacher_profile).where('email LIKE ?', "%#{email}%") if email.present?
+    teacher_profile_table = TeacherProfile.arel_table
+
+    if params[:university].present?
+      users = users.joins(:teacher_profile).where(teacher_profile_table[:university].matches("%#{params[:university]}%"))
+    end
+    if params[:gender].present?
+      users = users.joins(:teacher_profile).where(teacher_profile_table[:gender].eq(params[:gender]))
+    end
+    if params[:major].present?
+      users = users.joins(:teacher_profile).where(teacher_profile_table[:major].eq(params[:major]))
+    end
+    if params[:style].present?
+      users = users.joins(:teacher_profile).where(teacher_profile_table[:style].eq(params[:style]))
+    end
+    if params[:hourly_pay].present?
+      min = params[:hourly_pay][0]
+      max = params[:hourly_pay][1]
+      users = users.joins(:teacher_profile).where(teacher_profile_table[:hourly_pay].gteq(min))
+      users = users.joins(:teacher_profile).where(teacher_profile_table[:hourly_pay].lteq(max))
+    end
+
+    return users
+
   end
 
   def self.student_search(params)

@@ -92,3 +92,11 @@ export interface SearchStudentsParams {
   frequency: string
   desiredSchool: string
 }
+
+export interface SearchTeachersParams {
+  major: string
+  style: string
+  gender: string
+  university: string
+  hourlyPay: number[]
+}
