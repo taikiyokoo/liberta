@@ -13,11 +13,15 @@ import {
   TextField,
   DialogTitle,
   styled,
+  SelectChangeEvent,
+  SliderProps,
 } from '@mui/material';
 import { Box } from '@mui/system';
 import Slide from '@mui/material/Slide';
 import { SearchModalContext } from 'pages/_app';
 import { Search } from '@mui/icons-material';
+import { SearchTeachers } from 'pages/api/user';
+import { User } from 'interfaces';
 
 //バーのスタイル
 
@@ -41,13 +45,67 @@ const SearchIconWrapper = styled('div')`
 `;
 
 
+interface SearchComponentProps {
+  setUsers: (users: User[]) => void;
+  setTeachers: (users: User[]) => void;
+  setLoading: (loading: boolean) => void;
+}
 
-const SearchItem: React.FC = () => {
 
+const SearchItem: React.FC<SearchComponentProps> = ({setUsers,setTeachers,setLoading}) => {
+
+//検索モーダル管理
   const { searchOpen, setSearchOpen } = useContext(SearchModalContext);
   const handleClose = () => {
     setSearchOpen(false);
   };
+
+//フォーム管理
+  const [university, setUniversity] = useState<string>('');
+  const [major, setMajor] = useState<string>('');
+  const [gender,setGender] = useState<string>('');
+  const [style, setStyle] = useState<string>('');
+  const [hourlyPay, setHourlyPay] = useState<number[]>([1000, 2000]);
+
+  const handleUniversityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setUniversity(event.target.value);
+  };
+
+  const handleMajorChange = (event: SelectChangeEvent) => {
+    setMajor(event.target.value as string);
+  };
+
+  const handleGenderChange = (event: SelectChangeEvent) => {
+    setGender(event.target.value as string);
+  };
+
+  const handleStyleChange = (event: SelectChangeEvent) => {
+    setStyle(event.target.value as string);
+  };
+
+  const handleSliderChange: SliderProps['onChange'] = (event, newValue) => {
+    setHourlyPay(newValue as number[]);
+  };
+
+  const handleSearch=async()=>{
+    setLoading(true)
+    try{
+      const res = await SearchTeachers({
+        university:university,
+        major:major,
+        gender: gender,
+        style: style,
+        hourlyPay: hourlyPay
+      })
+      setUsers(res.data)
+      setTeachers(res.data.filter((user:User)=>user.teacherProfile))
+    }catch(error){
+      console.log(error)
+    }
+    setLoading(false)
+    handleClose()
+  }
+
 
   return (
     <div>
@@ -67,29 +125,30 @@ const SearchItem: React.FC = () => {
         </SearchIconWrapper>
       </StyledDialogTitle>
         <DialogContent sx={{padding:7}}>
-          {/* 大学名 */}
+
+          {/* university */}
           <Box marginBottom={2}>
             <FormControl fullWidth>
-              <TextField label="大学名" />
+              <TextField label="大学名" onChange={handleUniversityChange} />
             </FormControl>
           </Box>
 
-          {/* 専攻 */}
+          {/* major */}
           <Box marginBottom={2}>
             <FormControl sx={{ width: "40%"}}>
               <InputLabel>文理選択</InputLabel>
-              <Select>
+              <Select onChange={handleMajorChange} value={major}>
                 <MenuItem value="理系">理系</MenuItem>
                 <MenuItem value="文系">文系</MenuItem>
                 <MenuItem value="">どちらでも</MenuItem>
               </Select>
             </FormControl>
          </Box>
-          {/* 性別 */}
+          {/* gender */}
           <Box marginBottom={2}>
             <FormControl sx={{ width: "40%" }}>
               <InputLabel>性別</InputLabel>
-              <Select>
+              <Select onChange={handleGenderChange} value={gender}>
                 <MenuItem value="男性">男性</MenuItem>
                 <MenuItem value="女性">女性</MenuItem>
                 <MenuItem value="">どちらでも</MenuItem>
@@ -97,11 +156,11 @@ const SearchItem: React.FC = () => {
             </FormControl>
           </Box>
 
-          {/* 指導形態 */}
+          {/* style */}
          <Box marginBottom={2}>
             <FormControl sx={{ width: "40%" }}>
               <InputLabel>指導形態</InputLabel>
-              <Select>
+              <Select onChange={handleStyleChange} value={style}>
                 <MenuItem value="対面">対面</MenuItem>
                 <MenuItem value="オンライン">オンライン</MenuItem>
                 <MenuItem value="">どちらでも</MenuItem>
@@ -109,12 +168,14 @@ const SearchItem: React.FC = () => {
             </FormControl>
           </Box>
 
-          {/* 時給 */}
+          {/* hourlyPay */}
           <Box marginBottom={2}>
             <Typography variant="subtitle2" >
               希望時給
                 <Slider
                     defaultValue={[1000, 2000]}
+                    onChange={handleSliderChange}
+                    value={hourlyPay}
                     valueLabelDisplay="auto"
                     min={1000}
                     max={10000}
@@ -131,7 +192,7 @@ const SearchItem: React.FC = () => {
             キャンセル
           </Button>
           <Button
-                onClick={handleClose}
+                onClick={handleSearch}
                 variant="contained"
                 sx={{
                     backgroundColor: 'teal',
