@@ -1,10 +1,10 @@
-import { Chip, Container, Dialog, Grid, Modal, Skeleton } from '@mui/material'
+import { Box, Chip, Container, Dialog, Grid, Modal, Skeleton, Slider, SliderProps, Typography } from '@mui/material'
 import { User } from 'interfaces'
 import { GetServerSideProps } from 'next'
 import { getUsers } from 'pages/api/user'
 import TeacherCard from 'pages/components/Cards/teacher/TeacherCard'
 import { SearchItem } from 'pages/components/Dialog/student/SearchItem'
-import { AuthContext, HomeContext} from 'pages/_app'
+import {HomeContext} from 'pages/_app'
 import React, { useContext, useEffect, useState } from 'react'
 
 const Home:React.FC = () => {
@@ -38,6 +38,21 @@ const Home:React.FC = () => {
     setTeachers(filteredUsers)
     setSubject(newSelectedSubjects)
   }
+
+//時給スライダーで絞る処理
+  const handleSliderChange: SliderProps['onChange'] = async(event, newValue) => {
+    setLoading(true)
+    try{
+    const slideValue = newValue as number[]
+    const newUsers = users.filter((user:User)=>{
+      return user.teacherProfile?.hourlyPay >= slideValue[0] && user.teacherProfile.hourlyPay <= slideValue[1]
+    })
+    setTeachers(newUsers)
+  }catch(err){
+    console.log(err)
+  }
+  setLoading(false)
+  };
 
 
   //マウント時に実行、全てのユーザーを取得して教師のみ格納
@@ -90,6 +105,28 @@ const Home:React.FC = () => {
           )
         })}
       </Grid>
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        flexDirection="column"
+        marginBottom={5}
+        width={300}
+        mx="auto" 
+    >
+      <Typography variant="subtitle2">希望時給</Typography>
+      <Slider
+        defaultValue={[1000, 10000]}
+        valueLabelDisplay="auto"
+        onChange={handleSliderChange}
+        min={1000}
+        max={10000}
+        marks={[
+          { value: 1000, label: "1000" },
+          { value: 10000, label: "10000円以上" },
+        ]}
+      />
+    </Box>
 
           <Grid container sx={{width: "100%"}}  justifyContent="center" rowSpacing={6} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
             {teachers.map((user: User)=>{

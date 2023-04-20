@@ -65,7 +65,7 @@ const SearchItem: React.FC<SearchComponentProps> = ({setUsers,setTeachers,setLoa
   const [major, setMajor] = useState<string>('');
   const [gender,setGender] = useState<string>('');
   const [style, setStyle] = useState<string>('');
-  const [hourlyPay, setHourlyPay] = useState<number[]>([1000, 2000]);
+  const [hourlyPay, setHourlyPay] = useState<number[]>([1000, 10000]);
 
   const handleUniversityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUniversity(event.target.value);
@@ -90,6 +90,13 @@ const SearchItem: React.FC<SearchComponentProps> = ({setUsers,setTeachers,setLoa
   const handleSearch=async()=>{
     setLoading(true)
     try{
+      console.log(
+        university,
+        major, 
+        gender,
+        style,
+        hourlyPay
+      )
       const res = await SearchTeachers({
         university:university,
         major:major,
@@ -173,14 +180,14 @@ const SearchItem: React.FC<SearchComponentProps> = ({setUsers,setTeachers,setLoa
             <Typography variant="subtitle2" >
               希望時給
                 <Slider
-                    defaultValue={[1000, 2000]}
+                    defaultValue={[1000, 10000]}
                     onChange={handleSliderChange}
                     value={hourlyPay}
                     valueLabelDisplay="auto"
                     min={1000}
                     max={10000}
                     marks={[
-                    { value: 1000, label: '1000' },
+                    { value: 1000, label: '1000円' },
                     { value: 10000, label: '10000円以上' },
                     ]}
                 />

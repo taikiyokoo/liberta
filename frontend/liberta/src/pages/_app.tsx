@@ -6,6 +6,7 @@ import { getCurrentUser } from './api/auth';
 import { User } from 'interfaces';
 import { ThemeProvider } from '@emotion/react';
 import theme from 'theme';
+import Head from 'next/head';
 //認証用context
 export const AuthContext = createContext({} as {
   loading: boolean
@@ -92,6 +93,9 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <>
+     <Head>
+        <title>liberta</title>
+      </Head>
         <AuthContext.Provider value={{loading,setLoading,isSignedIn,setIsSignedIn,currentUser,setCurrentUser}}>
           <HomeContext.Provider value={{isHome,setIsHome}}>
             <UserEditModalContext.Provider value={{userEditOpen,setUserEditOpen}}>
