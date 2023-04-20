@@ -4,6 +4,9 @@ Rails.application.routes.draw do
       resources :teacher_profiles
       resources :student_profiles
       resources :users do
+        collection do
+          get :students_search
+        end
         member do 
           get :check_liked
           get :liked_users

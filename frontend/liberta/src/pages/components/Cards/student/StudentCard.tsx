@@ -1,5 +1,5 @@
 import { Box,makeStyles } from '@material-ui/core'
-import { Avatar, Button, Card, CardActions, CardContent, CardHeader, Chip, LinearProgress, Typography } from '@mui/material'
+import { Avatar, Button, Card, CardActions, CardContent, CardHeader, Chip, LinearProgress, styled, Typography } from '@mui/material'
 import { red } from '@mui/material/colors'
 import { User } from 'interfaces'
 import { useRouter } from 'next/router'
@@ -9,7 +9,7 @@ const useStyles =makeStyles((theme) => ({
 card :{
   width:300,
   height:450,
-  padding:10,
+  padding:20,
   transition: 'box-shadow 0.3s,transform 0.3s',
   cursor: 'pointer',
   '&:hover': {
@@ -46,6 +46,14 @@ chipGroup: {
 },
 }));
 
+//チップの大きさを変更する
+const CustomChip = styled(Chip)({
+  width: '55px',
+  height: '25px',
+  fontSize: '5px',
+});
+
+
 
 const StudentCard: React.FC<{user:User}>= ({user}) => {
   
@@ -60,6 +68,7 @@ const chips = (
     <Chip color="primary" variant="outlined" sx={{ marginRight: 1 }}  label={user.studentProfile.frequency} />
     <Chip color="primary" variant="outlined" sx={{ marginRight: 1 }}  label={user.studentProfile.duration} />
     <Chip color="primary" variant="outlined" sx={{ marginRight: 1 }}  label={user.studentProfile.grade} />
+    <Chip color="primary" variant="outlined" sx={{ marginRight: 1 }}  label={user.studentProfile.style} />
   </>
 );
 
@@ -76,8 +85,8 @@ const chips = (
         <>
           <Typography variant="subtitle1" sx={{display: 'inline-block',marginRight: 1}}>{user.name}</Typography>
           {<>
-          {user.studentProfile.major ==="理系"&&<Chip sx={{marginLeft: 1}} label={user.studentProfile.major} color="primary" variant="outlined"></Chip>}
-          {user.studentProfile.major ==="文系"&&<Chip sx={{marginLeft: 1}} label={user.studentProfile.major} color="secondary" variant="outlined"></Chip>}
+          {user.studentProfile.major ==="理系"&&<CustomChip sx={{marginLeft: 1}} label={user.studentProfile.major} color="primary"></CustomChip>}
+          {user.studentProfile.major ==="文系"&&<CustomChip sx={{marginLeft: 1}} label={user.studentProfile.major} color="secondary" ></CustomChip>}
           </>
           }
         </>

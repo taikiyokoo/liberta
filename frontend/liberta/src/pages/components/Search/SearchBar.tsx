@@ -2,8 +2,6 @@ import React, { useContext, useState } from "react";
 import {  Search } from '@mui/icons-material'
 import { Button, Typography, styled  } from '@mui/material'
 import { AuthContext, SearchModalContext } from "pages/_app";
-import { SearchItem as TeacherSearchItem }from "../Dialog/teacher/SearchItem";
-import { SearchItem as StudentSearchItem }from "../Dialog/student/SearchItem";
 
 const SearchButton = styled(Button)(({ theme }) => ({
   padding: theme.spacing(1, 5),
@@ -41,11 +39,6 @@ const SearchBar:React.FC = () => {
       
   return (
     <div>
-    {searchOpen ? ( //詳細検索ボタンが押されているかどうか
-      currentUser?.userType ==="teacher" ? <TeacherSearchItem /> : <StudentSearchItem /> //先生か生徒かで検索項目を変える
-
-    ) : (
-
       <SearchButton
         variant="text"
         onClick={() => setSearchOpen(true)}
@@ -57,7 +50,6 @@ const SearchBar:React.FC = () => {
           <Search sx={{color: "white"}} />
         </SearchIconWrapper>
       </SearchButton>
-    )}
   </div>
   )
 }

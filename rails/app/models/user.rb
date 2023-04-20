@@ -29,17 +29,35 @@ class User < ActiveRecord::Base
   end
 
   def self.teacher_search(university,major,gender,style,hourly_pay)
-    users = all
-    users = users.where('name LIKE ?', "%#{name}%") if name.present?
-    users = users.where('email LIKE ?', "%#{email}%") if email.present?
-    users
+    users = User.where(user_type: :teacher)
+    users = users.joins(:teacher_profile).where('name LIKE ?', "%#{name}%") if name.present?
+    users = users.joins(:teacher_profile).where('email LIKE ?', "%#{email}%") if email.present?
   end
 
-  def self.student_search(desired_school,grade,major,style,duration,frequency,score)
-    users = all
-    users = users.where('name LIKE ?', "%#{name}%") if name.present?
-    users = users.where('email LIKE ?', "%#{email}%") if email.present?
-    users
+  def self.student_search(params)
+    users = User.where(user_type: :student)
+    student_profile_table = StudentProfile.arel_table
+  
+    if params[:grade].present?
+      users = users.joins(:student_profile).where(student_profile_table[:grade].eq(params[:grade]))
+    end
+    if params[:desired_school].present?
+      users = users.joins(:student_profile).where(student_profile_table[:desired_school].matches("%#{params[:desired_school]}%"))
+    end
+    if params[:major].present?
+      users = users.joins(:student_profile).where(student_profile_table[:major].eq(params[:major]))
+    end
+    if params[:style].present?
+      users = users.joins(:student_profile).where(student_profile_table[:style].eq(params[:style]))
+    end
+    if params[:duration].present?
+      users = users.joins(:student_profile).where(student_profile_table[:duration].eq(params[:duration]))
+    end
+    if params[:frequency].present?
+      users = users.joins(:student_profile).where(student_profile_table[:frequency].eq(params[:frequency]))
+    end
+  
+    return users
   end
 
 end

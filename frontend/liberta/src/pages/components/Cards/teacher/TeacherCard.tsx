@@ -9,7 +9,7 @@ const useStyles = makeStyles({
 card :{
   width:300,
   height:450,
-  padding:10,
+  padding:20,
   transition: 'box-shadow 0.3s,transform 0.3s',
   cursor: 'pointer',
   '&:hover': {

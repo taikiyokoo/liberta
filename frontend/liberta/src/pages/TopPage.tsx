@@ -1,10 +1,11 @@
-import React, { useState, useEffect, ReactNode, useRef } from 'react';
+import React, { useState, useEffect, ReactNode, useRef, useContext } from 'react';
 import { Box, Typography, Button, Container, Grid, Paper } from '@mui/material';
 import { styled } from '@mui/system';
 import SchoolIcon from '@mui/icons-material/School';
 import { makeStyles } from '@material-ui/core';
 import { useSpring, animated } from 'react-spring';
 import { useRouter } from 'next/router';
+import { AuthContext } from './_app';
 
 
 //ボタンのスタイル
@@ -128,6 +129,7 @@ const TopPage = () => {
   const classes= useStyles();
   const router = useRouter();
   const [typingComplete, setTypingComplete] = useState<boolean>(false);
+
 
   //カードのpropsの型定義
   interface FeatureCardProps {
@@ -265,6 +267,7 @@ const TopPage = () => {
   const handleStudentLogin = () => {
     router.push("/student/SignIn")
   };
+  
 
   return (
     <Box className={classes.mainContainer} >

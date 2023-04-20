@@ -1,8 +1,9 @@
-import { Chip, Container, Dialog, Grid, Modal } from '@mui/material'
+import { Chip, Container, Dialog, Grid, Modal, Skeleton } from '@mui/material'
 import { User } from 'interfaces'
 import { GetServerSideProps } from 'next'
 import { getUsers } from 'pages/api/user'
 import TeacherCard from 'pages/components/Cards/teacher/TeacherCard'
+import { SearchItem } from 'pages/components/Dialog/student/SearchItem'
 import { AuthContext, HomeContext} from 'pages/_app'
 import React, { useContext, useEffect, useState } from 'react'
 
@@ -12,9 +13,9 @@ const Home:React.FC = () => {
   const [teachers,setTeachers] = useState<User[]>([])
   const [selectedSubjects,setSubject] = useState<string[]>([]) //フロント教科で絞る用のstate
 
-  const {loading,setLoading} =useContext(AuthContext)
   const {isHome,setIsHome} = useContext(HomeContext)
 
+  const [loading,setLoading] = useState(true) //home用のloadingState skeltonを表示
 
   const subjects:string[] = ["数学","英語","物理","化学","生物","地学","日本史","世界史","地理"]
 
@@ -62,7 +63,21 @@ const Home:React.FC = () => {
     }
   }, [])
 
-  if(loading) return (<div>Loading...</div>)
+  if(loading){
+    const skeletonCount = 50;
+    return (
+      <div>
+        <Skeleton  animation="wave" variant="text" sx={{ fontSize: 100,mb: 10 }} />
+        <Grid container spacing={4}>
+          {Array.from({ length: skeletonCount }).map((_, index) => (
+            <Grid item key={index}>
+              <Skeleton animation="wave" variant="rounded" width={250} height={300} />
+            </Grid>
+          ))}
+        </Grid>
+      </div>
+  )
+   }
 
   return (
     <div>
@@ -85,6 +100,7 @@ const Home:React.FC = () => {
               )
             })}
           </Grid>
+          <SearchItem />
     </div>
   )
 }

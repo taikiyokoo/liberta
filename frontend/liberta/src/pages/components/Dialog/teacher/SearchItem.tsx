@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   Button,
   Dialog,
@@ -20,6 +20,8 @@ import { SearchModalContext } from 'pages/_app'
 import  { useContext } from 'react'
 import Slide from '@mui/material/Slide';
 import { Search } from '@mui/icons-material';
+import { SearchStudents } from 'pages/api/user';
+import { User } from 'interfaces';
 
 //バーのスタイル
 
@@ -42,22 +44,75 @@ const SearchIconWrapper = styled('div')`
   margin-left: 8px;
 `;
 
+interface SearchComponentProps {
+  setUsers: (users: User[]) => void;
+  setStudents: (users: User[]) => void;
+  setLoading: (loading: boolean) => void;
+}
 
 
+const SearchItem:React.FC<SearchComponentProps> = ({setUsers,setStudents,setLoading}) => {
 
-const SearchItem:React.FC = () => {
-
+  //検索モーダル開け閉め
     const {searchOpen,setSearchOpen} = useContext(SearchModalContext)
-    const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
 
     const handleClose=()=>{
         setSearchOpen(false)
     }
 
-    const handleChange = (event: SelectChangeEvent<string[]>) => {
-        setSelectedSubjects(event.target.value as string[]);
-      };
+  //フォーム管理
+  const [grade,setGrade] = useState<string>("")
+  const [major,setMajor] = useState<string>("")
+  const [desiredSchool,setdesiredSchool] = useState<string>("")
+  const [duration,setDuration] = useState<string>("")
+  const [style,setStyle] = useState<string>("")
+  const [frequency,setFrequency] = useState<string>("")
 
+  const handleGradeChange = (event: SelectChangeEvent) => {
+    setGrade(event.target.value as string);
+  };
+
+  const handleMajorChange = (event: SelectChangeEvent) => {
+    setMajor(event.target.value as string);
+  };
+
+  const handleDurationChange = (event: SelectChangeEvent) => {
+    setDuration(event.target.value as string);
+  };
+
+  const handleStyleChange = (event: SelectChangeEvent) => {
+    setStyle(event.target.value as string);
+  };
+
+  const handleFrequencyChange = (event: SelectChangeEvent) => {
+    setFrequency(event.target.value as string);
+  };
+
+
+  const handledesiredSchoolChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setdesiredSchool(event.target.value);
+  };
+
+  const handleSearch = async() => {
+    setLoading(true)
+    try{
+      const res = await SearchStudents({
+        grade: grade,
+        major: major,
+        desiredSchool: desiredSchool,
+        duration: duration,
+        style: style,
+        frequency: frequency,
+      })
+      console.log(res.data)
+      setUsers(res.data)
+      setStudents(res.data.filter((user:User)=>user.studentProfile))
+    }catch(error){
+      console.log(error)
+    }
+    handleClose();
+    setLoading(false)
+  }
 
   return (
     <div>
@@ -77,106 +132,91 @@ const SearchItem:React.FC = () => {
         </SearchIconWrapper>
       </StyledDialogTitle>
         <DialogContent>
-        {/* 学年 */}
+        {/* grade */}
         <Box marginBottom={2}>
             <FormControl fullWidth>
             <InputLabel>学年</InputLabel>
-            <Select>
+            <Select onChange={handleGradeChange} value={grade}>
                 <MenuItem value="">なし</MenuItem>
-                <MenuItem value="middle_school_1">中学1年生</MenuItem>
-                <MenuItem value="middle_school_2">中学2年生</MenuItem>
-                <MenuItem value="middle_school_3">中学3年生</MenuItem>
-                <MenuItem value="high_school_1">高校1年生</MenuItem>
-                <MenuItem value="high_school_2">高校2年生</MenuItem>
-                <MenuItem value="high_school_3">高校3年生</MenuItem>
+                <MenuItem value="中学1年生">中学1年生</MenuItem>
+                <MenuItem value="中学2年生">中学2年生</MenuItem>
+                <MenuItem value="中学3年生">中学3年生</MenuItem>
+                <MenuItem value="高校1年生">高校1年生</MenuItem>
+                <MenuItem value="高校2年生">高校2年生</MenuItem>
+                <MenuItem value="高校3年生">高校3年生</MenuItem>
             </Select>
             </FormControl>
         </Box>
 
-         {/* 専攻 */}
-         <Box marginBottom={2}>
+         {/* major */}
+        <Box marginBottom={2}>
             <FormControl sx={{ width: "40%"}}>
               <InputLabel>文理選択</InputLabel>
-              <Select>
+              <Select onChange={handleMajorChange} value={major}>
                 <MenuItem value="理系">理系</MenuItem>
                 <MenuItem value="文系">文系</MenuItem>
                 <MenuItem value="">どちらでも</MenuItem>
               </Select>
             </FormControl>
-         </Box>
+        </Box>
         
 
-        {/* 大学名 */}
+        {/* desired_university */}
         <Box marginBottom={2}>
             <FormControl fullWidth>
-                <TextField label="志望校" />
+                <TextField label="志望校" onChange={handledesiredSchoolChange} />
             </FormControl>
         </Box>
 
-        {/* 希望期間 */}
+        {/* duration */}
         <Box marginBottom={2}>
             <FormControl fullWidth>
             <InputLabel>希望期間</InputLabel>
-            <Select>
+            <Select onChange={handleDurationChange} value={duration}>
                 <MenuItem value="">なし</MenuItem>
-                <MenuItem value="test_period">テスト期間</MenuItem>
-                <MenuItem value="few_hours">数時間</MenuItem>
-                <MenuItem value="one_day">1日</MenuItem>
-                <MenuItem value="one_week">1週間</MenuItem>
-                <MenuItem value="one_month">1か月以上</MenuItem>
+                <MenuItem value="テスト期間のみ">テスト期間のみ</MenuItem>
+                <MenuItem value="1日">1日</MenuItem>
+                <MenuItem value="１週間">1週間</MenuItem>
+                <MenuItem value="１ヶ月">1か月</MenuItem>
+                <MenuItem value="１〜３ヶ月">１〜３ヶ月</MenuItem>
+                <MenuItem value="３〜６ヶ月">３〜６ヶ月</MenuItem>
+                <MenuItem value="一年以上">一年以上</MenuItem>
             </Select>
             </FormControl>
         </Box>
-            {/* 希望頻度 */}
+            {/* frequency */}
         <Box marginBottom={2}>
             <FormControl fullWidth>
                 <InputLabel>希望頻度</InputLabel>
-                <Select>
+                <Select onChange={handleFrequencyChange} value={frequency}>
                     <MenuItem value="">なし</MenuItem>
-                    <MenuItem value={1}>週1</MenuItem>
-                    <MenuItem value={2}>週2</MenuItem>
-                    <MenuItem value={3}>週3</MenuItem>
-                    <MenuItem value={4}>週4</MenuItem>
-                    <MenuItem value={5}>週5</MenuItem>
-                    <MenuItem value={6}>週6</MenuItem>
-                    <MenuItem value={7}>週7</MenuItem>
+                    <MenuItem value="週1回">週1回</MenuItem>
+                    <MenuItem value="週２回">週2回</MenuItem>
+                    <MenuItem value="週３回">週3回</MenuItem>
+                    <MenuItem value="週４回">週4回</MenuItem>
+                    <MenuItem value="週５回">週5回</MenuItem>
+                    <MenuItem value="週６回">週6回</MenuItem>
+                    <MenuItem value="週７回">週7回</MenuItem>
                 </Select>
             </FormControl>
         </Box>
 
-        {/* 指導形態 */}
+        {/* style */}
         <Box marginBottom={2}>
             <FormControl sx={{ width: "40%" }}>
               <InputLabel>指導形態</InputLabel>
-              <Select>
+              <Select onChange={handleStyleChange} value={style}>
                 <MenuItem value="対面">対面</MenuItem>
                 <MenuItem value="オンライン">オンライン</MenuItem>
                 <MenuItem value="">どちらでも</MenuItem>
               </Select>
             </FormControl>
           </Box>
-
-        {/* 偏差値 */}
-        <Box marginBottom={2}>
-            <Typography>
-                偏差値 <Button color="error" onClick={() => {}}>解除</Button>
-            </Typography>     
-                <Slider
-                defaultValue={[20, 100]}
-                valueLabelDisplay="auto"
-                min={20}
-                max={100}
-                marks={[
-                    { value: 20, label: '20' },
-                    { value: 100, label: '100' },
-                ]}
-                />
-        </Box>
         </DialogContent>
         <DialogActions>
             <Button onClick={handleClose} color="error">キャンセル</Button>
             <Button
-                onClick={handleClose}
+                onClick={handleSearch}
                 variant="contained"
                 sx={{
                     backgroundColor: 'teal',

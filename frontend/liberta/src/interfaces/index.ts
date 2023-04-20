@@ -79,8 +79,16 @@ export interface SignUpParams {
   }
 
   export interface CreateLikeParams {
-    liker_id: number,
+    liker_id: number
     liked_id: number
   }
 
 
+export interface SearchStudentsParams {
+  major: string
+  style: string
+  grade: string
+  duration: string
+  frequency: string
+  desiredSchool: string
+}
