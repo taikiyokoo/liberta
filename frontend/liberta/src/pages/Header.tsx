@@ -124,7 +124,7 @@ const handleSignOut = async()=>{
                             </>
                         }
                         <Button
-                        color="success"
+                        color="primary"
                         onClick={handleSignOut}
                         >
                             Logout
@@ -138,7 +138,7 @@ const handleSignOut = async()=>{
                         <Link href= "/teacher/SignIn">
                             <Button
                                 variant='text'
-                                color="success"
+                                color="primary"
                             >
                             先生の方はこちら
                             </Button>
@@ -146,7 +146,7 @@ const handleSignOut = async()=>{
                         <Link href="/student/SignIn">        
                             <Button
                                 variant='text'
-                                color="success"
+                                color="primary"
                             >
                             生徒の方はこちら
                             </Button>
@@ -183,7 +183,7 @@ const handleSignOut = async()=>{
             </Box>
           <Box sx={{ flexGrow: 1 }} />
           {isHome&&<SearchBar />}
-          <Box sx={{ flexGrow: 1.5 }} />
+          <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <AuthButtons />
           </Box>

@@ -55,10 +55,14 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   const router = useRouter();
 
+  const isAuthRoute = (path:string) =>
+  ['/student/SignIn', '/student/SignUp', '/User/SignIn', '/User/SignUp'].includes(path);
+
   //ページ遷移時にログイン状態確認、currentUser格納
   const handleGetCurrentUser = async()=>{
 
     try{
+
       const res  = await getCurrentUser()
       
       if (res?.data.isLogin === true){
@@ -66,16 +70,16 @@ function MyApp({ Component, pageProps }: AppProps) {
         setIsSignedIn(true)
         console.log(res?.data.data)
       }else if(res?.data.isLogin === false){
-        console.log(res?.data.message)
-        if(!(router.pathname ==="/student/SignIn")&&!(router.pathname ==="/student/SignUp")&&!(router.pathname ==="/User/SignIn")&&!(router.pathname ==="/User/SignUp"))router.push("/TopPage")
+        console.log("API側で認証されてない")
+        if (!isAuthRoute(router.pathname)) router.push('/TopPage');
       }else{
-        console.log("No current User")
-        if(!(router.pathname ==="/student/SignIn")&&!(router.pathname ==="/student/SignUp")&&!(router.pathname ==="/User/SignIn")&&!(router.pathname ==="/User/SignUp"))router.push("/TopPage")
+        console.log("そもそもqookieにtokenがない")
+        if (!isAuthRoute(router.pathname)) router.push('/TopPage');
       }
 
     } catch (err){
-      console.log(err)
-      if(!(router.pathname ==="/student/SignIn")&&!(router.pathname ==="/student/SignUp")&&!(router.pathname ==="/User/SignIn")&&!(router.pathname ==="/User/SignUp"))router.push("/TopPage")
+      console.error
+      
     }
     setLoading(false)
   }

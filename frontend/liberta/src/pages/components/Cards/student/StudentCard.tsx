@@ -85,8 +85,8 @@ const chips = (
         <>
           <Typography variant="subtitle1" sx={{display: 'inline-block',marginRight: 1}}>{user.name}</Typography>
           {<>
-          {user.studentProfile.major ==="理系"&&<CustomChip sx={{marginLeft: 1}} label={user.studentProfile.major} color="primary"></CustomChip>}
-          {user.studentProfile.major ==="文系"&&<CustomChip sx={{marginLeft: 1}} label={user.studentProfile.major} color="secondary" ></CustomChip>}
+          {user.studentProfile.major ==="理系"&&<CustomChip sx={{marginLeft: 1}} label={user.studentProfile.major} color="primary" variant="outlined"></CustomChip>}
+          {user.studentProfile.major ==="文系"&&<CustomChip sx={{marginLeft: 1}} label={user.studentProfile.major} color="secondary" variant="outlined" ></CustomChip>}
           </>
           }
         </>
