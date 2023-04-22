@@ -21,7 +21,16 @@ const Home:React.FC = () => {
 
   const subjects:string[] = ["数学","英語","物理","化学","生物","地学","日本史","世界史","地理"] //検索チップ用の教科
 
-  const [slideValue ,setSlideValue] = useState<number[]>([]) //時給スライダーの値
+  const [slideValue ,setSlideValue] = useState<number[]>([1000,10000]) //フロント時給スライダーの値
+
+  //検索用のstate ここから
+  const [searchState,setSearchState] = useState<boolean>(false) //検索ボタンを押したかどうかのstate
+  const [university, setUniversity] = useState<string>('');
+  const [major, setMajor] = useState<string>('');
+  const [gender,setGender] = useState<string>('');
+  const [style, setStyle] = useState<string>('');
+  const [hourlyPay, setHourlyPay] = useState<number[]>([1000, 10000]);
+  //検索用のstate ここまで
 
   //フロントで教科で絞る
   const handleSubjectSearch = (subject:string) => {
@@ -30,7 +39,7 @@ const Home:React.FC = () => {
       let filteredUsers:User[] = []
       filteredUsers = users.filter((user:User)=>user.teacherProfile)
       filteredUsers = filteredUsers.filter((user:User)=>newSelectedSubjects.every((newSelectedSubject)=>user.teacherProfile?.subjects.includes(newSelectedSubject)))
-      if(slideValue.length > 0){ //時給スライダーで指定していた場合
+      if(!(slideValue[0]===1000 && slideValue[1]===10000)){ //時給スライダーで指定していた場合
         filteredUsers = filteredUsers.filter((user:User)=>{
           return user.teacherProfile?.hourlyPay >= slideValue[0] && user.teacherProfile.hourlyPay <= slideValue[1]
         })
@@ -44,7 +53,7 @@ const Home:React.FC = () => {
     newSelectedSubjects.push(subject)
     filteredUsers = users.filter((user:User)=>user.teacherProfile)
     filteredUsers = filteredUsers.filter((user:User)=>newSelectedSubjects.every((newSelectedSubject)=>user.teacherProfile?.subjects.includes(newSelectedSubject)))
-    if(slideValue.length > 0){ //時給スライダーで指定していた場合
+    if(!(slideValue[0]===1000 && slideValue[1]===10000)){ //時給スライダーで指定していた場合
       filteredUsers = filteredUsers.filter((user:User)=>{
         return user.teacherProfile?.hourlyPay >= slideValue[0] && user.teacherProfile.hourlyPay <= slideValue[1]
       })
@@ -114,22 +123,59 @@ const Home:React.FC = () => {
 
   return (
     <div>
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          sx={{mb: 5}}
+        >
+          <Grid container spacing={2} justifyContent="center" alignItems="center">
+            <Grid item>
+              {searchState&&<Typography variant="subtitle2" color="teal">
+                現在の検索条件:
+              </Typography>}
+            </Grid>
+            {university&&<Grid item>
+              <Chip label={university} color="primary" variant='outlined'/>
+            </Grid>}
+            {major&&<Grid item>
+              <Chip label={major} color="primary" variant='outlined'/>
+            </Grid>}
+            {gender&&<Grid item>
+              <Chip label={gender} color="primary" variant='outlined'/>
+            </Grid>}
+            {style&&<Grid item>
+              <Chip label={style} color="primary" variant='outlined'/>
+            </Grid>}
+            {!(hourlyPay[0]===1000 && hourlyPay[1] === 10000) &&<Grid item>
+              <Chip label={hourlyPay[0] + "円〜" + hourlyPay[1] + "円"} color="primary" variant='outlined'/>
+            </Grid>}
+          </Grid>
+        </Box>
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          sx={{mb: 5}}
+        >
+          <Button color= "success" variant="outlined" sx={{ mr: 3 ,borderRadius: 50}}  >
+            {teachers.length}人の先生が見つかりました！
+          </Button>
+        </Box>
       <Box
         display="flex"
         alignItems="center"
         justifyContent="center"
         sx={{mb: 5}}
       >
-        <Typography variant="subtitle2" color= "teal" sx={{ mr: 3 }}  >
-          {teachers.length}人の先生が見つかりました
-        </Typography>  
         <Button
-          variant="outlined"
+          variant="contained"
           color= "primary"
           onClick={handleCollapseToggle}
           endIcon={collapseOpen ? <ExpandLess /> : <ExpandMore />}
+          sx={{borderRadius: 50}}
           >
-          簡単絞り込み
+          高速絞り込み
         </Button>
       </Box>
       <Collapse in={collapseOpen}>
@@ -142,6 +188,11 @@ const Home:React.FC = () => {
           width={300}
           mx="auto" 
         >
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            >
           <Typography
             variant="subtitle2"
             sx={{
@@ -150,12 +201,18 @@ const Home:React.FC = () => {
           >
             希望時給を範囲で指定
           </Typography>
+          <Button onClick={()=> {
+            setSlideValue([1000,10000])
+            setTeachers(users.filter((user:User)=>user.teacherProfile))
+            }}>リセット</Button>
+          </Box>
           <Slider
             defaultValue={[1000, 10000]}
             valueLabelDisplay="auto"
             onChange={handleSliderChange}
             min={1000}
             max={10000}
+            value={slideValue}
             marks={[
               { value: 1000, label: "1000円" },
               { value: 10000, label: "10000円以上" },
@@ -170,13 +227,23 @@ const Home:React.FC = () => {
           marginBottom={5}
           mx="auto" 
         >
-          <Typography 
-          sx ={{mb: 2}}
-          variant="subtitle2"
-          >
-            指導可能教科
-          </Typography>
-          <Grid container spacing={5} justifyContent="center" sx={{mb:4}}>
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            sx={{mb:2}}
+            >
+            <Typography 
+            variant="subtitle2"
+            >
+              指導可能教科
+            </Typography>
+            <Button onClick={()=> {
+              setSubject([])
+              setTeachers(users.filter((user:User)=>user.teacherProfile))
+              }}>リセット</Button>
+          </Box>
+          <Grid container spacing={2} justifyContent="center" sx={{mb:4}}>
             {subjects.map((subject:string)=>{
               return(
               <Grid item key={subject}>
@@ -197,7 +264,23 @@ const Home:React.FC = () => {
             )
           })}
         </Grid>
-        <SearchItem setUsers={setUsers} setTeachers={setTeachers} setLoading={setLoading}/>
+        <SearchItem
+          setUsers={setUsers} 
+          setTeachers={setTeachers} 
+          setLoading={setLoading} 
+          university={university}
+          setUniversity={setUniversity}
+          major={major}
+          setMajor={setMajor}
+          gender={gender}
+          setGender={setGender}
+          style={style}
+          setStyle={setStyle}
+          hourlyPay={hourlyPay}
+          setHourlyPay={setHourlyPay}
+          searchState={searchState}
+          setSearchState={setSearchState}
+            />
     </div>
   )
 }

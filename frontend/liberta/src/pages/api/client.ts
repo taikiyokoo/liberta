@@ -1,16 +1,23 @@
 import axios, { AxiosResponse } from "axios";
 import applyCaseMiddleware from "axios-case-converter";
+import Cookies from "js-cookie";
 
 const options = {
-  ignoreHeaders: true 
+  ignoreHeaders: true
 }
 
 const client = applyCaseMiddleware(axios.create({
-    baseURL: "http://localhost:3001/api/v1",
-    headers: {
-        "Content-Type": "multipart/form-data" // 画像ファイルを取り扱うのでform-dataで送信
-      }
-    }),options
-)
+  baseURL: "http://localhost:3001/api/v1",
+}), options);
 
-export default client
+// Request interceptor to attach authentication information to headers
+client.interceptors.request.use((config) => {
+  // Attach authentication tokens to header
+  config.headers['access-token'] = Cookies.get('_access_token');
+  config.headers['client'] = Cookies.get('_client');
+  config.headers['uid'] = Cookies.get('_uid');
+
+  return config;
+});
+
+export default client;
