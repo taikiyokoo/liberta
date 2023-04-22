@@ -1,5 +1,5 @@
 import { Box, makeStyles, styled } from '@material-ui/core'
-import { Avatar, Card, CardActions, CardContent, CardHeader, Chip, Typography } from '@mui/material'
+import { Avatar, Card, CardActions, CardContent, CardHeader, Chip, LinearProgress, Typography } from '@mui/material'
 import { User } from 'interfaces'
 import { useRouter } from 'next/router'
 import React from 'react'
@@ -20,6 +20,7 @@ const useStyles =makeStyles((theme) => ({
     display: 'flex',
     overflowX: 'hidden',
     position: 'relative',
+    height: 100,
     '&::before': {
       content: '""',
       position: 'absolute',
@@ -34,6 +35,11 @@ const useStyles =makeStyles((theme) => ({
   chipGroup: {
     display: 'flex',
     animation: `$slide 10s linear infinite`,
+  },
+  progress: {
+    height: 6,
+    width: 250,
+    borderRadius: 3,
   },
   '@keyframes slide': {
     from: {
@@ -85,17 +91,28 @@ const chips = (
         <>
           <Typography variant="subtitle1" sx={{display: 'inline-block',marginRight: 1}}>{user.name}</Typography>
           {<>
-          {user.teacherProfile.major ==="理系"&&<Chip sx={{marginLeft: 1}} label={user.teacherProfile.major} color="primary" variant="outlined"></Chip>}
-          {user.teacherProfile.major ==="文系"&&<Chip sx={{marginLeft: 1}} label={user.teacherProfile.major} color="secondary" variant="outlined"></Chip>}
+          {user.teacherProfile.major ==="理系"&&<CustomChip sx={{marginLeft: 1}} label={user.teacherProfile.major} color="primary" variant="outlined"></CustomChip>}
+          {user.teacherProfile.major ==="文系"&&<CustomChip sx={{marginLeft: 1}} label={user.teacherProfile.major} color="secondary" variant="outlined"></CustomChip>}
           </>
           }
         </>
         }
         subheader={user.teacherProfile?.university}
       />
-          <CardContent sx={{height: 280}}>
+          <CardContent sx={{height: 230}}>
             <Typography variant="caption">{user.teacherProfile.introduction}</Typography>
           </CardContent>
+          <Box>
+            <Typography variant="subtitle2" gutterBottom color="textSecondary">
+                希望時給: {user.teacherProfile.hourlyPay} 円
+            </Typography>
+            <LinearProgress
+                className={classes.progress}
+                variant="determinate"
+                value={(user.teacherProfile.hourlyPay / 10000) * 100}
+             
+              />
+          </Box>
           <CardActions className={classes.slideChips}>
           <Box className={classes.chipGroup}>{chips}</Box>
           <Box className={classes.chipGroup}>{chips}</Box>

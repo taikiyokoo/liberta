@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import {  Search } from '@mui/icons-material'
-import { Button, Typography, styled  } from '@mui/material'
+import { Button, Typography, styled, Box  } from '@mui/material'
 import { AuthContext, SearchModalContext } from "pages/_app";
 
 const SearchButton = styled(Button)(({ theme }) => ({
@@ -39,17 +39,31 @@ const SearchBar:React.FC = () => {
       
   return (
     <div>
-      <SearchButton
-        variant="text"
-        onClick={() => setSearchOpen(true)}
-      >
-        <Typography variant="subtitle2" sx={{ marginRight: 5 }}>
-          条件から検索する
-        </Typography>
-        <SearchIconWrapper>
-          <Search sx={{color: "white"}} />
-        </SearchIconWrapper>
-      </SearchButton>
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+        >
+        <SearchButton
+          variant="text"
+          onClick={() => setSearchOpen(true)}
+        >
+          <Typography variant="subtitle2" sx={{ marginRight: 5 }}>
+            条件から検索する
+          </Typography>
+          <SearchIconWrapper>
+            <Search sx={{color: "white"}} />
+          </SearchIconWrapper>
+        </SearchButton>
+        <Button
+            variant="text"
+            color="error"
+            onClick={() => window.location.reload()}
+            sx={{ fontSize: 0.9 }}
+          >
+            全ての検索条件をリセット
+        </Button>
+      </Box>
   </div>
   )
 }

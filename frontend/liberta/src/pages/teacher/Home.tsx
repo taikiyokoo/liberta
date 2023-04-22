@@ -1,4 +1,4 @@
-import { Chip, Grid, Skeleton, Tab, Tabs, Typography } from '@mui/material'
+import { Box, Button, Chip, Grid, Skeleton, Tab, Tabs, Typography } from '@mui/material'
 import { User } from 'interfaces'
 import { getUsers } from 'pages/api/user'
 import StudentCard from 'pages/components/Cards/student/StudentCard'
@@ -93,6 +93,16 @@ const Home:React.FC = () => {
 
   return (
     <div>
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        sx={{mb: 5}}
+      >
+        <Button variant="text" sx={{ mb: 2,mr: 3 }}>
+           {students.length}人の生徒が見つかりました
+        </Button>
+      </Box>
        <Tabs
           value={selectedTab}
           onChange={handleTabChange}
