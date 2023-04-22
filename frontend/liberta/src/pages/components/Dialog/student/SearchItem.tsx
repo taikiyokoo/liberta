@@ -49,23 +49,28 @@ interface SearchComponentProps {
   setUsers: (users: User[]) => void;
   setTeachers: (users: User[]) => void;
   setLoading: (loading: boolean) => void;
+  university: string;
+  setUniversity: (university: string) => void;
+  major: string;
+  setMajor: (major: string) => void;
+  gender: string;
+  setGender: (gender: string) => void;
+  style: string;
+  setStyle: (style: string) => void;
+  hourlyPay: number[];
+  setHourlyPay: (hourlyPay: number[]) => void;
+  searchState: boolean;
+  setSearchState: (searchState: boolean) => void;
 }
 
 
-const SearchItem: React.FC<SearchComponentProps> = ({setUsers,setTeachers,setLoading}) => {
+const SearchItem: React.FC<SearchComponentProps> = ({setUsers,setTeachers,setLoading,university,setUniversity,major,setMajor,gender,setGender,style,setStyle,hourlyPay,setHourlyPay,searchState,setSearchState}) => {
 
 //検索モーダル管理
   const { searchOpen, setSearchOpen } = useContext(SearchModalContext);
   const handleClose = () => {
     setSearchOpen(false);
   };
-
-//フォーム管理
-  const [university, setUniversity] = useState<string>('');
-  const [major, setMajor] = useState<string>('');
-  const [gender,setGender] = useState<string>('');
-  const [style, setStyle] = useState<string>('');
-  const [hourlyPay, setHourlyPay] = useState<number[]>([1000, 10000]);
 
   const handleUniversityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUniversity(event.target.value);
@@ -109,8 +114,9 @@ const SearchItem: React.FC<SearchComponentProps> = ({setUsers,setTeachers,setLoa
     }catch(error){
       console.log(error)
     }
-    setLoading(false)
     handleClose()
+    setSearchState(true)
+    setLoading(false)
   }
 
 
@@ -136,7 +142,7 @@ const SearchItem: React.FC<SearchComponentProps> = ({setUsers,setTeachers,setLoa
           {/* university */}
           <Box marginBottom={2}>
             <FormControl fullWidth>
-              <TextField label="大学名" onChange={handleUniversityChange} />
+              <TextField label="大学名" onChange={handleUniversityChange} value={university}  InputLabelProps={{ shrink: true }}/>
             </FormControl>
           </Box>
 

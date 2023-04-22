@@ -56,10 +56,10 @@ const SearchBar:React.FC = () => {
           </SearchIconWrapper>
         </SearchButton>
         <Button
-            variant="text"
+            variant="outlined"
             color="error"
             onClick={() => window.location.reload()}
-            sx={{ fontSize: 0.9 }}
+            sx={{ fontSize: 0.9,borderRadius: 50 }}
           >
             全ての検索条件をリセット
         </Button>
