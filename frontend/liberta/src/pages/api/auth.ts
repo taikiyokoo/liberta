@@ -16,11 +16,7 @@ export const signIn= (params: SignInParams)=>{
 //サインアウト
 
 export const signOut = ()=>{
-    return client.delete("auth/sign_out",{headers: {
-        "access-token": Cookies.get("_access_token"),
-        "client": Cookies.get("_client"),
-        "uid": Cookies.get("_uid")
-    }})
+    return client.delete("auth/sign_out")
 }
 
 //認証済みのユーザーを取得
