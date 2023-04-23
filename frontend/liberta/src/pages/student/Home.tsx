@@ -6,6 +6,7 @@ import { getUsers } from 'pages/api/user'
 import TeacherCard from 'pages/components/Cards/teacher/TeacherCard'
 import { SearchItem } from 'pages/components/Dialog/student/SearchItem'
 import {HomeContext} from 'pages/_app'
+import { grey } from '@mui/material/colors';
 import React, { useContext, useEffect, useState } from 'react'
 
 const Home:React.FC = () => {
@@ -62,6 +63,19 @@ const Home:React.FC = () => {
     setSubject(newSelectedSubjects)
   }
 
+//フロント教科リセット
+  const handleSubjectReset = () => {
+    let newUsers = users.filter((user:User)=>user.teacherProfile) //一度教師全員を格納
+    if(!(slideValue[0]===1000 && slideValue[1]===10000)){ //時給スライダーで指定していた場合時給条件だけ適用
+      newUsers= newUsers.filter((user:User)=>{
+        return user.teacherProfile?.hourlyPay >= slideValue[0] && user.teacherProfile.hourlyPay <= slideValue[1]
+      })
+    }
+    setTeachers(newUsers)
+    setSubject([]) //教科のみリセット
+  }
+  
+
 //フロントで時給で絞る処理
   const handleSliderChange: SliderProps['onChange'] = async(event, newValue) => {
       const value= newValue as number[]
@@ -75,6 +89,15 @@ const Home:React.FC = () => {
       setSlideValue(value)
   }
 
+  //フロント時給リセット
+  const handleSliderReset = () => {
+    let newUsers = users.filter((user:User)=>user.teacherProfile) //一度教師全員を格納
+    if(selectedSubjects.length > 0){ //教科が選択されていた場合は教科条件だけ適用
+      newUsers = newUsers.filter((user:User)=>selectedSubjects.every((selectedSubject)=>user.teacherProfile?.subjects.includes(selectedSubject)))
+    }
+    setTeachers(newUsers)
+    setSlideValue([1000,10000]) //スライダーの値のみリセット
+  }
 
   //検索collapseを開くか閉じるかの処理
   const handleCollapseToggle = () => {
@@ -123,50 +146,42 @@ const Home:React.FC = () => {
 
   return (
     <div>
-        <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          sx={{mb: 5}}
-        >
-          <Grid container spacing={2} justifyContent="center" alignItems="center">
-            <Grid item>
-              {searchState&&<Typography variant="subtitle2" color="teal">
-                現在の検索条件:
-              </Typography>}
-            </Grid>
-            {university&&<Grid item>
-              <Chip label={university} color="primary" variant='outlined'/>
-            </Grid>}
-            {major&&<Grid item>
-              <Chip label={major} color="primary" variant='outlined'/>
-            </Grid>}
-            {gender&&<Grid item>
-              <Chip label={gender} color="primary" variant='outlined'/>
-            </Grid>}
-            {style&&<Grid item>
-              <Chip label={style} color="primary" variant='outlined'/>
-            </Grid>}
-            {!(hourlyPay[0]===1000 && hourlyPay[1] === 10000) &&<Grid item>
-              <Chip label={hourlyPay[0] + "円〜" + hourlyPay[1] + "円"} color="primary" variant='outlined'/>
-            </Grid>}
-          </Grid>
-        </Box>
-        <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          sx={{mb: 5}}
-        >
-          <Button color= "success" variant="outlined" sx={{ mr: 3 ,borderRadius: 50}}  >
-            {teachers.length}人の先生が見つかりました！
-          </Button>
-        </Box>
       <Box
         display="flex"
         alignItems="center"
         justifyContent="center"
         sx={{mb: 5}}
+        width="100%"
+        minWidth="80vw"
+      >
+        <Grid container spacing={2} justifyContent="center" alignItems="center">
+          <Grid item>
+            {searchState&&<Typography variant="subtitle2" color="teal">
+              現在の検索条件:
+            </Typography>}
+          </Grid>
+          {university&&<Grid item>
+            <Chip label={university} color="primary" variant='outlined'/>
+          </Grid>}
+          {major&&<Grid item>
+            <Chip label={major} color="primary" variant='outlined'/>
+          </Grid>}
+          {gender&&<Grid item>
+            <Chip label={gender} color="primary" variant='outlined'/>
+          </Grid>}
+          {style&&<Grid item>
+            <Chip label={style} color="primary" variant='outlined'/>
+          </Grid>}
+          {!(hourlyPay[0]===1000 && hourlyPay[1] === 10000) &&<Grid item>
+            <Chip label={hourlyPay[0] + "円〜" + hourlyPay[1] + "円"} color="primary" variant='outlined'/>
+          </Grid>}
+        </Grid>
+      </Box>
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        mb={3}
       >
         <Button
           variant="contained"
@@ -179,83 +194,95 @@ const Home:React.FC = () => {
         </Button>
       </Box>
       <Collapse in={collapseOpen}>
-      <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          flexDirection="column"
-          marginBottom={5}
-          width={300}
-          mx="auto" 
+        <Box 
+          bgcolor={grey[200]}
+          p={2}
+          borderRadius={4}
+          mb={5}
         >
           <Box
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            >
-          <Typography
-            variant="subtitle2"
-            sx={{
-        
-            }}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              flexDirection="column"
+              marginBottom={5}
+              width={300}
+              mx="auto" 
           >
-            希望時給を範囲で指定
-          </Typography>
-          <Button onClick={()=> {
-            setSlideValue([1000,10000])
-            setTeachers(users.filter((user:User)=>user.teacherProfile))
-            }}>リセット</Button>
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <Typography
+                variant="subtitle2"
+                sx={{
+            
+                }}
+              >
+                希望時給を範囲で指定
+              </Typography>
+              <Button onClick={handleSliderReset}>リセット</Button>
+            </Box>
+            <Slider
+              defaultValue={[1000, 10000]}
+              valueLabelDisplay="auto"
+              onChange={handleSliderChange}
+              min={1000}
+              max={10000}
+              value={slideValue}
+              marks={[
+                { value: 1000, label: "1000円" },
+                { value: 10000, label: "10000円以上" },
+              ]}
+            />
           </Box>
-          <Slider
-            defaultValue={[1000, 10000]}
-            valueLabelDisplay="auto"
-            onChange={handleSliderChange}
-            min={1000}
-            max={10000}
-            value={slideValue}
-            marks={[
-              { value: 1000, label: "1000円" },
-              { value: 10000, label: "10000円以上" },
-            ]}
-          />
-        </Box>
-        <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          flexDirection="column"
-          marginBottom={5}
-          mx="auto" 
-        >
           <Box
             display="flex"
             alignItems="center"
             justifyContent="center"
-            sx={{mb:2}}
-            >
-            <Typography 
-            variant="subtitle2"
-            >
-              指導可能教科
-            </Typography>
-            <Button onClick={()=> {
-              setSubject([])
-              setTeachers(users.filter((user:User)=>user.teacherProfile))
-              }}>リセット</Button>
+            flexDirection="column"
+            marginBottom={5}
+            mx="auto" 
+          >
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              sx={{mb:2}}
+              >
+                <Typography 
+                variant="subtitle2"
+                >
+                  指導可能教科
+                </Typography>
+                <Button onClick={handleSubjectReset}>リセット</Button>
+            </Box>
+            <Grid container spacing={2} justifyContent="center" sx={{mb:4}}>
+              {subjects.map((subject:string)=>{
+                return(
+                <Grid item key={subject}>
+                  {selectedSubjects.includes(subject) ? <Chip label={subject} color="primary" onClick= {()=>handleSubjectSearch(subject)}/> : <Chip label={subject} color="primary" variant="outlined" onClick= {()=>handleSubjectSearch(subject)}/>}
+                </Grid>
+                )
+              })}
+            </Grid>
           </Box>
-          <Grid container spacing={2} justifyContent="center" sx={{mb:4}}>
-            {subjects.map((subject:string)=>{
-              return(
-              <Grid item key={subject}>
-                {selectedSubjects.includes(subject) ? <Chip label={subject} color="primary" onClick= {()=>handleSubjectSearch(subject)}/> : <Chip label={subject} variant="outlined" onClick= {()=>handleSubjectSearch(subject)}/>}
-              </Grid>
-              )
-            })}
-          </Grid>
-        </Box>
+          </Box>
       </Collapse>
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        mt={5}
+      >
+        <Button color= "success" variant="outlined" sx={{ mr: 3 ,borderRadius: 50,fontWeight: "bold"}}  >
+          {teachers.length}人の先生が見つかりました！
+        </Button>
+      </Box>
 
-        <Grid container sx={{width: "100%"}}  justifyContent="center" rowSpacing={6} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+        {teachers.length >0 ?
+        <Grid container sx={{width: "100%"}}  justifyContent="center" rowSpacing={6} columnSpacing={{ xs: 1, sm: 2, md: 3 }} mt={3}>
           {teachers.map((user: User)=>{
             return(
               <Grid item key={user.id} >
@@ -263,7 +290,16 @@ const Home:React.FC = () => {
               </Grid>
             )
           })}
-        </Grid>
+        </Grid> : 
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          mt={10}
+          mb={30}
+          >
+          <Typography variant="h5" color="teal">条件に一致する先生は見つかりませんでした。</Typography>
+          </Box>}
         <SearchItem
           setUsers={setUsers} 
           setTeachers={setTeachers} 
