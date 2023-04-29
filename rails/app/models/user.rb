@@ -29,56 +29,60 @@ class User < ActiveRecord::Base
   end
 
   def self.teacher_search(params)
-    users = User.where(user_type: :teacher)
+    users = User.where(user_type: :teacher).joins(:teacher_profile)
     teacher_profile_table = TeacherProfile.arel_table
-
-    if params[:university].present?
-      users = users.joins(:teacher_profile).where(teacher_profile_table[:university].matches("%#{params[:university]}%"))
+  
+    search_params = {
+      university: params[:university],
+      gender: params[:gender],
+      major: params[:major],
+      style: params[:style],
+      hourly_pay: params[:hourly_pay]
+    }
+  
+    search_params.each do |key, value|
+      next if value.blank?
+  
+      if key == :university
+        users = users.where(teacher_profile_table[key].matches("%#{value}%"))
+      elsif key == :hourly_pay
+        min = value[0]
+        max = value[1]
+        users = users.where(teacher_profile_table[key].gteq(min)).where(teacher_profile_table[key].lteq(max))
+      else
+        users = users.where(teacher_profile_table[key].eq(value))
+      end
     end
-    if params[:gender].present?
-      users = users.joins(:teacher_profile).where(teacher_profile_table[:gender].eq(params[:gender]))
-    end
-    if params[:major].present?
-      users = users.joins(:teacher_profile).where(teacher_profile_table[:major].eq(params[:major]))
-    end
-    if params[:style].present?
-      users = users.joins(:teacher_profile).where(teacher_profile_table[:style].eq(params[:style]))
-    end
-    if params[:hourly_pay].present?
-      min = params[:hourly_pay][0]
-      max = params[:hourly_pay][1]
-      users = users.joins(:teacher_profile).where(teacher_profile_table[:hourly_pay].gteq(min))
-      users = users.joins(:teacher_profile).where(teacher_profile_table[:hourly_pay].lteq(max))
-    end
-
-    return users
-
+  
+    users
   end
+  
 
   def self.student_search(params)
-    users = User.where(user_type: :student)
+    users = User.where(user_type: :student).joins(:student_profile)
     student_profile_table = StudentProfile.arel_table
   
-    if params[:grade].present?
-      users = users.joins(:student_profile).where(student_profile_table[:grade].eq(params[:grade]))
-    end
-    if params[:desired_school].present?
-      users = users.joins(:student_profile).where(student_profile_table[:desired_school].matches("%#{params[:desired_school]}%"))
-    end
-    if params[:major].present?
-      users = users.joins(:student_profile).where(student_profile_table[:major].eq(params[:major]))
-    end
-    if params[:style].present?
-      users = users.joins(:student_profile).where(student_profile_table[:style].eq(params[:style]))
-    end
-    if params[:duration].present?
-      users = users.joins(:student_profile).where(student_profile_table[:duration].eq(params[:duration]))
-    end
-    if params[:frequency].present?
-      users = users.joins(:student_profile).where(student_profile_table[:frequency].eq(params[:frequency]))
+    search_params = {
+      grade: params[:grade],
+      desired_school: params[:desired_school],
+      major: params[:major],
+      style: params[:style],
+      duration: params[:duration],
+      frequency: params[:frequency]
+    }
+  
+    search_params.each do |key, value|
+      next if value.blank?
+  
+      if key == :desired_school
+        users = users.where(student_profile_table[key].matches("%#{value}%"))
+      else
+        users = users.where(student_profile_table[key].eq(value))
+      end
     end
   
     return users
   end
+  
 
 end

@@ -1,4 +1,5 @@
 import { Box, Button, Chip, Grid, Skeleton, Tab, Tabs, Typography } from '@mui/material'
+import { grey } from '@mui/material/colors'
 import { User } from 'interfaces'
 import { getUsers } from 'pages/api/user'
 import StudentCard from 'pages/components/Cards/student/StudentCard'
@@ -21,10 +22,15 @@ const Home:React.FC = () => {
 
   const [selectedTab, setSelectedTab] = useState(0); //タブ用のstate
 
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
-    setSelectedTab(newValue);
-  };
-
+//検索モーダルと共有するstate
+  const [searchState,setSearchState] = useState<boolean>(false)
+  const [grade,setGrade] = useState<string>("")
+  const [major,setMajor] = useState<string>("")
+  const [desiredSchool,setdesiredSchool] = useState<string>("")
+  const [duration,setDuration] = useState<string>("")
+  const [style,setStyle] = useState<string>("")
+  const [frequency,setFrequency] = useState<string>("")
+//ここまで
 
     //フロントで教科で絞る
     const handleSubjectSearch = (subject:string) => {
@@ -98,23 +104,36 @@ const Home:React.FC = () => {
         alignItems="center"
         justifyContent="center"
         sx={{mb: 5}}
+        width="100%"
+        minWidth="80vw"
       >
-        <Button variant="text" sx={{ mb: 2,mr: 3 }}>
-           {students.length}人の生徒が見つかりました
-        </Button>
+          {searchState&&<Grid container spacing={2} justifyContent="center" alignItems="center">
+          <Grid item>
+            <Typography variant="subtitle2" color="teal">
+              現在の検索条件:
+            </Typography>
+          </Grid>
+          {grade&&<Grid item>
+            <Chip label={grade} color="primary" variant='outlined'/>
+          </Grid>}
+          {major&&<Grid item>
+            <Chip label={major} color="primary" variant='outlined'/>
+          </Grid>}
+          {desiredSchool&&<Grid item>
+            <Chip label={desiredSchool} color="primary" variant='outlined'/>
+          </Grid>}
+          {style&&<Grid item>
+            <Chip label={style} color="primary" variant='outlined'/>
+          </Grid>}
+          {duration&&<Grid item>
+            <Chip label={duration} color="primary" variant='outlined'/>
+          </Grid>}
+          {frequency&&<Grid item>
+            <Chip label={frequency} color="primary" variant='outlined'/>
+          </Grid>}
+        </Grid>}
       </Box>
-       <Tabs
-          value={selectedTab}
-          onChange={handleTabChange}
-          indicatorColor="primary"
-          textColor="primary"
-          centered
-          sx={{marginBottom: 8}}
-        >
-          <Tab label="希望科目で絞る" sx={{marginRight: 10}} />
-          <Tab label="その他条件で絞る" />
-        </Tabs>
-      {selectedTab ===0 &&<Grid container spacing={5} justifyContent="center" sx={{ mb: 7 }}>
+        <Grid container spacing={5} justifyContent="center" sx={{ mb: 7 }}>
         {subjects.map((subject) => {
           return (
             <Grid item key={subject}>
@@ -135,41 +154,45 @@ const Home:React.FC = () => {
           </Grid>
           );
         })}
-      </Grid>}
-      {selectedTab ===1 &&<Grid container spacing={5} justifyContent="center" sx={{ mb: 7 }}>
-        <Grid item>
-          <Chip label="理系" variant="outlined" color='primary'/>
-        </Grid>
-        <Grid item>
-          <Chip label="文系" variant="outlined" color='primary'/>
-        </Grid>
-        <Grid item>
-          <Chip label="テスト期間のみ " variant="outlined" color='primary'/>
-        </Grid>
-        <Grid item>
-          <Chip label="週１" variant="outlined" color='primary'/>
-        </Grid>
-        <Grid item>
-          <Chip label="オンライン" variant="outlined" color='primary'/>
-        </Grid>
-        <Grid item>
-          <Chip label="対面" variant="outlined" color='primary'/>
-        </Grid>
-        <Grid item>
-          <Chip label="1年以上" variant="outlined" color='primary'/>
-        </Grid>
-      </Grid> }
-
-          <Grid container sx={{width: "100%"}} justifyContent="center" rowSpacing={6} columnSpacing={{ xs: 1, sm: 2, md: 4 }}>
-            {students.map((user: User)=>{
-              return(
-                <Grid item key={user.id} >
-                  <StudentCard key={user.id} user={user}/>
-                </Grid>
-              )
-            })}
-          </Grid>
-          <SearchItem setUsers={setUsers} setStudents={setStudents} setLoading={setLoading} />
+      </Grid>
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        mt={5}
+      >
+        <Button color= "primary" variant="text" sx={{ mr: 3 ,borderRadius: 50 }}  >
+          {students.length}人の生徒が見つかりました！
+        </Button>
+      </Box>
+      <Grid container sx={{width: "100%"}} justifyContent="center" rowSpacing={6} columnSpacing={{ xs: 1, sm: 2, md: 4 }} mt={5}>
+        {students.map((user: User)=>{
+          return(
+            <Grid item key={user.id}>
+              <StudentCard key={user.id} user={user}/>
+            </Grid>
+          )
+        })}
+      </Grid>
+      <SearchItem
+      setUsers={setUsers}
+      setStudents={setStudents}
+      setLoading={setLoading} 
+      grade={grade} 
+      setGrade={setGrade} 
+      major={major} 
+      setMajor={setMajor}
+      desiredSchool={desiredSchool} 
+      setdesiredSchool={setdesiredSchool}
+      duration={duration} 
+      setDuration={setDuration}
+      style={style} 
+      setStyle={setStyle}
+      frequency={frequency}
+      setFrequency={setFrequency}
+      searchState={searchState}
+      setSearchState={setSearchState}
+      />
     </div>
   )
 }

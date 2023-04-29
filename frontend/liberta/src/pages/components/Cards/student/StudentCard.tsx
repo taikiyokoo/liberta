@@ -1,6 +1,5 @@
 import { Box,makeStyles } from '@material-ui/core'
-import { Avatar, Button, Card, CardActions, CardContent, CardHeader, Chip, LinearProgress, styled, Typography } from '@mui/material'
-import { red } from '@mui/material/colors'
+import { Avatar,Card, CardActions, CardContent, CardHeader, Chip,styled, Typography } from '@mui/material'
 import { User } from 'interfaces'
 import { useRouter } from 'next/router'
 import React from 'react'
@@ -9,9 +8,11 @@ const useStyles =makeStyles((theme) => ({
 card :{
   width:300,
   height:450,
-  padding:20,
+  padding:30,
   transition: 'box-shadow 0.3s,transform 0.3s',
   cursor: 'pointer',
+  backgroundColor: `${theme.palette.grey[100]} !important`, 
+  borderRadius: '20px !important',
   '&:hover': {
     boxShadow: '0px 30px 50px -15px rgba(0,0,0,0.3), 0px 0px 0px 3px rgba(0,0,0,0.05)',
     transform: 'translateY(-5px) scale(1.05)',
@@ -77,20 +78,20 @@ const chips = (
       <Card className ={classes.card} onClick={()=> router.push(`/student/${user.id}`)} >
         <Box>
         <CardHeader
-        titleTypographyProps={{ style: { marginBottom: 4} }}
-        avatar={
-          <Avatar src="/images/dog.jpg" aria-label="recipe" />
-        }
-        title={
-        <>
-          <Typography variant="subtitle1" sx={{display: 'inline-block',marginRight: 1}}>{user.name}</Typography>
-          {<>
-          {user.studentProfile.major ==="理系"&&<CustomChip sx={{marginLeft: 1}} label={user.studentProfile.major} color="primary" variant="outlined"></CustomChip>}
-          {user.studentProfile.major ==="文系"&&<CustomChip sx={{marginLeft: 1}} label={user.studentProfile.major} color="secondary" variant="outlined" ></CustomChip>}
+          titleTypographyProps={{ style: { marginBottom: 4} }}
+          avatar={
+            <Avatar src="/images/dog.jpg" aria-label="recipe" />
+            }
+          title={
+          <>
+            <Typography variant="subtitle1" sx={{display: 'inline-block',marginRight: 1}}>{user.name}</Typography>
+            {<>
+            {user.studentProfile.major ==="理系"&&<CustomChip sx={{marginLeft: 1}} label={user.studentProfile.major} color="primary" variant="outlined"></CustomChip>}
+            {user.studentProfile.major ==="文系"&&<CustomChip sx={{marginLeft: 1}} label={user.studentProfile.major} color="secondary" variant="outlined" ></CustomChip>}
+            </>
+            }
           </>
           }
-        </>
-        }
         subheader={user.studentProfile?.school}
       />
           <CardContent sx={{height: 280}}>

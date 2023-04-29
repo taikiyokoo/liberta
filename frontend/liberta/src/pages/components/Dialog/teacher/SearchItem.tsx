@@ -48,10 +48,24 @@ interface SearchComponentProps {
   setUsers: (users: User[]) => void;
   setStudents: (users: User[]) => void;
   setLoading: (loading: boolean) => void;
+  grade: string;
+  setGrade: (grade: string) => void;
+  major: string;
+  setMajor: (major: string) => void;
+  desiredSchool: string;
+  setdesiredSchool: (desiredSchool: string) => void;
+  duration: string;
+  setDuration: (duration: string) => void;
+  style: string;
+  setStyle: (style: string) => void;
+  frequency: string;
+  setFrequency: (frequency: string) => void;
+  searchState: boolean;
+  setSearchState: (searchState: boolean) => void;
 }
 
 
-const SearchItem:React.FC<SearchComponentProps> = ({setUsers,setStudents,setLoading}) => {
+const SearchItem:React.FC<SearchComponentProps> = ({setUsers,setStudents,setLoading,grade,setGrade,major,setMajor,desiredSchool,setdesiredSchool,duration,setDuration,style,setStyle,frequency,setFrequency,searchState,setSearchState}) => {
 
   //検索モーダル開け閉め
     const {searchOpen,setSearchOpen} = useContext(SearchModalContext)
@@ -60,14 +74,8 @@ const SearchItem:React.FC<SearchComponentProps> = ({setUsers,setStudents,setLoad
         setSearchOpen(false)
     }
 
-  //フォーム管理
-  const [grade,setGrade] = useState<string>("")
-  const [major,setMajor] = useState<string>("")
-  const [desiredSchool,setdesiredSchool] = useState<string>("")
-  const [duration,setDuration] = useState<string>("")
-  const [style,setStyle] = useState<string>("")
-  const [frequency,setFrequency] = useState<string>("")
 
+  //フォーム管理
   const handleGradeChange = (event: SelectChangeEvent) => {
     setGrade(event.target.value as string);
   };
@@ -93,6 +101,7 @@ const SearchItem:React.FC<SearchComponentProps> = ({setUsers,setStudents,setLoad
     setdesiredSchool(event.target.value);
   };
 
+//検索処理
   const handleSearch = async() => {
     setLoading(true)
     try{
@@ -104,14 +113,15 @@ const SearchItem:React.FC<SearchComponentProps> = ({setUsers,setStudents,setLoad
         style: style,
         frequency: frequency,
       })
-      console.log(res.data)
-      setUsers(res.data)
-      setStudents(res.data.filter((user:User)=>user.studentProfile))
-    }catch(error){
-      console.log(error)
-    }
-    handleClose();
-    setLoading(false)
+        console.log(res.data)
+        setUsers(res.data)
+        setStudents(res.data.filter((user:User)=>user.studentProfile))
+      }catch(error){
+        console.log(error)
+      }
+      handleClose();
+      setSearchState(true)
+      setLoading(false)
   }
 
   return (
