@@ -1,4 +1,4 @@
-import { Refresh } from '@mui/icons-material'
+import { Group, PersonOff, Refresh } from '@mui/icons-material'
 import { Box, Button, Chip, Grid, Skeleton, Tab, Tabs, Typography, useMediaQuery, useTheme } from '@mui/material'
 import { grey } from '@mui/material/colors'
 import { User } from 'interfaces'
@@ -169,7 +169,7 @@ const Home:React.FC = () => {
             color ="teal"
             sx={{mr: 2}}
             >
-              希望教科
+              希望教科から絞る
             </Typography>
             {selectedSubjects.length >0 && <Button onClick={handleResetSubjext} color ="error" startIcon={<Refresh />} variant ="outlined"  sx={{ borderRadius: 50 }}>リセット</Button>}
         </Box>
@@ -225,9 +225,15 @@ const Home:React.FC = () => {
         justifyContent="center"
         mt={5}
       >
-        <Button color= "primary" variant="text" sx={{ mr: 3 ,borderRadius: 50 }}  >
+       {students.length >0 ? 
+        <Button color= "secondary" variant="text" sx={{ borderRadius: 50 }} startIcon ={<Group/>} >
           {students.length}人の生徒が見つかりました！
         </Button>
+          : 
+        <Button color= "secondary" variant="text" sx={{ borderRadius: 50 }} startIcon ={<PersonOff/>} >
+          0人の検索結果
+        </Button>
+        }
       </Box>
       <Grid container sx={{width: "100%"}} justifyContent="center" rowSpacing={6} columnSpacing={{ xs: 1, sm: 2, md: 4 }} mt={5}>
         {students.map((user: User)=>{

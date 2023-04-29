@@ -172,7 +172,7 @@ const SearchItem:React.FC<SearchComponentProps> = ({setUsers,setStudents,setLoad
         
 
         {/* desired_university */}
-        <Box marginBottom={2}>
+        <Box mb={2} mt={2}>
             <FormControl fullWidth>
                 <TextField label="志望校" onChange={handledesiredSchoolChange} />
             </FormControl>

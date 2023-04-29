@@ -141,22 +141,20 @@ const handleSignOut = async()=>{
             }else{
                 return(
                     <>
-                        <Link href= "/teacher/SignIn">
                             <Button
                                 variant='text'
                                 color="primary"
+                                onClick={()=> router.push("/teacher/SignIn")}
                             >
                             先生の方はこちら
                             </Button>
-                        </Link>
-                        <Link href="/student/SignIn">        
                             <Button
                                 variant='text'
                                 color="primary"
+                                onClick={()=> router.push("/student/SignIn")}
                             >
                             生徒の方はこちら
                             </Button>
-                        </Link>     
                     </>
                 )
 
@@ -178,6 +176,20 @@ const handleSignOut = async()=>{
                 }else{
                     return(
                         <>
+                            <Button
+                                variant='text'
+                                color="primary"
+                                onClick={()=> router.push("/teacher/SignIn")}
+                            >
+                                先生の方はこちら
+                                </Button>
+                                <Button
+                                    variant='text'
+                                    color="primary"
+                                    onClick={()=> router.push("/student/SignIn")}
+                                >
+                                生徒の方はこちら
+                            </Button>  
                         </>
                     )
                     }
