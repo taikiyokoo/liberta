@@ -116,7 +116,7 @@ const Home:React.FC = () => {
         display="flex"
         alignItems="center"
         justifyContent="center"
-        sx={{mb: 5}}
+        sx={{mb: 5,mt: 5}}
         width="100%"
         minWidth="80vw"
       >
