@@ -137,18 +137,18 @@ const SearchItem: React.FC<SearchComponentProps> = ({setUsers,setTeachers,setLoa
           <Search sx={{color: "white"}}/>
         </SearchIconWrapper>
       </StyledDialogTitle>
-        <DialogContent sx={{padding:7}}>
+        <DialogContent sx={{padding:6}}>
 
           {/* university */}
-          <Box marginBottom={2}>
+          <Box mb={2} mt={2}>
             <FormControl fullWidth>
-              <TextField label="大学名" onChange={handleUniversityChange} value={university}  InputLabelProps={{ shrink: true }}/>
+              <TextField label="大学名" onChange={handleUniversityChange} value={university}/>
             </FormControl>
           </Box>
 
           {/* major */}
           <Box marginBottom={2}>
-            <FormControl sx={{ width: "40%"}}>
+            <FormControl sx={{ width: {xs: "100%",md: "50%",}}}>
               <InputLabel>文理選択</InputLabel>
               <Select onChange={handleMajorChange} value={major}>
                 <MenuItem value="理系">理系</MenuItem>
@@ -159,7 +159,7 @@ const SearchItem: React.FC<SearchComponentProps> = ({setUsers,setTeachers,setLoa
          </Box>
           {/* gender */}
           <Box marginBottom={2}>
-            <FormControl sx={{ width: "40%" }}>
+            <FormControl sx={{ width: {xs: "100%",md: "50%",}}}>
               <InputLabel>性別</InputLabel>
               <Select onChange={handleGenderChange} value={gender}>
                 <MenuItem value="男性">男性</MenuItem>
@@ -171,7 +171,7 @@ const SearchItem: React.FC<SearchComponentProps> = ({setUsers,setTeachers,setLoa
 
           {/* style */}
          <Box marginBottom={2}>
-            <FormControl sx={{ width: "40%" }}>
+            <FormControl sx={{ width: {xs: "100%",md: "50%",}}}>
               <InputLabel>指導形態</InputLabel>
               <Select onChange={handleStyleChange} value={style}>
                 <MenuItem value="対面">対面</MenuItem>

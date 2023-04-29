@@ -26,7 +26,7 @@ interface SearchComponentProps {
 const MobileMenu:React.FC<SearchComponentProps> = ({menuOpen,setMenuOpen}) => {
 
   const router = useRouter()
-  const { setIsSignedIn} = useContext(AuthContext)
+  const { setIsSignedIn,currentUser} = useContext(AuthContext)
   const {userEditOpen,setUserEditOpen} = useContext(UserEditModalContext)
 
   const handleSignOut = async()=>{
@@ -91,7 +91,15 @@ const MobileMenu:React.FC<SearchComponentProps> = ({menuOpen,setMenuOpen}) => {
                   </ListItemIcon>
                   <ListItemText primary="メッセージ" />
                 </ListItemButton>
-                <ListItemButton  onClick={() => { /* ここに onClick 処理を実装 */ }}>
+                <ListItemButton
+                  onClick={()=>{
+                      setMenuOpen(false)
+                      if(currentUser?.userType ==="student"){
+                          router.push(`/student/${currentUser.id}/LikedUsers`)
+                      }else{
+                          router.push(`/teacher/${currentUser?.id}/LikedUsers`)
+                      }
+                  }}>
                   <ListItemIcon>
                     <Favorite color="primary" />
                   </ListItemIcon>

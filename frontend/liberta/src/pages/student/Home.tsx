@@ -1,4 +1,4 @@
-import { ExpandLess, ExpandMore, Refresh } from '@mui/icons-material'
+import { ExpandLess, ExpandMore, Group, PersonOff, Refresh } from '@mui/icons-material'
 import { Box, Button, Chip, Collapse, Container, Dialog, Grid, Modal, Skeleton, Slider, SliderProps, Typography, useMediaQuery, useTheme } from '@mui/material'
 import { User } from 'interfaces'
 import { GetServerSideProps } from 'next'
@@ -198,15 +198,27 @@ const Home:React.FC = () => {
         justifyContent="center"
         mb={3}
       >
+        {collapseOpen ?
         <Button
           variant="contained"
           color= "primary"
           onClick={handleCollapseToggle}
-          endIcon={collapseOpen ? <ExpandLess /> : <ExpandMore />}
           sx={{borderRadius: 50}}
+          endIcon ={<ExpandLess />}
+          >
+          高速絞り込み
+        </Button> 
+          :
+        <Button
+          variant="outlined"
+          color= "primary"
+          onClick={handleCollapseToggle}
+          sx={{borderRadius: 50}}
+          endIcon ={<ExpandMore />}
           >
           高速絞り込み
         </Button>
+         }
       </Box>
       <Collapse in={collapseOpen}>
         <Box 
@@ -292,9 +304,15 @@ const Home:React.FC = () => {
         justifyContent="center"
         mt={{xs: 1, sm: 3, md: 5}}
       >
-        <Button color= "primary" variant="text" sx={{ mr: 3 ,borderRadius: 50 }}  >
+        {teachers.length >0 ? 
+        <Button color= "secondary" variant="text" sx={{ borderRadius: 50 }} startIcon ={<Group/>} >
           {teachers.length}人の先生が見つかりました！
         </Button>
+          : 
+        <Button color= "secondary" variant="text" sx={{ borderRadius: 50 }} startIcon ={<PersonOff/>} >
+          0人の検索結果
+        </Button>
+        }
       </Box>
 
         {teachers.length >0 ?

@@ -228,7 +228,7 @@ const TopPage = () => {
     from: { opacity: 0 },
     to: { opacity: 1 },
     config: { duration: fadeInSpeed },
-    delay: 3000
+    delay: 3500
   });
 
 //フェードイン完了状態state
@@ -303,10 +303,10 @@ const TopPage = () => {
         <Box mt={2}>
             <animated.div style={buttonFadeIn}>
               <CustomButton variant="contained" onClick={handleTeacherLogin}>
-                先生のログイン
+                先生の方はこちら
               </CustomButton>
               <CustomButton variant="contained" onClick={handleStudentLogin}>
-                生徒のログイン
+                生徒の方はこちら
               </CustomButton> 
             </animated.div>
           </Box>

@@ -56,8 +56,8 @@ const LikedUsers:React.FC<LikedUsersProps> = ({likedUsers,likingUsers}) => {
 
   return (
     <div>
-      <Box sx={{minWidth: 1200}}>
-        <Button color="primary" startIcon={<ArrowBack />} sx={{ color: 'teal' }} onClick={() => router.push("/") }>戻る</Button>
+      <Box>
+        <Button color="primary" startIcon={<ArrowBack />} sx={{ color: 'teal',pl: {xs: 2,sm: 10},mt: {xs: 2,sm: 10},mb: 5 }} onClick={() => router.push("/") }>戻る</Button>
       </Box>
       <Tabs
           value={selectedTab}
@@ -67,15 +67,15 @@ const LikedUsers:React.FC<LikedUsersProps> = ({likedUsers,likingUsers}) => {
           centered
           sx={{marginBottom: 10}}
         >
-          <Tab label="いいねしたユーザー" sx={{marginRight: 10}} />
-          <Tab label="いいねされたユーザー" />
+          <Tab label="いいねした" sx={{marginRight: {xs: 2,sm: 10},minWidth:{xs:"40%",sm: "15%"}}} />
+          <Tab label="いいねされた" sx={{ minWidth: {xs: "40%",sm: "15%"}}} />
         </Tabs>
         <Box     
           sx={{
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              width: "100%",
+              minWidth: "100vw",
               height: "100%",
         }}
         >
