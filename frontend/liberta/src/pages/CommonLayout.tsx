@@ -5,7 +5,9 @@ import { makeStyles, Theme } from "@material-ui/core"
 
 const useStyles = makeStyles((theme:Theme) => ({
   container: {
-    marginTop: theme.spacing(8)
+    marginTop: theme.spacing(8),
+    overflow: "hidden",
+    minWidth: "100vw"
   }
 }))
 

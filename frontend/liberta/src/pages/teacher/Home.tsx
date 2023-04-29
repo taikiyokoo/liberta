@@ -1,4 +1,5 @@
-import { Box, Button, Chip, Grid, Skeleton, Tab, Tabs, Typography } from '@mui/material'
+import { Refresh } from '@mui/icons-material'
+import { Box, Button, Chip, Grid, Skeleton, Tab, Tabs, Typography, useMediaQuery, useTheme } from '@mui/material'
 import { grey } from '@mui/material/colors'
 import { User } from 'interfaces'
 import { getUsers } from 'pages/api/user'
@@ -8,6 +9,10 @@ import { HomeContext } from 'pages/_app'
 import React, { useContext, useEffect, useState } from 'react'
 
 const Home:React.FC = () => {
+
+    //レスポンシブ対応用
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const [loading,setLoading] =useState(true) //ホーム用のloadingState skeltonを表示
 
@@ -39,6 +44,7 @@ const Home:React.FC = () => {
         if(newSelectedSubjects.length === 0){
           setStudents(users.filter((user:User)=>user.studentProfile))
           setSubject(newSelectedSubjects)
+          setLoading(false)
           return
         }
         let filteredUsers:User[] = []
@@ -46,6 +52,7 @@ const Home:React.FC = () => {
         filteredUsers = filteredUsers.filter((user:User)=>newSelectedSubjects.every((newSelectedSubject)=>user.studentProfile?.subjects.includes(newSelectedSubject)))
         setSubject(newSelectedSubjects)
         setStudents(filteredUsers)
+        setLoading(false)
         return
       }
       let filteredUsers:User[] = []
@@ -56,6 +63,12 @@ const Home:React.FC = () => {
       setStudents(filteredUsers)
       setSubject(newSelectedSubjects)
     }
+
+  //フロント教科検索をリセット
+  const handleResetSubjext =() =>{
+    setSubject([])
+    setStudents(users.filter((user:User)=>user.studentProfile))
+  }
 
   const handleGetStudents = async () => {
 
@@ -86,7 +99,7 @@ const Home:React.FC = () => {
     return (
       <div>
         <Skeleton  animation="wave" variant="text" sx={{ fontSize: 100,mb: 10 }} />
-        <Grid container spacing={4}>
+        <Grid container sx={{width: "100%"}} justifyContent="center" rowSpacing={6} columnSpacing={{ xs: 1, sm: 2, md: 4 }} mt={5}>
           {Array.from({ length: skeletonCount }).map((_, index) => (
             <Grid item key={index}>
               <Skeleton animation="wave" variant="rounded" width={250} height={300} />
@@ -130,10 +143,38 @@ const Home:React.FC = () => {
           </Grid>}
           {frequency&&<Grid item>
             <Chip label={frequency} color="primary" variant='outlined'/>
-          </Grid>}
+          </Grid>
+          }
+          <Grid item>
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() => window.location.reload()}
+              sx={{ borderRadius: 50 }}
+              startIcon={<Refresh />}
+            >
+              全ての検索条件をリセット
+          </Button>
+          </Grid>
         </Grid>}
       </Box>
-        <Grid container spacing={5} justifyContent="center" sx={{ mb: 7 }}>
+      <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          sx={{mb:3}}
+          >
+            <Typography 
+            variant="subtitle2"
+            color ="teal"
+            sx={{mr: 2}}
+            >
+              希望教科
+            </Typography>
+            {selectedSubjects.length >0 && <Button onClick={handleResetSubjext} color ="error" startIcon={<Refresh />} variant ="outlined"  sx={{ borderRadius: 50 }}>リセット</Button>}
+        </Box>
+        {isMobile?
+        (<Grid container spacing={1} justifyContent="center" sx={{ mb: 5,minWidth: "100%" }}>
         {subjects.map((subject) => {
           return (
             <Grid item key={subject}>
@@ -154,7 +195,30 @@ const Home:React.FC = () => {
           </Grid>
           );
         })}
-      </Grid>
+    </Grid>) :(
+      <Grid container spacing={5} justifyContent="center" sx={{ mb: 7 }}>
+      {subjects.map((subject) => {
+        return (
+          <Grid item key={subject}>
+            {selectedSubjects.includes(subject) ? (
+              <Chip
+                label={subject}
+                color='primary'
+                onClick={() => handleSubjectSearch(subject)}
+              />
+            ) : (
+              <Chip
+                label={subject}
+                variant="outlined"
+                onClick={() => handleSubjectSearch(subject)}
+                color='primary'
+              />
+            )}
+        </Grid>
+        );
+      })}
+    </Grid>)
+      }
       <Box
         display="flex"
         alignItems="center"

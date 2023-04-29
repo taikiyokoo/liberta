@@ -1,5 +1,5 @@
-import { Box,makeStyles } from '@material-ui/core'
-import { Avatar,Card, CardActions, CardContent, CardHeader, Chip,styled, Typography } from '@mui/material'
+import { Box,makeStyles, useTheme } from '@material-ui/core'
+import { Avatar,Card, CardActions, CardContent, CardHeader, Chip,styled, Typography, useMediaQuery } from '@mui/material'
 import { User } from 'interfaces'
 import { useRouter } from 'next/router'
 import React from 'react'
@@ -11,11 +11,18 @@ card :{
   padding:30,
   transition: 'box-shadow 0.3s,transform 0.3s',
   cursor: 'pointer',
-  backgroundColor: `${theme.palette.grey[100]} !important`, 
   borderRadius: '20px !important',
   '&:hover': {
     boxShadow: '0px 30px 50px -15px rgba(0,0,0,0.3), 0px 0px 0px 3px rgba(0,0,0,0.05)',
     transform: 'translateY(-5px) scale(1.05)',
+  },
+  [theme.breakpoints.down('sm')]: {
+    width:230,
+    height:430,
+    padding:25,
+    '&:hover': {
+      transform: "none"
+    },
   },
 },
 slideChips: {
@@ -49,14 +56,17 @@ chipGroup: {
 
 //チップの大きさを変更する
 const CustomChip = styled(Chip)({
-  width: '55px',
-  height: '25px',
-  fontSize: '5px',
+  width: '10',
+  height: '5',
 });
 
 
 
 const StudentCard: React.FC<{user:User}>= ({user}) => {
+
+  //レスポンシブ対応用
+const theme = useTheme();
+const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   
 const router = useRouter()
 const classes = useStyles()
@@ -94,9 +104,15 @@ const chips = (
           }
         subheader={user.studentProfile?.school}
       />
-          <CardContent sx={{height: 280}}>
-            <Typography variant="caption">{user.studentProfile.introduction}</Typography>
-          </CardContent>
+          {isMobile?
+              <CardContent sx={{height: 250}}>
+                <Typography variant="caption">{user.studentProfile.introduction}</Typography>
+              </CardContent>
+              : 
+              <CardContent sx={{height: 280}}>
+                <Typography variant="caption">{user.studentProfile.introduction}</Typography>
+              </CardContent>
+            }
           <CardActions className={classes.slideChips}>
           <Box className={classes.chipGroup}>{chips}</Box>
           <Box className={classes.chipGroup}>{chips}</Box>

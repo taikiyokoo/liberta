@@ -53,9 +53,11 @@ const useStyles = makeStyles((theme) => ({
     transition: "color 0.3s",
   },
   mainContainer: {
+    margin:0,
+    padding: 0,
+    minWidth: "100vw",
     position: "relative",
     overflow: "hidden",
-    width: "100%",
     minHeight: "100vh",
     height: "auto",
     background:"linear-gradient(45deg, rgba(75, 192, 183, 1), rgba(56, 142, 142, 1))",
@@ -282,20 +284,22 @@ const TopPage = () => {
         >
         <Box display="flex" alignItems="center" style={{ gap: '8px' }}>
             <animated.div style={spinIcon}>
-              <SchoolIcon fontSize="large" sx={{marginRight: 5}}/>
+              <SchoolIcon fontSize="large" sx={{marginRight: {xs: 1,sm: 2, md: 3}}}/>
             </animated.div>
-            <Typography variant="h2" component="h1" gutterBottom className={classes.blendedText}>
+            <Typography variant="h2" component="h1" gutterBottom className={classes.blendedText} sx={{fontSize: {xs: "2.5rem",sm: "3rem", md: "3.5rem"}}}>
               Liberta
             </Typography>
-        </Box>
-        <animated.div style={fadeIn}>
-          <Typography variant="h4" component="h2" sx={{marginBottom: 3}}  className={classes.blendedText}>
-            教育の自由を追求し、新しい学びの場を創造します。
+        </Box >
+        <Box maxWidth={{xs: "80%", sm: "90%", md: "100%"}}>
+          <animated.div style={fadeIn}>
+            <Typography variant="h4" component="h2" sx={{marginBottom: {xs: 1,sm: 2, md: 3},fontSize: {xs: "1.3rem",sm: "1.7rem", md: "2rem"}}}  className={classes.blendedText}>
+              教育の自由を追求し、新しい学びの場を創造します。
+            </Typography>
+          </animated.div>
+          <Typography variant="body1" component="p" mb={4}  className={classes.blendedText} sx={{fontSize: {xs: "0.8rem",sm: "1.1rem", md: "1.3rem"}}}>
+            {typedDescription}
           </Typography>
-        </animated.div>
-        <Typography variant="body1" component="p" mb={4}  className={classes.blendedText}>
-          {typedDescription}
-        </Typography>
+        </Box>
         <Box mt={2}>
             <animated.div style={buttonFadeIn}>
               <CustomButton variant="contained" onClick={handleTeacherLogin}>

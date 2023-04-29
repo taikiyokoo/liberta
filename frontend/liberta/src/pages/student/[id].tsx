@@ -1,7 +1,7 @@
 
 import { makeStyles } from '@material-ui/styles';
 import { ArrowBack, ThumbUp } from '@mui/icons-material';
-import { Box, Typography, Avatar, Chip, Button, Theme, styled } from '@mui/material';
+import { Box, Typography, Avatar, Chip, Button, Theme, styled, useTheme, useMediaQuery } from '@mui/material';
 import { CreateLikeParams, User } from 'interfaces';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
@@ -126,10 +126,33 @@ export const getServerSideProps: GetServerSideProps<StudentDetailProps>= async (
     return (
       <Box sx={{ padding: '16px' }}>
         <Button color="primary" startIcon={<ArrowBack />} sx={{marginBottom :5 }} onClick={() => router.push("/") }>戻る</Button>
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: "center", borderBottom: '1px solid #e0e0e0', paddingBottom: '16px' }}>
-          <Avatar src="/images/dog.jpg" sx={{ width: 250, height: 250,marginRight: 50 }} />
-          <Box>
-            <Typography variant="h5" sx={{display: 'inline-block'}} gutterBottom>{user.name}</Typography><Chip sx={{marginLeft: 3}} label={user.studentProfile.major}></Chip>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderBottom: '1px solid #e0e0e0',
+            paddingBottom: '16px',
+            flexDirection: {
+              xs: 'column', // xs では縦並び
+              md: 'row', // sm 以上では横並び
+            },
+          }}
+        >
+         <Avatar
+            src="/images/dog.jpg"
+            sx={{
+              width: 250,
+              height: 250,
+              marginRight: {
+                xs: 0, // xs の場合、marginRight を 0 に設定
+                md: 50, // sm 以上の場合、marginRight を 50 に設定
+              },
+            }}
+          />
+          <Box sx={{mt: {xs: 5,md: 0}}}>
+            <Typography variant="h5" sx={{display: 'inline-block'}} gutterBottom>{user.name}</Typography>
+            <Chip sx={{marginLeft: 3}} label={user.studentProfile.major}></Chip>
             <Typography variant="subtitle1">年齢: {user.studentProfile.age}</Typography>
             <Typography variant="subtitle1">学校名: {user.studentProfile.school}</Typography>
             <Typography variant="subtitle1">学年: {user.studentProfile.grade}</Typography>

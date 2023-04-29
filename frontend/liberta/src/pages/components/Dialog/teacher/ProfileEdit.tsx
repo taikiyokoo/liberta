@@ -63,7 +63,7 @@ const ProfileEdit:React.FC = () => {
      <DialogTitle variant="subtitle1">
       <Box display="flex" alignItems="center">
         アカウント編集
-        <AccountCircle sx={{ marginLeft: 1 }} />
+        <AccountCircle sx={{ marginLeft: 1 }} color ="primary"/>
       </Box>
     </DialogTitle>
       <DialogContent>

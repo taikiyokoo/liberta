@@ -1,5 +1,5 @@
 import { Box, makeStyles, styled } from '@material-ui/core'
-import { Avatar, Card, CardActions, CardContent, CardHeader, Chip, LinearProgress, Typography } from '@mui/material'
+import { Avatar, Card, CardActions, CardContent, CardHeader, Chip, LinearProgress, Typography, useMediaQuery, useTheme } from '@mui/material'
 import { User } from 'interfaces'
 import { useRouter } from 'next/router'
 import React from 'react'
@@ -7,13 +7,22 @@ import React from 'react'
 const useStyles =makeStyles((theme) => ({
   card :{
     width:300,
-    height:450,
-    padding:20,
+    height:550,
+    padding:30,
+    borderRadius: '20px !important',
     transition: 'box-shadow 0.3s,transform 0.3s',
     cursor: 'pointer',
     '&:hover': {
       boxShadow: '0px 30px 50px -15px rgba(0,0,0,0.3), 0px 0px 0px 3px rgba(0,0,0,0.05)',
       transform: 'translateY(-5px) scale(1.05)',
+    },
+    [theme.breakpoints.down('sm')]: {
+      width:260,
+      height:500,
+      padding:25,
+      '&:hover': {
+        transform: "none"
+      },
     },
   },
   slideChips: {
@@ -53,9 +62,8 @@ const useStyles =makeStyles((theme) => ({
   
   //チップの大きさを変更する
   const CustomChip = styled(Chip)({
-    width: '55px',
-    height: '25px',
-    fontSize: '5px',
+    width: '10',
+    height: '5',
   });
 
 
@@ -63,6 +71,9 @@ const TeacherCard: React.FC<{user:User}>= ({user}) => {
   
 const classes = useStyles()
 const router = useRouter()
+ //レスポンシブ対応用
+const theme = useTheme();
+const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
 const chips = (
   <>
@@ -99,9 +110,15 @@ const chips = (
         }
         subheader={user.teacherProfile?.university}
       />
-          <CardContent sx={{height: 230}}>
-            <Typography variant="caption">{user.teacherProfile.introduction}</Typography>
-          </CardContent>
+          {isMobile?
+              <CardContent sx={{height: 250}}>
+                <Typography variant="caption">{user.teacherProfile.introduction}</Typography>
+              </CardContent>
+              : 
+              <CardContent sx={{height: 300}}>
+                <Typography variant="caption">{user.teacherProfile.introduction}</Typography>
+              </CardContent>
+            }
           <Box>
             <Typography variant="subtitle2" gutterBottom color="textSecondary">
                 希望時給: {user.teacherProfile.hourlyPay} 円
