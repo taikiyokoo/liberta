@@ -19,20 +19,7 @@ users = User.all
 users.each do |user|
   if user.student_profile
     user.student_profile.update(
-        gender: gender.sample,
-        grade: grade.sample,
-        major: major.sample,
-        style: style.sample,
-        duration: duration.sample,
-        frequency: frequency.sample,
-        score: rand(30..80)
+        grade: grade.sample
       )
-
-  elsif user.teacher_profile
-    user.teacher_profile.update(
-      major: major.sample,
-      style: style.sample,
-      hourly_pay: rand(1000..10000)
-    )
   end
 end

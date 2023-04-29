@@ -1,12 +1,12 @@
 import { makeStyles, Theme } from '@material-ui/core'
-import { AccountCircle, Chat, Favorite, FormatListNumberedRtlSharp, Search } from '@mui/icons-material'
-import { AppBar, Avatar, Box, Button, IconButton, InputBase, Toolbar, Typography, alpha, styled, darken  } from '@mui/material'
+import { AccountCircle, Chat, Favorite, FormatListNumberedRtlSharp, Search, Widgets } from '@mui/icons-material'
+import { AppBar, Avatar, Box, Button, IconButton, InputBase, Toolbar, Typography, alpha, styled, darken, useTheme, useMediaQuery } from '@mui/material'
 import Cookies from 'js-cookie'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useContext} from 'react'
-import theme from 'theme'
 import { signOut } from './api/auth'
+import MobileMenu from './components/Dialog/MobileMenu'
 import { ProfileEdit as StudentProfileEdit } from './components/Dialog/student/ProfileEdit'
 import { ProfileEdit as TeacherProfileEdit } from './components/Dialog/teacher/ProfileEdit'
 import SearchBar from './components/Search/SearchBar'
@@ -28,8 +28,14 @@ const {userEditOpen,setUserEditOpen} = useContext(UserEditModalContext)
 //ホームにいるかどうか
 const {isHome,setIsHome} = useContext(HomeContext)
 
-//スタイルを適用
 const router = useRouter()
+
+//レスポンシブ対応用
+const theme = useTheme();
+const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
+//スマホメニュー用
+const [menuOpen,setMenuOpen] = React.useState<boolean>(false)
 
 const handleSignOut = async()=>{
     try {
@@ -161,6 +167,25 @@ const handleSignOut = async()=>{
         }
     }
 
+    const AuthButtonsMobile = () =>{
+        if(!loading){
+            if(isSignedIn){
+                return (
+                    <>
+                        <Widgets color="primary" onClick={() => setMenuOpen(true)} />
+                    </>
+                )
+                }else{
+                    return(
+                        <>
+                        </>
+                    )
+                    }
+        }else{
+            return <></>
+        }
+    }
+
     return (
         <AppBar position="static" color="inherit" elevation={0} sx={{ borderBottom: '1px solid rgba(0,0,0,0.1)' }}>
         <Toolbar>
@@ -183,13 +208,24 @@ const handleSignOut = async()=>{
             </Box>
           <Box sx={{ flexGrow: 1 }} />
           {isHome&&<SearchBar />}
-          <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <AuthButtons />
-          </Box>
+            {isMobile ? (
+                <>
+                 <Box sx={{ flexGrow: 2 }} />
+                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <AuthButtonsMobile />
+                </Box>
+                </>
+            ) : (<>
+                <Box sx={{ flexGrow: 1 }} />
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <AuthButtons /> 
+                </Box>
+                </>
+            )}
         </Toolbar>
         {currentUser&& currentUser.userType === "student" && <StudentProfileEdit />}
         {currentUser&& currentUser.userType === "teacher" && <TeacherProfileEdit />}   
+        <MobileMenu menuOpen ={menuOpen} setMenuOpen={setMenuOpen} />
       </AppBar>
       
     );

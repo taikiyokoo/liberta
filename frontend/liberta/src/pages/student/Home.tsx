@@ -1,5 +1,5 @@
-import { ExpandLess, ExpandMore } from '@mui/icons-material'
-import { Box, Button, Chip, Collapse, Container, Dialog, Grid, Modal, Skeleton, Slider, SliderProps, Typography } from '@mui/material'
+import { ExpandLess, ExpandMore, Refresh } from '@mui/icons-material'
+import { Box, Button, Chip, Collapse, Container, Dialog, Grid, Modal, Skeleton, Slider, SliderProps, Typography, useMediaQuery, useTheme } from '@mui/material'
 import { User } from 'interfaces'
 import { GetServerSideProps } from 'next'
 import { getUsers } from 'pages/api/user'
@@ -10,6 +10,10 @@ import { grey } from '@mui/material/colors';
 import React, { useContext, useEffect, useState } from 'react'
 
 const Home:React.FC = () => {
+
+  //レスポンシブ対応用
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const [users,setUsers] = useState<User[]>([]) //全員の情報
   const [teachers,setTeachers] = useState<User[]>([]) //教師の情報
@@ -133,7 +137,7 @@ const Home:React.FC = () => {
     return (
       <div>
         <Skeleton  animation="wave" variant="text" sx={{ fontSize: 100,mb: 10 }} />
-        <Grid container spacing={4}>
+        <Grid container sx={{width: "100%"}} justifyContent="center" rowSpacing={6} columnSpacing={{ xs: 1, sm: 2, md: 4 }} mt={5}>
           {Array.from({ length: skeletonCount }).map((_, index) => (
             <Grid item key={index}>
               <Skeleton animation="wave" variant="rounded" width={250} height={300} />
@@ -175,6 +179,17 @@ const Home:React.FC = () => {
           {!(hourlyPay[0]===1000 && hourlyPay[1] === 10000) &&<Grid item>
             <Chip label={hourlyPay[0] + "円〜" + hourlyPay[1] + "円"} color="primary" variant='outlined'/>
           </Grid>}
+          <Grid item>
+            <Button
+              variant="outlined"
+              color="error"
+              onClick={() => window.location.reload()}
+              sx={{borderRadius: 50 }}
+              startIcon={<Refresh />}
+            >
+              全ての検索条件をリセット
+          </Button>
+          </Grid>
         </Grid>}
       </Box>
       <Box
@@ -206,7 +221,7 @@ const Home:React.FC = () => {
               justifyContent="center"
               flexDirection="column"
               marginBottom={5}
-              width={300}
+              maxWidth={{xs: 300, sm: 300, md: 500}}
               mx="auto" 
           >
             <Box
@@ -235,6 +250,7 @@ const Home:React.FC = () => {
                 { value: 1000, label: "1000円" },
                 { value: 10000, label: "10000円以上" },
               ]}
+              sx={{maxWidth: {xs: 200, sm: 300, md: 500}}}
             />
           </Box>
           <Box
@@ -258,7 +274,7 @@ const Home:React.FC = () => {
                 </Typography>
                 <Button onClick={handleSubjectReset}>リセット</Button>
             </Box>
-            <Grid container spacing={2} justifyContent="center" sx={{mb:4}}>
+            <Grid container spacing={{xs: 1, sm: 2, md: 2}} justifyContent="center" sx={{mb:{xs: 1, sm: 3, md: 5}}}>
               {subjects.map((subject:string)=>{
                 return(
                 <Grid item key={subject}>
@@ -274,15 +290,15 @@ const Home:React.FC = () => {
         display="flex"
         alignItems="center"
         justifyContent="center"
-        mt={5}
+        mt={{xs: 1, sm: 3, md: 5}}
       >
-        <Button color= "primary" variant="outlined" sx={{ mr: 3 ,borderRadius: 50,fontWeight: "bold"}}  >
+        <Button color= "primary" variant="text" sx={{ mr: 3 ,borderRadius: 50 }}  >
           {teachers.length}人の先生が見つかりました！
         </Button>
       </Box>
 
         {teachers.length >0 ?
-        <Grid container sx={{width: "100%"}}  justifyContent="center" rowSpacing={6} columnSpacing={{ xs: 1, sm: 2, md: 3 }} mt={3}>
+        <Grid container sx={{width: "100%"}} justifyContent="center" rowSpacing={6} columnSpacing={{ xs: 1, sm: 2, md: 4 }} mt={5}>
           {teachers.map((user: User)=>{
             return(
               <Grid item key={user.id} >
