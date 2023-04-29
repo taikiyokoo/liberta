@@ -18,7 +18,7 @@ const Home:React.FC = () => {
 
   const {isHome,setIsHome} = useContext(HomeContext)
 
-  const [loading,setLoading] = useState(true) //home用のloadingState skeltonを表示
+  const [loading,setLoading] = useState(true) //home用のloadingState → skeltonを表示
 
   const subjects:string[] = ["数学","英語","物理","化学","生物","地学","日本史","世界史","地理"] //検索チップ用の教科
 
@@ -154,11 +154,11 @@ const Home:React.FC = () => {
         width="100%"
         minWidth="80vw"
       >
-        <Grid container spacing={2} justifyContent="center" alignItems="center">
+        {searchState&&<Grid container spacing={2} justifyContent="center" alignItems="center">
           <Grid item>
-            {searchState&&<Typography variant="subtitle2" color="teal">
+            <Typography variant="subtitle2" color="teal">
               現在の検索条件:
-            </Typography>}
+            </Typography>
           </Grid>
           {university&&<Grid item>
             <Chip label={university} color="primary" variant='outlined'/>
@@ -175,7 +175,7 @@ const Home:React.FC = () => {
           {!(hourlyPay[0]===1000 && hourlyPay[1] === 10000) &&<Grid item>
             <Chip label={hourlyPay[0] + "円〜" + hourlyPay[1] + "円"} color="primary" variant='outlined'/>
           </Grid>}
-        </Grid>
+        </Grid>}
       </Box>
       <Box
         display="flex"
@@ -276,7 +276,7 @@ const Home:React.FC = () => {
         justifyContent="center"
         mt={5}
       >
-        <Button color= "success" variant="outlined" sx={{ mr: 3 ,borderRadius: 50,fontWeight: "bold"}}  >
+        <Button color= "primary" variant="outlined" sx={{ mr: 3 ,borderRadius: 50,fontWeight: "bold"}}  >
           {teachers.length}人の先生が見つかりました！
         </Button>
       </Box>
