@@ -2,12 +2,12 @@ import { ExpandLess, ExpandMore, Group, PersonOff, Refresh } from '@mui/icons-ma
 import { Box, Button, Chip, Collapse, Container, Dialog, Grid, Modal, Skeleton, Slider, SliderProps, Typography, useMediaQuery, useTheme } from '@mui/material'
 import { User } from 'interfaces'
 import { GetServerSideProps } from 'next'
-import { getUsers } from 'pages/api/user'
+import { getTeachers, getUsers } from 'pages/api/user'
 import TeacherCard from 'pages/components/Cards/teacher/TeacherCard'
 import { SearchItem } from 'pages/components/Dialog/student/SearchItem'
 import {HomeContext} from 'pages/_app'
 import { grey } from '@mui/material/colors';
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
 
 const Home:React.FC = () => {
 
@@ -16,7 +16,6 @@ const Home:React.FC = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const [users,setUsers] = useState<User[]>([]) //全員の情報
-  const [teachers,setTeachers] = useState<User[]>([]) //教師の情報
   const [selectedSubjects,setSubject] = useState<string[]>([]) //フロント教科で絞る用のstate
   const [collapseOpen,setCollapseOpen] = useState<boolean>(false) //フロント検索collapseを開くかどうかのstate
 
@@ -38,69 +37,29 @@ const Home:React.FC = () => {
   //検索用のstate ここまで
 
   //フロントで教科で絞る
-  const handleSubjectSearch = (subject:string) => {
-    if(selectedSubjects.includes(subject)){ //すでにその科目が選択されていた場合
-      const newSelectedSubjects = selectedSubjects.filter((selectedSubject)=>selectedSubject !== subject)
-      let filteredUsers:User[] = []
-      filteredUsers = users.filter((user:User)=>user.teacherProfile)
-      filteredUsers = filteredUsers.filter((user:User)=>newSelectedSubjects.every((newSelectedSubject)=>user.teacherProfile?.subjects.includes(newSelectedSubject)))
-      if(!(slideValue[0]===1000 && slideValue[1]===10000)){ //時給スライダーで指定していた場合
-        filteredUsers = filteredUsers.filter((user:User)=>{
-          return user.teacherProfile?.hourlyPay >= slideValue[0] && user.teacherProfile.hourlyPay <= slideValue[1]
-        })
-      }
-      setSubject(newSelectedSubjects)
-      setTeachers(filteredUsers)
-      return
-    }
-    let filteredUsers:User[] = []
-    const newSelectedSubjects = selectedSubjects
-    newSelectedSubjects.push(subject)
-    filteredUsers = users.filter((user:User)=>user.teacherProfile)
-    filteredUsers = filteredUsers.filter((user:User)=>newSelectedSubjects.every((newSelectedSubject)=>user.teacherProfile?.subjects.includes(newSelectedSubject)))
-    if(!(slideValue[0]===1000 && slideValue[1]===10000)){ //時給スライダーで指定していた場合
-      filteredUsers = filteredUsers.filter((user:User)=>{
-        return user.teacherProfile?.hourlyPay >= slideValue[0] && user.teacherProfile.hourlyPay <= slideValue[1]
-      })
-    }
-    setTeachers(filteredUsers)
-    setSubject(newSelectedSubjects)
-  }
+  const handleSubjectSearch = (subject: string) => {
+    const newSelectedSubjects = selectedSubjects.includes(subject)
+      ? selectedSubjects.filter((selectedSubject) => selectedSubject !== subject)
+      : [...selectedSubjects, subject];
+  
+    setSubject(newSelectedSubjects);
+  };
 
 //フロント教科リセット
   const handleSubjectReset = () => {
-    let newUsers = users.filter((user:User)=>user.teacherProfile) //一度教師全員を格納
-    if(!(slideValue[0]===1000 && slideValue[1]===10000)){ //時給スライダーで指定していた場合時給条件だけ適用
-      newUsers= newUsers.filter((user:User)=>{
-        return user.teacherProfile?.hourlyPay >= slideValue[0] && user.teacherProfile.hourlyPay <= slideValue[1]
-      })
-    }
-    setTeachers(newUsers)
-    setSubject([]) //教科のみリセット
+    setSubject([]) //教科リセット
   }
   
 
 //フロントで時給で絞る処理
-  const handleSliderChange: SliderProps['onChange'] = async(event, newValue) => {
+  const handleSliderChange: SliderProps['onChange'] = (event, newValue) => {
       const value= newValue as number[]
-      let newUsers = users.filter((user:User)=>{
-        return user.teacherProfile?.hourlyPay >= value[0] && user.teacherProfile.hourlyPay <= value[1]
-      })
-      if(selectedSubjects.length > 0){
-        newUsers = newUsers.filter((user:User)=>selectedSubjects.every((selectedSubject)=>user.teacherProfile?.subjects.includes(selectedSubject)))
-      }
-      setTeachers(newUsers)
-      setSlideValue(value)
+      setSlideValue(value) //スライダーの値を更新
   }
 
   //フロント時給リセット
   const handleSliderReset = () => {
-    let newUsers = users.filter((user:User)=>user.teacherProfile) //一度教師全員を格納
-    if(selectedSubjects.length > 0){ //教科が選択されていた場合は教科条件だけ適用
-      newUsers = newUsers.filter((user:User)=>selectedSubjects.every((selectedSubject)=>user.teacherProfile?.subjects.includes(selectedSubject)))
-    }
-    setTeachers(newUsers)
-    setSlideValue([1000,10000]) //スライダーの値のみリセット
+    setSlideValue([1000,10000]) //スライダーをリセット
   }
 
   //検索collapseを開くか閉じるかの処理
@@ -112,10 +71,9 @@ const Home:React.FC = () => {
   //マウント時に実行、全てのユーザーを取得して教師のみ格納
   const handleGetUsers = async () => {
       try{
-        const res = await getUsers()
+        const res = await getTeachers()
         const users:User[] = res.data
         setUsers(users)
-        setTeachers(users.filter((user:User)=>user.teacherProfile))
       }catch(err){
         console.log(err)
       }
@@ -123,6 +81,19 @@ const Home:React.FC = () => {
   }
 
   useEffect(() => {handleGetUsers()}, [])
+
+  //教師のデータをキャッシュに保存し、検索に応じてフィルタリング
+  const filteredUsers = useMemo(() => {
+    if(selectedSubjects.length ===0 && (slideValue[0]===1000 && slideValue[1]===10000) ) return users
+    
+    return users
+    .filter((user:User)=>
+      user.teacherProfile.hourlyPay >= slideValue[0] && user.teacherProfile.hourlyPay <= slideValue[1]
+    )
+    .filter((user:User) => 
+      selectedSubjects.every((selectedSubject)=>user.teacherProfile.subjects.includes(selectedSubject))
+    )
+  }, [users,slideValue,selectedSubjects])
 
    //ホームにいることをcontextに通知
    useEffect(() => {
@@ -304,9 +275,9 @@ const Home:React.FC = () => {
         justifyContent="center"
         mt={{xs: 1, sm: 3, md: 5}}
       >
-        {teachers.length >0 ? 
+        {filteredUsers.length >0 ? 
         <Button color= "secondary" variant="text" sx={{ borderRadius: 50 }} startIcon ={<Group/>} >
-          {teachers.length}人の先生が見つかりました！
+          {filteredUsers.length}人の先生が見つかりました！
         </Button>
           : 
         <Button color= "secondary" variant="text" sx={{ borderRadius: 50 }} startIcon ={<PersonOff/>} >
@@ -315,9 +286,9 @@ const Home:React.FC = () => {
         }
       </Box>
 
-        {teachers.length >0 ?
+        {filteredUsers.length >0 ?
         <Grid container sx={{width: "100%"}} justifyContent="center" rowSpacing={6} columnSpacing={{ xs: 1, sm: 2, md: 4 }} mt={5}>
-          {teachers.map((user: User)=>{
+          {filteredUsers.map((user: User)=>{
             return(
               <Grid item key={user.id} >
                 <TeacherCard user={user} />
@@ -336,7 +307,6 @@ const Home:React.FC = () => {
           </Box>}
         <SearchItem
           setUsers={setUsers} 
-          setTeachers={setTeachers} 
           setLoading={setLoading} 
           university={university}
           setUniversity={setUniversity}

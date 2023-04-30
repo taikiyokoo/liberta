@@ -2,9 +2,17 @@ import { SearchStudentsParams, SearchTeachersParams } from "interfaces";
 import Cookies from "js-cookie";
 import client from "./client";
 
+//全ユーザーを取得
 export const getUsers = () => {
     return client.get("/users");
     }
+export const getStudents = () => {
+    return client.get("/users/students");
+    }
+export const getTeachers = () => {
+    return client.get("/users/teachers");
+    }
+    
 
 export const getUser = (id: string) => {
     return client.get(`/users/${id}`);

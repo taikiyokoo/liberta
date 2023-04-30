@@ -7,6 +7,8 @@ Rails.application.routes.draw do
         collection do
           get :students_search
           get :teachers_search
+          get :teachers
+          get :students
         end
         member do 
           get :check_liked

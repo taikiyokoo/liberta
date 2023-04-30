@@ -47,7 +47,6 @@ const SearchIconWrapper = styled('div')`
 
 interface SearchComponentProps {
   setUsers: (users: User[]) => void;
-  setTeachers: (users: User[]) => void;
   setLoading: (loading: boolean) => void;
   university: string;
   setUniversity: (university: string) => void;
@@ -64,7 +63,7 @@ interface SearchComponentProps {
 }
 
 
-const SearchItem: React.FC<SearchComponentProps> = ({setUsers,setTeachers,setLoading,university,setUniversity,major,setMajor,gender,setGender,style,setStyle,hourlyPay,setHourlyPay,searchState,setSearchState}) => {
+const SearchItem: React.FC<SearchComponentProps> = ({setUsers,setLoading,university,setUniversity,major,setMajor,gender,setGender,style,setStyle,hourlyPay,setHourlyPay,searchState,setSearchState}) => {
 
 //検索モーダル管理
   const { searchOpen, setSearchOpen } = useContext(SearchModalContext);
@@ -110,7 +109,6 @@ const SearchItem: React.FC<SearchComponentProps> = ({setUsers,setTeachers,setLoa
         hourlyPay: hourlyPay
       })
       setUsers(res.data)
-      setTeachers(res.data.filter((user:User)=>user.teacherProfile))
     }catch(error){
       console.log(error)
     }
