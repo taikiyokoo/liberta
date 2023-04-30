@@ -192,82 +192,86 @@ const Home:React.FC = () => {
          }
       </Box>
       <Collapse in={collapseOpen}>
-        <Box 
-          bgcolor={grey[200]}
-          p={2}
-          borderRadius={4}
-          mb={5}
-        >
-          <Box
+        <Box sx={{display: "flex",justifyContent: "center",alignItems: "center"}}>
+          <Box 
+            bgcolor={grey[200]}
+            p={2}
+            borderRadius={4}
+            mb={5}
+            width={{xs: "80vw", sm: "70vw",md: "60vw"}}
+          >
+            <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                flexDirection="column"
+                marginBottom={5}
+                maxWidth={{xs: 300, sm: 300, md: 500}}
+                mx="auto" 
+            >
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Typography
+                  variant="subtitle2"
+                  sx={{
+              
+                  }}
+                >
+                  希望時給を範囲で指定
+                </Typography>
+                <Button onClick={handleSliderReset}>リセット</Button>
+              </Box>
+              <Slider
+                defaultValue={[1000, 10000]}
+                valueLabelDisplay="auto"
+                onChange={handleSliderChange}
+                min={1000}
+                max={10000}
+                value={slideValue}
+                marks={[
+                  { value: 1000, label: "1000円" },
+                  { value: 10000, label: "10000円以上" },
+                ]}
+                sx={{maxWidth: {xs: 200, sm: 300, md: 500}}}
+              />
+            </Box>
+            <Box
               display="flex"
               alignItems="center"
               justifyContent="center"
               flexDirection="column"
               marginBottom={5}
-              maxWidth={{xs: 300, sm: 300, md: 500}}
               mx="auto" 
-          >
-            <Box
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
+              width={{xs: "90%", sm: "85%", md: "80%"}}
             >
-              <Typography
-                variant="subtitle2"
-                sx={{
-            
-                }}
-              >
-                希望時給を範囲で指定
-              </Typography>
-              <Button onClick={handleSliderReset}>リセット</Button>
-            </Box>
-            <Slider
-              defaultValue={[1000, 10000]}
-              valueLabelDisplay="auto"
-              onChange={handleSliderChange}
-              min={1000}
-              max={10000}
-              value={slideValue}
-              marks={[
-                { value: 1000, label: "1000円" },
-                { value: 10000, label: "10000円以上" },
-              ]}
-              sx={{maxWidth: {xs: 200, sm: 300, md: 500}}}
-            />
-          </Box>
-          <Box
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            flexDirection="column"
-            marginBottom={5}
-            mx="auto" 
-          >
-            <Box
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              sx={{mb:2}}
-              >
-                <Typography 
-                variant="subtitle2"
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                sx={{mb:2}}
                 >
-                  指導可能教科
-                </Typography>
-                <Button onClick={handleSubjectReset}>リセット</Button>
+                  <Typography 
+                  variant="subtitle2"
+                  >
+                    指導可能教科
+                  </Typography>
+                  <Button onClick={handleSubjectReset}>リセット</Button>
+              </Box>
+              <Grid container spacing={{xs: 1, sm: 2, md: 2}} justifyContent="center" sx={{mb:{xs: 1, sm: 3, md: 5}}}>
+                {subjects.map((subject:string)=>{
+                  return(
+                  <Grid item key={subject}>
+                    {selectedSubjects.includes(subject) ? <Chip label={subject} color="primary" onClick= {()=>handleSubjectSearch(subject)}/> : <Chip label={subject} color="primary" variant="outlined" onClick= {()=>handleSubjectSearch(subject)}/>}
+                  </Grid>
+                  )
+                })}
+              </Grid>
             </Box>
-            <Grid container spacing={{xs: 1, sm: 2, md: 2}} justifyContent="center" sx={{mb:{xs: 1, sm: 3, md: 5}}}>
-              {subjects.map((subject:string)=>{
-                return(
-                <Grid item key={subject}>
-                  {selectedSubjects.includes(subject) ? <Chip label={subject} color="primary" onClick= {()=>handleSubjectSearch(subject)}/> : <Chip label={subject} color="primary" variant="outlined" onClick= {()=>handleSubjectSearch(subject)}/>}
-                </Grid>
-                )
-              })}
-            </Grid>
-          </Box>
-          </Box>
+            </Box>
+        </Box>
       </Collapse>
       <Box
         display="flex"
@@ -287,7 +291,7 @@ const Home:React.FC = () => {
       </Box>
 
         {filteredUsers.length >0 ?
-        <Grid container sx={{width: "100%"}} justifyContent="center" rowSpacing={6} columnSpacing={{ xs: 1, sm: 2, md: 4 }} mt={5}>
+        <Grid container sx={{width: "100vw"}} justifyContent="center" rowSpacing={6} columnSpacing={{ xs: 1, sm: 2, md: 4 }} mt={5}>
           {filteredUsers.map((user: User)=>{
             return(
               <Grid item key={user.id} >
@@ -302,6 +306,7 @@ const Home:React.FC = () => {
           justifyContent="center"
           mt={10}
           mb={30}
+          minWidth="100%"
           >
           <Typography variant="h5" color="teal">条件に一致する先生は見つかりませんでした。</Typography>
           </Box>}
