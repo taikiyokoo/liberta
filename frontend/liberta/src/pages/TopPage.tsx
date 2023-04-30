@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core';
 import { useSpring, animated } from 'react-spring';
 import { useRouter } from 'next/router';
 import { AuthContext } from './_app';
+import { Public, SensorOccupied } from '@mui/icons-material';
 
 
 //ボタンのスタイル
@@ -118,14 +119,11 @@ const useStyles = makeStyles((theme) => ({
     MozBackgroundClip: "text",
     backgroundClip: "text",
   },
+  rotatingIconWrapper: {
+    display: 'inline-block',
+    marginRight: "7px",
+  },
 }));
-
-
-
-
-
-
-
 
 const TopPage = () => {
   const classes= useStyles();
@@ -254,12 +252,13 @@ const TopPage = () => {
   );
 
   //アイコンのスピンアクション
-  const spinIcon = useSpring({
-    from: { transform: 'rotate(0deg)' },
-    to: { transform: 'rotate(360deg)' },
-    loop: true,
-    config: { duration: 8000 },
-  });
+    const spinIcon = useSpring({
+      from: { transform: 'rotate(0deg)' },
+      to: { transform: 'rotate(360deg)' },
+      loop: true,
+      config: { duration: 8000 },
+    });
+
 
   //ボタンの遷移先の設定
   const handleTeacherLogin = () => {
@@ -283,9 +282,19 @@ const TopPage = () => {
           textAlign="center"
         >
         <Box display="flex" alignItems="center" style={{ gap: '8px' }}>
-            <animated.div style={spinIcon}>
-              <SchoolIcon fontSize="large" sx={{marginRight: {xs: 1,sm: 2, md: 3}}}/>
-            </animated.div>
+        <div className={classes.rotatingIconWrapper}>
+          <animated.div
+            style={{
+              ...spinIcon,
+              transformOrigin: 'center',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+            >
+            <SensorOccupied  sx={{fontSize: {xs:25,sm:40}}}/>
+          </animated.div>
+        </div>
             <Typography variant="h2" component="h1" gutterBottom className={classes.blendedText} sx={{fontSize: {xs: "2.5rem",sm: "3rem", md: "3.5rem"}}}>
               Liberta
             </Typography>

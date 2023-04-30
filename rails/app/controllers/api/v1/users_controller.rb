@@ -39,6 +39,17 @@ class Api::V1::UsersController < ApplicationController
         render json: users.as_json(include: [:teacher_profile, :student_profile])
     end
 
+    def teachers
+        users = User.all
+        users =users.where(user_type: 0)
+        render json: users.as_json(include: [:teacher_profile, :student_profile])
+    end
+
+    def students
+        users = User.all
+        users =users.where(user_type: 1)
+        render json: users.as_json(include: [:teacher_profile, :student_profile])
+    end
   
 
 

@@ -1,31 +1,27 @@
-import { Group, PersonOff, Refresh } from '@mui/icons-material'
-import { Box, Button, Chip, Grid, Skeleton, Tab, Tabs, Typography, useMediaQuery, useTheme } from '@mui/material'
+import { ExpandLess, ExpandMore, Group, PersonOff, Refresh } from '@mui/icons-material'
+import { Box, Button, Chip, Collapse, Grid, Skeleton, Typography} from '@mui/material'
 import { grey } from '@mui/material/colors'
 import { User } from 'interfaces'
-import { getUsers } from 'pages/api/user'
+import { getStudents, getUsers } from 'pages/api/user'
 import StudentCard from 'pages/components/Cards/student/StudentCard'
 import { SearchItem } from 'pages/components/Dialog/teacher/SearchItem'
 import { HomeContext } from 'pages/_app'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
 
 const Home:React.FC = () => {
 
     //レスポンシブ対応用
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const [loading,setLoading] =useState(true) //ホーム用のloadingState skeltonを表示
 
   const [users,setUsers] = useState<User[]>([]) //全員の情報
-  const [students, setStudents] = useState<User[]>([]) //生徒のみの情報
 
   const {isHome,setIsHome} = useContext(HomeContext) //ホームにいるかどうか
 
   const subjects:string[] = ["数学","英語","物理","化学","生物","地学","日本史","世界史","地理"]
 
-  const [selectedSubjects,setSubject] = useState<string[]>([]) //フロント教科で絞る用のstate
-
-  const [selectedTab, setSelectedTab] = useState(0); //タブ用のstate
+  const [selectedSubjects,setSubject] = useState<string[]>([]) //フロント教科検索用のstate
+  const [collapseOpen,setCollapseOpen] = useState<boolean>(false) //フロント教科検索collapseを開くかどうかのstate
 
 //検索モーダルと共有するstate
   const [searchState,setSearchState] = useState<boolean>(false)
@@ -38,45 +34,30 @@ const Home:React.FC = () => {
 //ここまで
 
     //フロントで教科で絞る
-    const handleSubjectSearch = (subject:string) => {
-      if(selectedSubjects.includes(subject)){
-        const newSelectedSubjects = selectedSubjects.filter((selectedSubject)=>selectedSubject !== subject)
-        if(newSelectedSubjects.length === 0){
-          setStudents(users.filter((user:User)=>user.studentProfile))
-          setSubject(newSelectedSubjects)
-          setLoading(false)
-          return
-        }
-        let filteredUsers:User[] = []
-        filteredUsers = users.filter((user:User)=>user.studentProfile)
-        filteredUsers = filteredUsers.filter((user:User)=>newSelectedSubjects.every((newSelectedSubject)=>user.studentProfile?.subjects.includes(newSelectedSubject)))
-        setSubject(newSelectedSubjects)
-        setStudents(filteredUsers)
-        setLoading(false)
-        return
-      }
-      let filteredUsers:User[] = []
-      const newSelectedSubjects = selectedSubjects
-      newSelectedSubjects.push(subject)
-      filteredUsers = users.filter((user:User)=>user.studentProfile)
-      filteredUsers = filteredUsers.filter((user:User)=>newSelectedSubjects.every((newSelectedSubject)=>user.studentProfile?.subjects.includes(newSelectedSubject)))
-      setStudents(filteredUsers)
-      setSubject(newSelectedSubjects)
-    }
+    const handleSubjectSearch = (subject: string) => {
+      const newSelectedSubjects = selectedSubjects.includes(subject)
+        ? selectedSubjects.filter((selectedSubject) => selectedSubject !== subject)
+        : [...selectedSubjects, subject];
+    
+      setSubject(newSelectedSubjects);
+    };
 
   //フロント教科検索をリセット
   const handleResetSubjext =() =>{
     setSubject([])
-    setStudents(users.filter((user:User)=>user.studentProfile))
   }
+
+  //フロント教科検索collapseを開くか閉じるかの処理
+  const handleCollapseToggle = () => {
+    setCollapseOpen(!collapseOpen);
+  };
 
   const handleGetStudents = async () => {
 
     try{
-        const res = await getUsers()
+        const res = await getStudents()
         const users:User[] = res.data
         setUsers(users)
-        setStudents(users.filter((user:User)=>user.studentProfile))
     }catch(err){
       console.log(err)
     }
@@ -85,6 +66,20 @@ const Home:React.FC = () => {
   }
 
   useEffect(() => {handleGetStudents()}, [])
+
+  //キャッシュに生徒情報を保存して検索に応じてフィルタリング
+  const filteredUsers = useMemo(() => {
+    if (selectedSubjects.length === 0) {
+      return users
+    }
+  
+    return users
+      .filter((user: User) =>
+        selectedSubjects.every((selectedSubject) =>
+          user.studentProfile?.subjects.includes(selectedSubject)
+        )
+      );
+  }, [users, selectedSubjects]);
 
   //ホームにいることをcontextに通知
   useEffect(() => {
@@ -116,7 +111,7 @@ const Home:React.FC = () => {
         display="flex"
         alignItems="center"
         justifyContent="center"
-        sx={{mb: 5}}
+        sx={{mb: 5,mt: 5}}
         width="100%"
         minWidth="80vw"
       >
@@ -164,70 +159,62 @@ const Home:React.FC = () => {
           justifyContent="center"
           sx={{mb:3}}
           >
-            <Typography 
-            variant="subtitle2"
-            color ="teal"
-            sx={{mr: 2}}
+            {collapseOpen? <Button
+            variant= "contained"
+            color ="primary"
+            sx={{mr: 2,borderRadius: 50 }}
+            endIcon={<ExpandLess />}
+            onClick ={handleCollapseToggle}
+            >
+              閉じる
+            </Button>
+            :
+            <Button
+            variant= "outlined"
+            color ="primary"
+            sx={{mr: 2,borderRadius: 50 }}
+            endIcon={<ExpandMore />}
+            onClick ={handleCollapseToggle}
             >
               希望教科から絞る
-            </Typography>
-            {selectedSubjects.length >0 && <Button onClick={handleResetSubjext} color ="error" startIcon={<Refresh />} variant ="outlined"  sx={{ borderRadius: 50 }}>リセット</Button>}
+            </Button>
+            
+            }
+          {selectedSubjects.length >0 && <Button onClick={handleResetSubjext} color ="error" startIcon={<Refresh />} variant ="outlined"  sx={{ borderRadius: 50 }}>リセット</Button>}
         </Box>
-        {isMobile?
-        (<Grid container spacing={1} justifyContent="center" sx={{ mb: 5,minWidth: "100%" }}>
-        {subjects.map((subject) => {
-          return (
-            <Grid item key={subject}>
-              {selectedSubjects.includes(subject) ? (
-                <Chip
-                  label={subject}
-                  color='primary'
-                  onClick={() => handleSubjectSearch(subject)}
-                />
-              ) : (
-                <Chip
-                  label={subject}
-                  variant="outlined"
-                  onClick={() => handleSubjectSearch(subject)}
-                  color='primary'
-                />
-              )}
-          </Grid>
-          );
-        })}
-    </Grid>) :(
-      <Grid container spacing={5} justifyContent="center" sx={{ mb: 7 }}>
-      {subjects.map((subject) => {
-        return (
-          <Grid item key={subject}>
-            {selectedSubjects.includes(subject) ? (
-              <Chip
-                label={subject}
-                color='primary'
-                onClick={() => handleSubjectSearch(subject)}
-              />
-            ) : (
-              <Chip
-                label={subject}
-                variant="outlined"
-                onClick={() => handleSubjectSearch(subject)}
-                color='primary'
-              />
-            )}
+        <Collapse in={collapseOpen}>
+          <Grid container spacing={{xs:1,sm:5}} justifyContent="center" sx={{ mb: {xs:5,sm:7},mt: {xs:1,sm:2}}}>
+          {subjects.map((subject) => {
+            return (
+                <Grid item key={subject}>
+                  {selectedSubjects.includes(subject) ? (
+                    <Chip
+                      label={subject}
+                      color='primary'
+                      onClick={() => handleSubjectSearch(subject)}
+                    />
+                  ) : (
+                    <Chip
+                      label={subject}
+                      variant="outlined"
+                      onClick={() => handleSubjectSearch(subject)}
+                      color='primary'
+                    />
+                  )}
+              </Grid>
+            );
+            })}
         </Grid>
-        );
-      })}
-    </Grid>)
-      }
+        </Collapse>
       <Box
         display="flex"
         alignItems="center"
         justifyContent="center"
         mt={5}
       >
-       {students.length >0 ? 
+       {filteredUsers.length >0 ? 
         <Button color= "secondary" variant="text" sx={{ borderRadius: 50 }} startIcon ={<Group/>} >
-          {students.length}人の生徒が見つかりました！
+          {filteredUsers.length}人の生徒が見つかりました！
         </Button>
           : 
         <Button color= "secondary" variant="text" sx={{ borderRadius: 50 }} startIcon ={<PersonOff/>} >
@@ -236,7 +223,7 @@ const Home:React.FC = () => {
         }
       </Box>
       <Grid container sx={{width: "100%"}} justifyContent="center" rowSpacing={6} columnSpacing={{ xs: 1, sm: 2, md: 4 }} mt={5}>
-        {students.map((user: User)=>{
+        {filteredUsers.map((user: User)=>{
           return(
             <Grid item key={user.id}>
               <StudentCard key={user.id} user={user}/>
@@ -246,7 +233,6 @@ const Home:React.FC = () => {
       </Grid>
       <SearchItem
       setUsers={setUsers}
-      setStudents={setStudents}
       setLoading={setLoading} 
       grade={grade} 
       setGrade={setGrade} 
