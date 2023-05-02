@@ -15,7 +15,7 @@ import {
   Slide,
   Box,
 } from '@mui/material';
-import { UserEditModalContext } from 'pages/_app';
+import { AuthContext, UserEditModalContext } from 'pages/_app';
 import { TransitionProps } from '@mui/material/transitions';
 import { AccountCircle } from '@mui/icons-material';
 
@@ -31,9 +31,10 @@ const Transition = React.forwardRef(function Transition(
 
 const ProfileEdit: React.FC = () => {
 
+const {currentUser} = useContext(AuthContext)
 const {userEditOpen,setUserEditOpen} =  useContext(UserEditModalContext)
-const [name, setName] = useState('');
-const [email, setEmail] = useState('');
+const [name, setName] = useState(currentUser?.name? currentUser.name : '');
+const [email, setEmail] = useState(currentUser?.email? currentUser.email : '');
 const [desiredSubjects, setDesiredSubjects] = useState<string[]>([]);
 const [desiredDuration, setDesiredDuration] = useState('');
 const [desiredFrequency, setDesiredFrequency] = useState(1);

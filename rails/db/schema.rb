@@ -10,7 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_04_19_073318) do
+ActiveRecord::Schema.define(version: 2023_04_30_073954) do
+
+  create_table "chatrooms", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "user1_id", null: false
+    t.integer "user2_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "likes", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "liker_id", null: false
@@ -19,6 +26,16 @@ ActiveRecord::Schema.define(version: 2023_04_19_073318) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["liked_id"], name: "index_likes_on_liked_id"
     t.index ["liker_id"], name: "index_likes_on_liker_id"
+  end
+
+  create_table "messages", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "chatroom_id", null: false
+    t.text "content", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["chatroom_id"], name: "index_messages_on_chatroom_id"
+    t.index ["user_id"], name: "index_messages_on_user_id"
   end
 
   create_table "student_profile", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|

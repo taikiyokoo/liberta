@@ -85,7 +85,15 @@ const MobileMenu:React.FC<SearchComponentProps> = ({menuOpen,setMenuOpen}) => {
             <DialogContent>
               <List>
                 {/* 以下に、スマホサイズ時に表示されるメニュー項目を追加します */}
-                <ListItemButton  onClick={() => { /* ここに onClick 処理を実装 */ }}>
+                <ListItemButton  
+                  onClick={()=>{
+                    setMenuOpen(false)
+                    if(currentUser?.userType ==="student"){
+                        router.push(`/student/${currentUser.id}/ChatList`)
+                    }else{
+                        router.push(`/teacher/${currentUser?.id}/ChatList`)
+                    }
+                  }}>
                   <ListItemIcon>
                     <Chat color="primary" />
                   </ListItemIcon>

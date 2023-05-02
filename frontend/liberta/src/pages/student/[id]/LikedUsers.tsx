@@ -76,7 +76,6 @@ const LikedUsers:React.FC<LikedUsersProps> = ({likedUsers,likingUsers}) => {
             alignItems: "center",
             justifyContent: "center",
             width: "100vw",
-            height: "100%",
         }}
         >
           {selectedTab === 0 &&

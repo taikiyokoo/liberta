@@ -1,8 +1,12 @@
 Rails.application.routes.draw do
+  mount ActionCable.server => '/cable'
   namespace :api do
     namespace :v1 do
       resources :teacher_profiles
       resources :student_profiles
+      resources  :chatrooms do 
+        resources :messages
+      end
       resources :users do
         collection do
           get :students_search

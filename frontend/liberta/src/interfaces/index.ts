@@ -100,3 +100,16 @@ export interface SearchTeachersParams {
   university: string
   hourlyPay: number[]
 }
+
+export interface CreateChatroomParams {
+  user1_id: number | undefined
+  user2_id: number
+}
+
+
+export interface Message {
+  id: number;
+  userId: number;
+  content: string;
+  createdAt: string;
+}
