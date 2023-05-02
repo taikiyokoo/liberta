@@ -16,6 +16,13 @@ class User < ActiveRecord::Base
   #自分がいいねをもらったユーザー
   has_many :liking_users, through: :likes_received, source: :liker
 
+  #チャットルーム関連付け
+  has_many :chatrooms_as_user1, class_name: 'Chatroom', foreign_key: 'user1_id', dependent: :destroy
+  has_many :chatrooms_as_user2, class_name: 'Chatroom', foreign_key: 'user2_id', dependent: :destroy
+
+  #メッセージ関連付け
+  has_many :messages, dependent: :destroy
+
   enum user_type: { teacher: 0, student: 1 }
 
   # Include default devise modules. Others available are:
@@ -83,6 +90,10 @@ class User < ActiveRecord::Base
   
     return users
   end
-  
 
+  # ユーザーが関連するチャットルームを取得する
+  def chatrooms
+    Chatroom.where('user1_id = ? OR user2_id = ?', self.id, self.id)
+  end
+  
 end

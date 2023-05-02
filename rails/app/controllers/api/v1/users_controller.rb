@@ -50,7 +50,7 @@ class Api::V1::UsersController < ApplicationController
         users =users.where(user_type: 1)
         render json: users.as_json(include: [:teacher_profile, :student_profile])
     end
-  
+
 
 
 end

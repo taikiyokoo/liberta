@@ -5,10 +5,11 @@ import Cookies from "js-cookie";
 const options = {
   ignoreHeaders: true
 }
-const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+const IPUrl = process.env.NEXT_PUBLIC_API_URL;
+const localUrl = 'http://localhost:3001';
 
 const client = applyCaseMiddleware(axios.create({
-  baseURL: `${apiUrl}/api/v1`,
+  baseURL: `${localUrl}/api/v1`,
 }), options);
 
 // Request interceptor to attach authentication information to headers

@@ -41,3 +41,10 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'devise'
 gem 'devise_token_auth'
+
+gem 'redis', '>= 3', '< 5'
+gem 'hiredis'
+gem 'redis-namespace'
+gem 'redis-rails'
+gem 'redis-activesupport'
+gem 'actioncable'

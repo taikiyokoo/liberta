@@ -23,7 +23,6 @@ module Myapp
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.1
-    config.hosts << "192.168.10.37"
 
     # Configuration for the application, engines, and railties goes here.
     #
@@ -37,5 +36,9 @@ module Myapp
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+    config.action_cable.mount_path = '/cable'
+    config.action_cable.url = 'ws://localhost:3001/cable'
+    config.action_cable.allowed_request_origins = ['http://localhost:3000', /http:\/\/192\.168\.10\.37(:\d+)?/]
+
   end
 end

@@ -25,5 +25,8 @@ services:
       - "3001:3000"
     depends_on:
       - db
+      - redis 
+  redis:
+    image: "redis:alpine"
 volumes:
   mysql-data:
