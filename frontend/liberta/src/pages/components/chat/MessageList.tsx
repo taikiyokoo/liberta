@@ -43,7 +43,7 @@ const MessageList: React.FC<MessageListProps> = ({ messages, currentUser }) => {
   }, [messages]);
 
   return (
-    <Box className={classes.messagesContainer} ref={messagesContainerRef}  sx={{height: {xs: "65%",md:"60%"}}}>
+    <Box className={classes.messagesContainer} ref={messagesContainerRef}  sx={{minHeight: {xs: "50vh",md:"60vh"}}}>
       {messages.map((message) => (
         <Grid
           key={message.id}
