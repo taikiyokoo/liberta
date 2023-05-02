@@ -47,7 +47,7 @@ const InputBar: React.FC<InputBarProps> = ({
   const classes = useStyles();
 
   return (
-    <Box className={classes.inputContainer} sx={{height: {xs: "25%",md: "30%"}}}>
+    <Box className={classes.inputContainer} sx={{height: {xs: "15vh",md: "20vh"}}}>
       <TextField
         fullWidth
         multiline

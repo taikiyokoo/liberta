@@ -14,9 +14,6 @@ import InputBar from 'pages/components/chat/InputBar';
 
 const useStyles = makeStyles((theme) => ({
   chatContainer: {
-    marginTop: theme.spacing(5),
-    height: "80vh",
-    width: "80vw",
     backgroundColor: "#F0F2F5",
   },
 }));
@@ -40,8 +37,8 @@ const ChatRoom: React.FC = () => {
   if(isLoading) return (<div>loading...</div>);
   
   return (
-    <Box className={classes.chatContainer}>
-      <AppBar position="static" sx={{height: {xs:"10%"}}}>
+    <Box className={classes.chatContainer} sx={{height: {xs: "73vh",md: "88vh"},width: "100vw"}}>
+      <AppBar position="static" sx={{height: "8vh"}}>
         <Toolbar>
           <IconButton edge="start" color="inherit" aria-label="back">
             <ArrowBackIosNew onClick={handleBackChatList} />
