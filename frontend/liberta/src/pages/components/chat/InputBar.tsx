@@ -50,6 +50,7 @@ const InputBar: React.FC<InputBarProps> = ({
     <Box className={classes.inputContainer} sx={{height: {xs: "25%",md: "30%"}}}>
       <TextField
         fullWidth
+        multiline
         className={classes.messageInput}
         placeholder="メッセージを入力..."
         variant="outlined"
@@ -62,5 +63,4 @@ const InputBar: React.FC<InputBarProps> = ({
     </Box>
   );
 };
-
 export default InputBar;

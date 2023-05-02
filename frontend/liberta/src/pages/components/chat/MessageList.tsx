@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core';
 import { Box, Grid, Typography } from '@mui/material';
 import { Avatar } from '@mui/material';
 import { Message, User } from 'interfaces';
+import { formatDate } from 'pages/utils/format';
 
 const useStyles = makeStyles((theme) => ({
   messagesContainer: {
@@ -54,15 +55,19 @@ const MessageList: React.FC<MessageListProps> = ({ messages, currentUser }) => {
         >
           {message.userId === currentUser?.id ? (
             <>
+            <Box display="flex" justifyContent="center" alignItems="center">
+              <Typography sx ={{mr: 1}} variant='caption'>{formatDate(message.createdAt)}</Typography>
               <Typography
                 sx={{ mb: 2, mr: { xs: 3, md: 10 }, padding: { xs: 1, md: 2 } }}
                 className={`${classes.message} ${classes.sentMessage}`}
               >
                 {message.content}
               </Typography>
+            </Box>
             </>
           ) : (
             <>
+            <Box display="flex" justifyContent="center" alignItems="center">
               <Avatar sx={{ mr: 2 }} alt="Remy Sharp" src="/images/dog.jpg" />
               <Typography
                 sx={{ mb: 2, mr: 3, padding: { xs: 1, md: 2 } }}
@@ -70,6 +75,8 @@ const MessageList: React.FC<MessageListProps> = ({ messages, currentUser }) => {
               >
                 {message.content}
               </Typography>
+              <Typography variant='caption'>{formatDate(message?.createdAt)}</Typography>
+            </Box>
             </>
           )}
         </Grid>

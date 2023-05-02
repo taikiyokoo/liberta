@@ -49,8 +49,8 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
 };
 
 const ChatCard = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(2) ,
-  marginBottom: 2,
+  padding: theme.spacing(3) ,
+  marginBottom: 10,
   display: 'flex',
   alignItems: 'center',
   textDecoration: 'none',
@@ -80,12 +80,12 @@ const ChatList: React.FC<Props> = ({ users }) => {
 
   return (
     <>
-      <Button color="primary" startIcon={<ArrowBackIosNew />} sx={{ color: 'teal',mb: 5,mr: {xs: 35},mt: {xs:1} }} onClick={() => router.push("/") }></Button>
-      <Container>
-        <Grid container spacing={1}>
+     
+      <Box display="flex" justifyContent="center" alignItems="center" minWidth="100vw" mt={{xs:0,sm: 5,md: 10}}>
+        <Grid container sx={{width: {xs: "100vw",md: "50vw"}}}>
           {users.map((user) => (
-            <Grid item xs={12} key={user.id}>
-                <ChatCard onClick={() => handleClickChat(user.id)}>
+            <Grid item xs={12} key={user.id} maxWidth="100%">
+                <ChatCard onClick={() => handleClickChat(user.id)} sx={{width: "100%"}}>
                   <Avatar
                     sx={{ marginRight: 2,}}
                     src= "/images/dog.jpg"
@@ -100,7 +100,7 @@ const ChatList: React.FC<Props> = ({ users }) => {
             </Grid>
           ))}
         </Grid>
-      </Container>
+      </Box>
     </>
   );
 };

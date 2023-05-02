@@ -20,6 +20,7 @@ class ChatChannel < ApplicationCable::Channel
       id: message.id,
       content: message.content,
       userId: message.user_id,
+      createdAt: message.created_at
     })
   end
 end
