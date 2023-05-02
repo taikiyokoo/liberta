@@ -1,7 +1,5 @@
 // components/ChatRoom.tsx
 import React, { useState, useEffect, useContext } from 'react';
-import { Channel } from 'actioncable';
-import cable from 'pages/utils/actioncable';
 import { AuthContext } from 'pages/_app';
 import { getChatroom, getMessages } from 'pages/api/chatroom';
 import { makeStyles } from '@material-ui/core';
@@ -16,7 +14,7 @@ import InputBar from 'pages/components/chat/InputBar';
 
 const useStyles = makeStyles((theme) => ({
   chatContainer: {
-    marginTop: theme.spacing(3),
+    marginTop: theme.spacing(5),
     height: "80vh",
     width: "80vw",
     backgroundColor: "#F0F2F5",
@@ -30,6 +28,15 @@ const ChatRoom: React.FC = () => {
   const classes = useStyles();
   const { messages, handleSendMessage, handleChangeContent, inputValue, user,isLoading } = useChat(chatroomId, currentUser);
 
+  const handleBackChatList = () => {
+    if(!currentUser) return
+    if(currentUser.studentProfile){
+      router.push(`/student/${currentUser.id}/ChatList`);
+    }else{
+      router.push(`/teacher/${currentUser.id}/ChatList`);
+    }
+  };
+
   if(isLoading) return (<div>loading...</div>);
   
   return (
@@ -37,7 +44,7 @@ const ChatRoom: React.FC = () => {
       <AppBar position="static" sx={{height: {xs:"10%"}}}>
         <Toolbar>
           <IconButton edge="start" color="inherit" aria-label="back">
-            <ArrowBackIosNew />
+            <ArrowBackIosNew onClick={handleBackChatList} />
           </IconButton>
           <Box display="flex" justifyContent="center" alignItems="center" sx={{ml: 2}}>
             <Avatar sx={{mr: 2}} alt="Remy Sharp" src="/images/dog.jpg"  />
