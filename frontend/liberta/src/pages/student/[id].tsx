@@ -4,6 +4,7 @@ import { ArrowBack, ThumbUp } from '@mui/icons-material';
 import { Box, Typography, Avatar, Chip, Button, Theme, styled, useTheme, useMediaQuery } from '@mui/material';
 import { CreateLikeParams, User } from 'interfaces';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { createLike } from 'pages/api/like';
 import { confirmLiked, getUser } from 'pages/api/user';
@@ -88,7 +89,6 @@ export const getServerSideProps: GetServerSideProps<StudentDetailProps>= async (
         try{
           const res = await confirmLiked(currentUser.id,user.id)
           const isLiked = res.data
-          console.log(isLiked)
           setLike(isLiked)
         }catch(error){
           console.log(error)
@@ -125,7 +125,9 @@ export const getServerSideProps: GetServerSideProps<StudentDetailProps>= async (
 
     return (
       <Box sx={{ padding: '16px' }}>
-        <Button color="primary" startIcon={<ArrowBack />} sx={{marginBottom :5 }} onClick={() => router.push("/") }>戻る</Button>
+        <Link href="/">
+          <Button color="primary" startIcon={<ArrowBack />} sx={{marginBottom :5 }}>戻る</Button>
+        </Link>
         <Box
           sx={{
             display: 'flex',
