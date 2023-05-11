@@ -1,12 +1,13 @@
 import { ExpandLess, ExpandMore, Group, PersonOff, Refresh } from '@mui/icons-material'
 import { Box, Button, Chip, Collapse, Grid, Skeleton, Typography} from '@mui/material'
 import { grey } from '@mui/material/colors'
-import { User } from 'interfaces'
-import { getStudents, getUsers } from 'pages/api/user'
+import { SearchStudentsParams, User } from 'interfaces'
+import { getStudents, getUsers, SearchStudents } from 'pages/api/user'
 import StudentCard from 'pages/components/Cards/student/StudentCard'
 import { SearchItem } from 'pages/components/Dialog/teacher/SearchItem'
-import { HomeContext } from 'pages/_app'
-import React, { useContext, useEffect, useMemo, useState } from 'react'
+import { HomeContext, SearchModalContext } from 'pages/_app'
+import React, { use, useContext, useEffect, useMemo, useState } from 'react'
+import useSWR from 'swr'
 
 const Home:React.FC = () => {
 
@@ -22,16 +23,6 @@ const Home:React.FC = () => {
 
   const [selectedSubjects,setSubject] = useState<string[]>([]) //フロント教科検索用のstate
   const [collapseOpen,setCollapseOpen] = useState<boolean>(false) //フロント教科検索collapseを開くかどうかのstate
-
-//検索モーダルと共有するstate
-  const [searchState,setSearchState] = useState<boolean>(false)
-  const [grade,setGrade] = useState<string>("")
-  const [major,setMajor] = useState<string>("")
-  const [desiredSchool,setdesiredSchool] = useState<string>("")
-  const [duration,setDuration] = useState<string>("")
-  const [style,setStyle] = useState<string>("")
-  const [frequency,setFrequency] = useState<string>("")
-//ここまで
 
     //フロントで教科で絞る
     const handleSubjectSearch = (subject: string) => {
@@ -52,20 +43,29 @@ const Home:React.FC = () => {
     setCollapseOpen(!collapseOpen);
   };
 
-  const handleGetStudents = async () => {
+  //検索状態管理
+  const {searchState,setSearchState} = useContext(SearchModalContext)
+  const {searchStudentTerm,setSearchStudentTerm} = useContext(SearchModalContext)
 
-    try{
-        const res = await getStudents()
-        const users:User[] = res.data
-        setUsers(users)
-    }catch(err){
-      console.log(err)
-    }
+  //検索結果を更新する
+  const fetcher = (searchStudentTerm:SearchStudentsParams) => {
+    return SearchStudents(searchStudentTerm);
+  };
+
+  //searchStudentTermが変更されたらキャッシュされた検索結果を更新
+  const { data, error } = useSWR(searchStudentTerm, fetcher,{
+    revalidateOnFocus: false, 
+    revalidateOnReconnect: false,
+    dedupingInterval: 1800000 // 30分間キーが変更されない限り再フェッチされない
+  });
+
+
+  //キャッシュが更新されたらusersを更新
+  useEffect(() => {
+    if (!data) return;
+    setUsers(data.data);
     setLoading(false)
-
-  }
-
-  useEffect(() => {handleGetStudents()}, [])
+  }, [data]);
 
   //キャッシュに生徒情報を保存して検索に応じてフィルタリング
   const filteredUsers = useMemo(() => {
@@ -88,6 +88,7 @@ const Home:React.FC = () => {
       setIsHome(false)
     }
   }, [])
+
 
   if(loading){
     const skeletonCount = 50;
@@ -121,23 +122,23 @@ const Home:React.FC = () => {
               現在の検索条件:
             </Typography>
           </Grid>
-          {grade&&<Grid item>
-            <Chip label={grade} color="primary" variant='outlined'/>
+          {searchStudentTerm.grade&&<Grid item>
+            <Chip label={searchStudentTerm.grade} color="primary" variant='outlined'/>
           </Grid>}
-          {major&&<Grid item>
-            <Chip label={major} color="primary" variant='outlined'/>
+          {searchStudentTerm.major&&<Grid item>
+            <Chip label={searchStudentTerm.major} color="primary" variant='outlined'/>
           </Grid>}
-          {desiredSchool&&<Grid item>
-            <Chip label={desiredSchool} color="primary" variant='outlined'/>
+          {searchStudentTerm.desiredSchool&&<Grid item>
+            <Chip label={searchStudentTerm.desiredSchool} color="primary" variant='outlined'/>
           </Grid>}
-          {style&&<Grid item>
-            <Chip label={style} color="primary" variant='outlined'/>
+          {searchStudentTerm.style&&<Grid item>
+            <Chip label={searchStudentTerm.style} color="primary" variant='outlined'/>
           </Grid>}
-          {duration&&<Grid item>
-            <Chip label={duration} color="primary" variant='outlined'/>
+          {searchStudentTerm.duration&&<Grid item>
+            <Chip label={searchStudentTerm.duration} color="primary" variant='outlined'/>
           </Grid>}
-          {frequency&&<Grid item>
-            <Chip label={frequency} color="primary" variant='outlined'/>
+          {searchStudentTerm.frequency&&<Grid item>
+            <Chip label={searchStudentTerm.frequency} color="primary" variant='outlined'/>
           </Grid>
           }
           <Grid item>
@@ -148,7 +149,7 @@ const Home:React.FC = () => {
               sx={{ borderRadius: 50 }}
               startIcon={<Refresh />}
             >
-              全ての検索条件をリセット
+              検索条件をリセット
           </Button>
           </Grid>
         </Grid>}
@@ -212,7 +213,7 @@ const Home:React.FC = () => {
         justifyContent="center"
         mt={5}
       >
-       {filteredUsers.length >0 ? 
+      {filteredUsers.length >0 ? 
         <Button color= "secondary" variant="text" sx={{ borderRadius: 50 }} startIcon ={<Group/>} >
           {filteredUsers.length}人の生徒が見つかりました！
         </Button>
@@ -234,20 +235,6 @@ const Home:React.FC = () => {
       <SearchItem
       setUsers={setUsers}
       setLoading={setLoading} 
-      grade={grade} 
-      setGrade={setGrade} 
-      major={major} 
-      setMajor={setMajor}
-      desiredSchool={desiredSchool} 
-      setdesiredSchool={setdesiredSchool}
-      duration={duration} 
-      setDuration={setDuration}
-      style={style} 
-      setStyle={setStyle}
-      frequency={frequency}
-      setFrequency={setFrequency}
-      searchState={searchState}
-      setSearchState={setSearchState}
       />
     </div>
   )

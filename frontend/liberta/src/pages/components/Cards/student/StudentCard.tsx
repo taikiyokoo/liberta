@@ -1,13 +1,18 @@
 import { Box,makeStyles, useTheme } from '@material-ui/core'
 import { Avatar,Card, CardActions, CardContent, CardHeader, Chip,styled, Typography, useMediaQuery } from '@mui/material'
 import { User } from 'interfaces'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
+import Detail from 'pages/components/Dialog/student/Detail'
 import React from 'react'
 
 const useStyles =makeStyles((theme) => ({
+link: {
+  textDecoration: 'none',
+},
 card :{
   width:300,
-  height:450,
+  height:500,
   padding:30,
   transition: 'box-shadow 0.3s,transform 0.3s',
   cursor: 'pointer',
@@ -17,8 +22,8 @@ card :{
     transform: 'translateY(-5px) scale(1.05)',
   },
   [theme.breakpoints.down('sm')]: {
-    width:230,
-    height:430,
+    width:260,
+    height:500,
     padding:25,
     '&:hover': {
       transform: "none"
@@ -83,42 +88,39 @@ const chips = (
   </>
 );
 
+const [open, setOpen] = React.useState(false);
+
   return (
     <div>
-      <Card className ={classes.card} onClick={()=> router.push(`/student/${user.id}`)} >
-        <Box>
-        <CardHeader
-          titleTypographyProps={{ style: { marginBottom: 4} }}
-          avatar={
-            <Avatar src="/images/dog.jpg" aria-label="recipe" />
-            }
-          title={
-          <>
-            <Typography variant="subtitle1" sx={{display: 'inline-block',marginRight: 1}}>{user.name}</Typography>
-            {<>
-            {user.studentProfile.major ==="理系"&&<CustomChip sx={{marginLeft: 1}} label={user.studentProfile.major} color="primary" variant="outlined"></CustomChip>}
-            {user.studentProfile.major ==="文系"&&<CustomChip sx={{marginLeft: 1}} label={user.studentProfile.major} color="secondary" variant="outlined" ></CustomChip>}
-            </>
-            }
-          </>
-          }
-        subheader={user.studentProfile?.school}
-      />
-          {isMobile?
-              <CardContent sx={{height: 250}}>
+          <Card className ={classes.card} onClick={()=> setOpen(true)} >
+            <Box>
+            <CardHeader
+              titleTypographyProps={{ style: { marginBottom: 4} }}
+              avatar={
+                <Avatar src="/images/dog.jpg" aria-label="recipe" />
+                }
+              title={
+              <>
+                <Typography variant="subtitle1" sx={{display: 'inline-block',marginRight: 1}}>{user.name}</Typography>
+                {<>
+                {user.studentProfile.major ==="理系"&&<CustomChip sx={{marginLeft: 1}} label={user.studentProfile.major} color="primary" variant="outlined"></CustomChip>}
+                {user.studentProfile.major ==="文系"&&<CustomChip sx={{marginLeft: 1}} label={user.studentProfile.major} color="secondary" variant="outlined" ></CustomChip>}
+                </>
+                }
+              </>
+              }
+            subheader={user.studentProfile?.school}
+          />
+              <CardContent sx={{height: 300}}>
                 <Typography variant="caption">{user.studentProfile.introduction}</Typography>
               </CardContent>
-              : 
-              <CardContent sx={{height: 280}}>
-                <Typography variant="caption">{user.studentProfile.introduction}</Typography>
-              </CardContent>
-            }
-          <CardActions className={classes.slideChips}>
-          <Box className={classes.chipGroup}>{chips}</Box>
-          <Box className={classes.chipGroup}>{chips}</Box>
-        </CardActions>
-        </Box>
-      </Card>
+              <CardActions className={classes.slideChips}>
+              <Box className={classes.chipGroup}>{chips}</Box>
+              <Box className={classes.chipGroup}>{chips}</Box>
+            </CardActions>
+            </Box>
+          </Card>
+          <Detail user={user} open={open} setOpen={setOpen}/>
     </div>
   )
 }

@@ -3,11 +3,13 @@ import { useRouter } from 'next/router';
 import { createContext, useEffect, useState } from 'react';
 import CommonLayout from './CommonLayout';
 import { getCurrentUser } from './api/auth';
-import { User } from 'interfaces';
+import { SearchStudentsParams, SearchTeachersParams, User } from 'interfaces';
 import { ThemeProvider } from '@emotion/react';
 import theme from 'theme';
 import Head from 'next/head';
 import { GlobalStyles } from '@mui/material';
+import '../styles/globals.css';
+
 //認証用context
 export const AuthContext = createContext({} as {
   loading: boolean
@@ -30,9 +32,15 @@ export const UserEditModalContext = createContext({} as {
 export const SearchModalContext = createContext({} as {
   searchOpen: boolean
   setSearchOpen: React.Dispatch<React.SetStateAction<boolean>>
+  searchState: boolean
+  setSearchState: React.Dispatch<React.SetStateAction<boolean>>
+  searchStudentTerm: SearchStudentsParams
+  setSearchStudentTerm: React.Dispatch<React.SetStateAction<SearchStudentsParams>>
+  searchTeacherTerm: SearchTeachersParams
+  setSearchTeacherTerm: React.Dispatch<React.SetStateAction<SearchTeachersParams>>
 })
 
-//ホームにいるかどうか
+//ホーム用Context
 export const HomeContext = createContext({} as {
   isHome: boolean
   setIsHome: React.Dispatch<React.SetStateAction<boolean>>
@@ -50,8 +58,25 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   //検索モーダル管理
   const [searchOpen,setSearchOpen]= useState<boolean>(false)
+  const [searchState,setSearchState] = useState<boolean>(false)
+  const [searchStudentTerm,setSearchStudentTerm] = useState<SearchStudentsParams>({
+    grade: "",
+    major: "",
+    desiredSchool: "",
+    duration: "",
+    style: "",
+    frequency: "",
+  })
+  const [searchTeacherTerm,setSearchTeacherTerm] = useState<SearchTeachersParams>({
+    major: "",
+    style: "",
+    gender: "",
+    university:"",
+    hourlyPay: [0,10000]
+  })
+    
 
-  //ホームにいるかどうか
+  //ホーム状態管理
   const [isHome,setIsHome] = useState<boolean>(false)
 
   const router = useRouter();
@@ -69,7 +94,6 @@ function MyApp({ Component, pageProps }: AppProps) {
       if (res?.data.isLogin === true){
         setCurrentUser(res?.data.data)
         setIsSignedIn(true)
-        console.log(res?.data.data)
       }else if(res?.data.isLogin === false){
         console.log("API側で認証されてない")
         if (!isAuthRoute(router.pathname)) router.push('/TopPage');
@@ -116,7 +140,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <AuthContext.Provider value={{loading,setLoading,isSignedIn,setIsSignedIn,currentUser,setCurrentUser}}>
           <HomeContext.Provider value={{isHome,setIsHome}}>
             <UserEditModalContext.Provider value={{userEditOpen,setUserEditOpen}}>
-                <SearchModalContext.Provider value={{searchOpen,setSearchOpen}}>
+                <SearchModalContext.Provider value={{searchOpen,setSearchOpen,searchState,setSearchState,searchStudentTerm,setSearchStudentTerm,searchTeacherTerm,setSearchTeacherTerm}}>
                     <ThemeProvider theme={theme}>
                       {isTopPage ? (
                           <Component {...pageProps} />

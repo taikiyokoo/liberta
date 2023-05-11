@@ -2,6 +2,7 @@ import { Box, makeStyles, styled } from '@material-ui/core'
 import { Avatar, Card, CardActions, CardContent, CardHeader, Chip, LinearProgress, Typography, useMediaQuery, useTheme } from '@mui/material'
 import { User } from 'interfaces'
 import { useRouter } from 'next/router'
+import Detail from 'pages/components/Dialog/teacher/Detail'
 import React from 'react'
 
 const useStyles =makeStyles((theme) => ({
@@ -88,10 +89,12 @@ const chips = (
   </>
 );
 
+const [open,setOpen] = React.useState(false)
+
 
   return (
     <div>
-      <Card className ={classes.card} onClick={()=> router.push(`/teacher/${user.id}`)} >
+      <Card className ={classes.card} onClick={()=> setOpen(true)} >
         <Box>
         <CardHeader
         titleTypographyProps={{ style: { marginBottom: 4} }}
@@ -127,7 +130,6 @@ const chips = (
                 className={classes.progress}
                 variant="determinate"
                 value={(user.teacherProfile.hourlyPay / 10000) * 100}
-             
               />
           </Box>
           <CardActions className={classes.slideChips}>
@@ -136,6 +138,7 @@ const chips = (
         </CardActions>
         </Box>
       </Card>
+      <Detail open={open} setOpen={setOpen} user={user}/>
     </div>
   )
 }

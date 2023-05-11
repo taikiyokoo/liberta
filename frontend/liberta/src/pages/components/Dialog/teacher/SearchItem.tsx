@@ -21,7 +21,7 @@ import  { useContext } from 'react'
 import Slide from '@mui/material/Slide';
 import { Search } from '@mui/icons-material';
 import { SearchStudents } from 'pages/api/user';
-import { User } from 'interfaces';
+import { SearchStudentsParams, User } from 'interfaces';
 
 //バーのスタイル
 
@@ -47,31 +47,29 @@ const SearchIconWrapper = styled('div')`
 interface SearchComponentProps {
   setUsers: (users: User[]) => void;
   setLoading: (loading: boolean) => void;
-  grade: string;
-  setGrade: (grade: string) => void;
-  major: string;
-  setMajor: (major: string) => void;
-  desiredSchool: string;
-  setdesiredSchool: (desiredSchool: string) => void;
-  duration: string;
-  setDuration: (duration: string) => void;
-  style: string;
-  setStyle: (style: string) => void;
-  frequency: string;
-  setFrequency: (frequency: string) => void;
-  searchState: boolean;
-  setSearchState: (searchState: boolean) => void;
 }
 
 
-const SearchItem:React.FC<SearchComponentProps> = ({setUsers,setLoading,grade,setGrade,major,setMajor,desiredSchool,setdesiredSchool,duration,setDuration,style,setStyle,frequency,setFrequency,searchState,setSearchState}) => {
+const SearchItem:React.FC<SearchComponentProps> = ({setUsers,setLoading}) => {
 
   //検索モーダル開け閉め
     const {searchOpen,setSearchOpen} = useContext(SearchModalContext)
-
     const handleClose=()=>{
-        setSearchOpen(false)
-    }
+      setSearchOpen(false)
+  }
+
+    //検索状態管理
+    const {searchState,setSearchState} = useContext(SearchModalContext)
+    const {searchStudentTerm,setSearchStudentTerm} = useContext(SearchModalContext)
+
+
+  //フォーム管理state
+  const [grade,setGrade] = useState<string>("")
+  const [major,setMajor] = useState<string>("")
+  const [desiredSchool,setdesiredSchool] = useState<string>("")
+  const [duration,setDuration] = useState<string>("")
+  const [style,setStyle] = useState<string>("")
+  const [frequency,setFrequency] = useState<string>("")
 
 
   //フォーム管理
@@ -102,9 +100,8 @@ const SearchItem:React.FC<SearchComponentProps> = ({setUsers,setLoading,grade,se
 
 //検索処理
   const handleSearch = async() => {
-    setLoading(true)
-    try{
-      const res = await SearchStudents({
+      handleClose();
+      setSearchStudentTerm({
         grade: grade,
         major: major,
         desiredSchool: desiredSchool,
@@ -112,14 +109,7 @@ const SearchItem:React.FC<SearchComponentProps> = ({setUsers,setLoading,grade,se
         style: style,
         frequency: frequency,
       })
-        console.log(res.data)
-        setUsers(res.data)
-      }catch(error){
-        console.log(error)
-      }
-      handleClose();
       setSearchState(true)
-      setLoading(false)
   }
 
   return (

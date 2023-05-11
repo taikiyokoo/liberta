@@ -48,25 +48,25 @@ const SearchIconWrapper = styled('div')`
 interface SearchComponentProps {
   setUsers: (users: User[]) => void;
   setLoading: (loading: boolean) => void;
-  university: string;
-  setUniversity: (university: string) => void;
-  major: string;
-  setMajor: (major: string) => void;
-  gender: string;
-  setGender: (gender: string) => void;
-  style: string;
-  setStyle: (style: string) => void;
-  hourlyPay: number[];
-  setHourlyPay: (hourlyPay: number[]) => void;
-  searchState: boolean;
-  setSearchState: (searchState: boolean) => void;
 }
 
 
-const SearchItem: React.FC<SearchComponentProps> = ({setUsers,setLoading,university,setUniversity,major,setMajor,gender,setGender,style,setStyle,hourlyPay,setHourlyPay,searchState,setSearchState}) => {
+const SearchItem: React.FC<SearchComponentProps> = ({setUsers,setLoading}) => {
 
 //検索モーダル管理
   const { searchOpen, setSearchOpen } = useContext(SearchModalContext);
+  //検索状態管理
+  const {searchState, setSearchState} = useContext(SearchModalContext);
+  const {searchTeacherTerm, setSearchTeacherTerm} = useContext(SearchModalContext);
+
+  //フォーム管理
+  const [university, setUniversity] = useState<string>('');
+  const [major, setMajor] = useState<string>('');
+  const [gender, setGender] = useState<string>('');
+  const [style, setStyle] = useState<string>('');
+  const [hourlyPay, setHourlyPay] = useState<number[]>([0, 10000]);
+
+
   const handleClose = () => {
     setSearchOpen(false);
   };
@@ -92,29 +92,15 @@ const SearchItem: React.FC<SearchComponentProps> = ({setUsers,setLoading,univers
   };
 
   const handleSearch=async()=>{
-    setLoading(true)
-    try{
-      console.log(
-        university,
-        major, 
-        gender,
-        style,
-        hourlyPay
-      )
-      const res = await SearchTeachers({
-        university:university,
-        major:major,
-        gender: gender,
-        style: style,
-        hourlyPay: hourlyPay
-      })
-      setUsers(res.data)
-    }catch(error){
-      console.log(error)
-    }
     handleClose()
+    setSearchTeacherTerm({
+      university: university,
+      major: major,
+      gender: gender,
+      style: style,
+      hourlyPay: hourlyPay,
+    })
     setSearchState(true)
-    setLoading(false)
   }
 
 

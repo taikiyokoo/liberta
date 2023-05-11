@@ -1,13 +1,14 @@
 import { ExpandLess, ExpandMore, Group, PersonOff, Refresh } from '@mui/icons-material'
 import { Box, Button, Chip, Collapse, Container, Dialog, Grid, Modal, Skeleton, Slider, SliderProps, Typography, useMediaQuery, useTheme } from '@mui/material'
-import { User } from 'interfaces'
+import { SearchTeachersParams, User } from 'interfaces'
 import { GetServerSideProps } from 'next'
-import { getTeachers, getUsers } from 'pages/api/user'
+import { getTeachers, getUsers, SearchTeachers } from 'pages/api/user'
 import TeacherCard from 'pages/components/Cards/teacher/TeacherCard'
 import { SearchItem } from 'pages/components/Dialog/student/SearchItem'
-import {HomeContext} from 'pages/_app'
+import {HomeContext, SearchModalContext} from 'pages/_app'
 import { grey } from '@mui/material/colors';
 import React, { useContext, useEffect, useMemo, useState } from 'react'
+import useSWR from 'swr'
 
 const Home:React.FC = () => {
 
@@ -27,14 +28,6 @@ const Home:React.FC = () => {
 
   const [slideValue ,setSlideValue] = useState<number[]>([1000,10000]) //フロント時給スライダーの値
 
-  //検索用のstate ここから
-  const [searchState,setSearchState] = useState<boolean>(false) //検索ボタンを押したかどうかのstate
-  const [university, setUniversity] = useState<string>('');
-  const [major, setMajor] = useState<string>('');
-  const [gender,setGender] = useState<string>('');
-  const [style, setStyle] = useState<string>('');
-  const [hourlyPay, setHourlyPay] = useState<number[]>([1000, 10000]);
-  //検索用のstate ここまで
 
   //フロントで教科で絞る
   const handleSubjectSearch = (subject: string) => {
@@ -67,20 +60,32 @@ const Home:React.FC = () => {
     setCollapseOpen(!collapseOpen);
   };
 
+  
+  const {searchTeacherTerm,setSearchTeacherTerm} = useContext(SearchModalContext) //検索ワード
+  const {searchState,setSearchState} = useContext(SearchModalContext) //検索状態管理
 
-  //マウント時に実行、全てのユーザーを取得して教師のみ格納
-  const handleGetUsers = async () => {
-      try{
-        const res = await getTeachers()
-        const users:User[] = res.data
-        setUsers(users)
-      }catch(err){
-        console.log(err)
-      }
-    setLoading(false)
-  }
+ //検索結果を更新する
+ const fetcher = (searchTeacherTerm:SearchTeachersParams) => {
+  return SearchTeachers(searchTeacherTerm);
+};
 
-  useEffect(() => {handleGetUsers()}, [])
+//searchStudentTermが変更されたらキャッシュされた検索結果を更新
+const { data, error } = useSWR(searchTeacherTerm, fetcher,{
+  revalidateOnFocus: false, 
+  revalidateOnReconnect: false,
+  dedupingInterval: 1800000 // 30分間キーが変更されない限り再フェッチされない
+});
+
+
+//キャッシュが更新されたらusersを更新
+useEffect(() => {
+  if (!data) return;
+  setUsers(data.data);
+  setLoading(false)
+}, [data]);
+
+
+
 
   //教師のデータをキャッシュに保存し、検索に応じてフィルタリング
   const filteredUsers = useMemo(() => {
@@ -135,20 +140,20 @@ const Home:React.FC = () => {
               現在の検索条件:
             </Typography>
           </Grid>
-          {university&&<Grid item>
-            <Chip label={university} color="primary" variant='outlined'/>
+          {searchTeacherTerm.university&&<Grid item>
+            <Chip label={searchTeacherTerm.university} color="primary" variant='outlined'/>
           </Grid>}
-          {major&&<Grid item>
-            <Chip label={major} color="primary" variant='outlined'/>
+          {searchTeacherTerm.major&&<Grid item>
+            <Chip label={searchTeacherTerm.major} color="primary" variant='outlined'/>
           </Grid>}
-          {gender&&<Grid item>
-            <Chip label={gender} color="primary" variant='outlined'/>
+          {searchTeacherTerm.gender&&<Grid item>
+            <Chip label={searchTeacherTerm.gender} color="primary" variant='outlined'/>
           </Grid>}
-          {style&&<Grid item>
-            <Chip label={style} color="primary" variant='outlined'/>
+          {searchTeacherTerm.style&&<Grid item>
+            <Chip label={searchTeacherTerm.style} color="primary" variant='outlined'/>
           </Grid>}
-          {!(hourlyPay[0]===1000 && hourlyPay[1] === 10000) &&<Grid item>
-            <Chip label={hourlyPay[0] + "円〜" + hourlyPay[1] + "円"} color="primary" variant='outlined'/>
+          {!(searchTeacherTerm.hourlyPay[0]===1000 && searchTeacherTerm.hourlyPay[1] === 10000) &&<Grid item>
+            <Chip label={searchTeacherTerm.hourlyPay[0] + "円〜" + searchTeacherTerm.hourlyPay[1] + "円"} color="primary" variant='outlined'/>
           </Grid>}
           <Grid item>
             <Button
@@ -313,18 +318,6 @@ const Home:React.FC = () => {
         <SearchItem
           setUsers={setUsers} 
           setLoading={setLoading} 
-          university={university}
-          setUniversity={setUniversity}
-          major={major}
-          setMajor={setMajor}
-          gender={gender}
-          setGender={setGender}
-          style={style}
-          setStyle={setStyle}
-          hourlyPay={hourlyPay}
-          setHourlyPay={setHourlyPay}
-          searchState={searchState}
-          setSearchState={setSearchState}
             />
     </div>
   )
