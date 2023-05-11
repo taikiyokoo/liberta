@@ -44,8 +44,6 @@ export const SearchModalContext = createContext({} as {
 export const HomeContext = createContext({} as {
   isHome: boolean
   setIsHome: React.Dispatch<React.SetStateAction<boolean>>
-  scrollY: number
-  setScrollY: React.Dispatch<React.SetStateAction<number>>
 })
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -80,7 +78,6 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   //ホーム状態管理
   const [isHome,setIsHome] = useState<boolean>(false)
-  const [scrollY,setScrollY] = useState<number>(0)
 
   const router = useRouter();
 
@@ -141,7 +138,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         }}
       />
         <AuthContext.Provider value={{loading,setLoading,isSignedIn,setIsSignedIn,currentUser,setCurrentUser}}>
-          <HomeContext.Provider value={{isHome,setIsHome,scrollY,setScrollY}}>
+          <HomeContext.Provider value={{isHome,setIsHome}}>
             <UserEditModalContext.Provider value={{userEditOpen,setUserEditOpen}}>
                 <SearchModalContext.Provider value={{searchOpen,setSearchOpen,searchState,setSearchState,searchStudentTerm,setSearchStudentTerm,searchTeacherTerm,setSearchTeacherTerm}}>
                     <ThemeProvider theme={theme}>
