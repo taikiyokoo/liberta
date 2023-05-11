@@ -72,7 +72,10 @@ import { useContext, useEffect, useState } from 'react';
     }
 
 
-    useEffect(() => {handleConfirmLiked()},[])
+    useEffect(() => {
+      if(!open) return;
+      handleConfirmLiked()
+    },[open])
 
     //いいねボタンを押した時の処理
     const handleLikeClick = async() => {

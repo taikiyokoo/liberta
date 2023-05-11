@@ -66,6 +66,7 @@ const Home:React.FC = () => {
 
  //検索結果を更新する
  const fetcher = (searchTeacherTerm:SearchTeachersParams) => {
+  setLoading(true)
   return SearchTeachers(searchTeacherTerm);
 };
 
@@ -134,28 +135,32 @@ useEffect(() => {
         width="100%"
         minWidth="80vw"
       >
-        {searchState&&<Grid container spacing={2} justifyContent="center" alignItems="center">
-          <Grid item>
-            <Typography variant="subtitle2" color="teal">
-              現在の検索条件:
-            </Typography>
-          </Grid>
-          {searchTeacherTerm.university&&<Grid item>
-            <Chip label={searchTeacherTerm.university} color="primary" variant='outlined'/>
-          </Grid>}
-          {searchTeacherTerm.major&&<Grid item>
-            <Chip label={searchTeacherTerm.major} color="primary" variant='outlined'/>
-          </Grid>}
-          {searchTeacherTerm.gender&&<Grid item>
-            <Chip label={searchTeacherTerm.gender} color="primary" variant='outlined'/>
-          </Grid>}
-          {searchTeacherTerm.style&&<Grid item>
-            <Chip label={searchTeacherTerm.style} color="primary" variant='outlined'/>
-          </Grid>}
-          {!(searchTeacherTerm.hourlyPay[0]===1000 && searchTeacherTerm.hourlyPay[1] === 10000) &&<Grid item>
-            <Chip label={searchTeacherTerm.hourlyPay[0] + "円〜" + searchTeacherTerm.hourlyPay[1] + "円"} color="primary" variant='outlined'/>
-          </Grid>}
-          <Grid item>
+        {searchState&&
+        <>
+          <Box >
+            <Grid container spacing={{xs: 1, sm: 2}} justifyContent="center" alignItems="center">
+              <Grid item>
+                <Typography variant="subtitle2" color="teal">
+                  現在の検索条件:
+                </Typography>
+              </Grid>
+              {searchTeacherTerm.university&&<Grid item>
+                <Chip label={searchTeacherTerm.university} color="primary" variant='outlined'/>
+              </Grid>}
+              {searchTeacherTerm.major&&<Grid item>
+                <Chip label={searchTeacherTerm.major} color="primary" variant='outlined'/>
+              </Grid>}
+              {searchTeacherTerm.gender&&<Grid item>
+                <Chip label={searchTeacherTerm.gender} color="primary" variant='outlined'/>
+              </Grid>}
+              {searchTeacherTerm.style&&<Grid item>
+                <Chip label={searchTeacherTerm.style} color="primary" variant='outlined'/>
+              </Grid>}
+              {!(searchTeacherTerm.hourlyPay[0]===1000 && searchTeacherTerm.hourlyPay[1] === 10000) &&<Grid item>
+                <Chip label={searchTeacherTerm.hourlyPay[0] + "円〜" + searchTeacherTerm.hourlyPay[1] + "円"} color="primary" variant='outlined'/>
+              </Grid>}
+            </Grid>
+            <Box display="flex" justifyContent="center" alignItems="center" mt={2}>
             <Button
               variant="outlined"
               color="error"
@@ -164,9 +169,11 @@ useEffect(() => {
               startIcon={<Refresh />}
             >
               全ての検索条件をリセット
-          </Button>
-          </Grid>
-        </Grid>}
+            </Button>
+          </Box>
+        </Box>
+        </>
+        }
       </Box>
       <Box
         display="flex"
