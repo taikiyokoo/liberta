@@ -3,6 +3,7 @@
 
 # 開発環境
 
+### バックエンド
 ・*Docker*
 
 ・*Rails*
@@ -11,6 +12,7 @@
 
 ・*MySQL*
 
+### フロントエンド
 ・*Next.js*
 
 ・*TypeScript*
