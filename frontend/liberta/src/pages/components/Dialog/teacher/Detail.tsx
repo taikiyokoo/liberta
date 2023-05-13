@@ -74,7 +74,10 @@ interface TeacherDetailProps {
     }
 
 
-    useEffect(() => {handleConfirmLiked()},[])
+    useEffect(() =>{
+      if(!open) return;
+      handleConfirmLiked()
+    },[open])
 
     //いいねボタンを押した時の処理
     const handleLikeClick = async() => {
