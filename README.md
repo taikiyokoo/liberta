@@ -1,4 +1,4 @@
-# liberta
+# liberta ※開発中
 フリーランスの教師と生徒のマッチングサービス
 
 ## 開発環境
@@ -34,7 +34,7 @@ docker上でrails環境を立ち上げapiエンドポイントを作成し、Nex
 
 redisはリアルタイムチャット機能を実現するために使用
 
-## 実際の画面 
+## 現段階の実際の画面 
 
 ### トップ画面
 
@@ -43,6 +43,11 @@ redisはリアルタイムチャット機能を実現するために使用
 
 #### モバイル
 <img width="200" height="auto" src="https://github.com/taikiyokoo/liberta/assets/110810721/bcab6915-f4bb-4224-a610-9df2e0523a78">
+
+
+##### アニメーションを多用してモダンな雰囲気にした
+
+##### 例）　タイトルがフェードイン、アイコンが回ってる、タイピングアニメーション、ホバーアクション
 
 ### ログイン画面
 
@@ -53,12 +58,18 @@ redisはリアルタイムチャット機能を実現するために使用
 <img width="200" height="auto" src="https://github.com/taikiyokoo/liberta/assets/110810721/b54eaca9-7fb6-432e-9dd2-3fe9fada8a5d">
 
 ### ホーム画面
-※テストデータはChatGPTで適当に生成
+
 #### デスクトップ
 <img width="600" height="auto" alt="スクリーンショット 2023-05-13 18 26 04" src="https://github.com/taikiyokoo/liberta/assets/110810721/be673cb7-f64d-4d23-a3d6-69a45dcfee75">
 
 #### モバイル
 <img width="200" height="auto" src="https://github.com/taikiyokoo/liberta/assets/110810721/61b39988-f968-4732-80ce-9dcee3b77e16">
+
+##### カードにしてホバーアクション、中のチップを無限にループさせる、ページ遷移を減らす（完全なSPAではない）、ローディング中はスケルトンを表示するなどしてモダンな感じに
+
+###### ※テストデータはChatGPTで適当に生成
+
+###### ※写真はうちの犬
 
 ### 検索モーダル
 
@@ -76,6 +87,8 @@ redisはリアルタイムチャット機能を実現するために使用
 
 #### 　モバイル
 <img width="200" height="auto" src="https://github.com/taikiyokoo/liberta/assets/110810721/e34db4f4-405a-40b7-abee-894d1d8fab6d">
+
+###### ※紹介文と他のカラムをChatGPTにそれぞれ別で生成させたので矛盾が生じている
 
 ### フロント検索
 
