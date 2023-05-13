@@ -1,14 +1,24 @@
 
 import { makeStyles } from '@material-ui/styles';
-import { ArrowBack, ThumbUp } from '@mui/icons-material';
-import { Box, Typography, Avatar, Chip, Button, Theme, styled, useTheme, useMediaQuery, Dialog } from '@mui/material';
+import { ArrowBack, Close, ThumbUp } from '@mui/icons-material';
+import { Box, Typography, Avatar, Chip, Button, Theme, styled, useTheme, useMediaQuery, Dialog, Slide } from '@mui/material';
+import { TransitionProps } from '@mui/material/transitions';
 import { CreateLikeParams, User } from 'interfaces';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
 import { createLike } from 'pages/api/like';
 import { confirmLiked, getUser } from 'pages/api/user';
 import { AuthContext } from 'pages/_app';
-import { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+
+const Transition = React.forwardRef(function Transition(
+  props: TransitionProps & {
+    children: React.ReactElement;
+  },
+  ref: React.Ref<unknown>,
+) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 
 interface TeacherDetailProps {
@@ -110,9 +120,10 @@ interface TeacherDetailProps {
             onClose={()=> setOpen(false)}
             aria-labelledby="scroll-dialog-title"
             aria-describedby="scroll-dialog-description"
+            TransitionComponent={Transition}
         >
         <Box sx={{ padding: '16px' }}>
-            <Button color="primary" startIcon={<ArrowBack />} sx={{marginBottom: 5}} onClick={() => setOpen(false)}>戻る</Button>
+            <Button color="primary" startIcon={ <Close />} sx={{marginBottom: 5}} onClick={() => setOpen(false)}>閉じる</Button>
             <Box
             sx={{
                 display: 'flex',
