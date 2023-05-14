@@ -64,7 +64,7 @@ const SearchItem: React.FC<SearchComponentProps> = ({setUsers,setLoading}) => {
   const [major, setMajor] = useState<string>('');
   const [gender, setGender] = useState<string>('');
   const [style, setStyle] = useState<string>('');
-  const [hourlyPay, setHourlyPay] = useState<number[]>([0, 10000]);
+  const [hourlyPay, setHourlyPay] = useState<number[]>([1000, 10000]);
 
 
   const handleClose = () => {

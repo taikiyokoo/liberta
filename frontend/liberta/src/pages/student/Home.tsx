@@ -1,4 +1,4 @@
-import { ExpandLess, ExpandMore, Group, KeyboardArrowUp, PersonOff, Refresh } from '@mui/icons-material'
+import { Clear, ExpandLess, ExpandMore, Group, KeyboardArrowUp, PersonOff, Refresh } from '@mui/icons-material'
 import { Box, Button, Chip, Collapse, Container, Dialog, Fab, Grid, Modal, Skeleton, Slider, SliderProps, styled, Typography, useMediaQuery, useTheme } from '@mui/material'
 import { SearchTeachersParams, User } from 'interfaces'
 import { GetServerSideProps } from 'next'
@@ -9,6 +9,7 @@ import {HomeContext, SearchModalContext} from 'pages/_app'
 import { grey } from '@mui/material/colors';
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import useSWR from 'swr'
+import { set } from 'react-hook-form'
 
 
 //高速絞り込みボタンのスタイル
@@ -56,6 +57,57 @@ const Home:React.FC = () => {
   const [slideValue ,setSlideValue] = useState<number[]>([1000,10000]) //フロント時給スライダーの値
 
 
+  const {searchTeacherTerm,setSearchTeacherTerm} = useContext(SearchModalContext) //検索ワード
+  const {searchState,setSearchState} = useContext(SearchModalContext) //検索状態管理
+
+
+  //検索条件チップを削除
+  const handleDeleteUniversity = () => {
+    setSearchTeacherTerm(prevState => ({
+      ...prevState,
+      university: ""
+    }));
+  };
+  
+
+  const handleDeleteMajor = () => {
+    setSearchTeacherTerm(prevState => ({
+      ...prevState,
+      major: ""
+    }));
+  }
+
+  const handleDeleteGender = () => {
+    setSearchTeacherTerm(prevState => ({
+      ...prevState,
+      gender: ""
+    }));
+  }
+
+  const handleDeleteStyle = () => {
+    setSearchTeacherTerm(prevState => ({
+      ...prevState,
+      style: ""
+    }));
+  }
+
+  const handleDeleteHourlyPay = () => {
+    setSearchTeacherTerm(prevState => ({
+      ...prevState,
+      hourlyPay: [1000,10000]
+    }));
+  }
+
+  const handleResetSearchTerm = () => {
+    setSearchTeacherTerm({
+      university: "",
+      major: "",
+      gender: "", 
+      style: "",
+      hourlyPay: [1000,10000]
+    })
+  }
+
   //フロントで教科で絞る
   const handleSubjectSearch = (subject: string) => {
     const newSelectedSubjects = selectedSubjects.includes(subject)
@@ -87,14 +139,16 @@ const Home:React.FC = () => {
     setCollapseOpen(!collapseOpen);
   };
 
-  
-  const {searchTeacherTerm,setSearchTeacherTerm} = useContext(SearchModalContext) //検索ワード
-  const {searchState,setSearchState} = useContext(SearchModalContext) //検索状態管理
 
  //検索結果を更新する
- const fetcher = (searchTeacherTerm:SearchTeachersParams) => {
-  setLoading(true)
-  return SearchTeachers(searchTeacherTerm);
+ const fetcher = async(searchTeacherTerm: SearchTeachersParams) => {
+  setLoading(true);
+  try {
+    const res = await SearchTeachers(searchTeacherTerm);
+    return res.data;
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 //searchStudentTermが変更されたらキャッシュされた検索結果を更新
@@ -104,15 +158,25 @@ const { data, error } = useSWR(searchTeacherTerm, fetcher,{
   dedupingInterval: 1800000 // 30分間キーが変更されない限り再フェッチされない
 });
 
-
-//キャッシュが更新されたらusersを更新
 useEffect(() => {
-  if (!data) return;
-  setUsers(data.data);
-  setLoading(false)
-}, [data]);
+    // データが取得できたら、stateを更新
+    if(data) {
+      setUsers(() => data);
+  
+    // チップの数が0個のときの処理
+    if (
+      searchTeacherTerm.gender === "" &&
+      (searchTeacherTerm.hourlyPay[0] === 1000 && searchTeacherTerm.hourlyPay[1] === 10000) &&
+      searchTeacherTerm.style === "" &&
+      searchTeacherTerm.university === "" &&
+      searchTeacherTerm.major === ""
+    ) {
+      setSearchState(false);
+    }
+    setLoading(false); // Loading stateをfalseに設定
+  }
 
-
+}, [data]); 
 
 
   //教師のデータをキャッシュに保存し、検索に応じてフィルタリング
@@ -194,26 +258,26 @@ useEffect(() => {
                 </Typography>
               </Grid>
               {searchTeacherTerm.university&&<Grid item>
-                <Chip label={searchTeacherTerm.university} color="primary" variant='outlined'/>
+                <Chip label={searchTeacherTerm.university} color="primary" variant='outlined' onClick={handleDeleteUniversity} icon={<Clear sx={{fontSize: 'small'}} />}/>
               </Grid>}
               {searchTeacherTerm.major&&<Grid item>
-                <Chip label={searchTeacherTerm.major} color="primary" variant='outlined'/>
+                <Chip label={searchTeacherTerm.major} color="primary" variant='outlined' onClick={handleDeleteMajor} icon={<Clear sx={{fontSize: 'small'}} />}/>
               </Grid>}
               {searchTeacherTerm.gender&&<Grid item>
-                <Chip label={searchTeacherTerm.gender} color="primary" variant='outlined'/>
+                <Chip label={searchTeacherTerm.gender} color="primary" variant='outlined' onClick={handleDeleteGender} icon={<Clear sx={{fontSize: 'small'}} />}/>
               </Grid>}
               {searchTeacherTerm.style&&<Grid item>
-                <Chip label={searchTeacherTerm.style} color="primary" variant='outlined'/>
+                <Chip label={searchTeacherTerm.style} color="primary" variant='outlined' onClick={handleDeleteStyle}  icon={<Clear sx={{fontSize: 'small'}} />}/>
               </Grid>}
               {!(searchTeacherTerm.hourlyPay[0]===1000 && searchTeacherTerm.hourlyPay[1] === 10000) &&<Grid item>
-                <Chip label={searchTeacherTerm.hourlyPay[0] + "円〜" + searchTeacherTerm.hourlyPay[1] + "円"} color="primary" variant='outlined'/>
+                <Chip label={searchTeacherTerm.hourlyPay[0] + "円〜" + searchTeacherTerm.hourlyPay[1] + "円"} color="primary" variant='outlined' onClick={handleDeleteHourlyPay}  icon={<Clear sx={{fontSize: 'small'}} />}/>
               </Grid>}
             </Grid>
             <Box display="flex" justifyContent="center" alignItems="center" mt={2}>
             <Button
               variant="outlined"
               color="error"
-              onClick={() => window.location.reload()}
+              onClick={handleResetSearchTerm}
               sx={{borderRadius: 50 }}
               startIcon={<Refresh />}
             >
@@ -239,7 +303,7 @@ useEffect(() => {
         </Button>
         }
       </Box>}
-      <Box
+      {filteredUsers.length >0 &&<Box
         display="flex"
         alignItems="center"
         justifyContent="center"
@@ -261,7 +325,7 @@ useEffect(() => {
           <Typography variant="caption">高速絞り込み</Typography>
         </FastSearchButton>
         }
-      </Box>
+      </Box>}
       <Collapse in={collapseOpen}>
         <Box sx={{display: "flex",justifyContent: "center",alignItems: "center"}}>
           <Box 
@@ -346,7 +410,7 @@ useEffect(() => {
               display="flex"
               alignItems="center"
               justifyContent="center"
-              mb={3}
+              mb={1}
             >
               {filteredUsers.length >0 ? 
               <Button color= "primary" variant="text" sx={{ borderRadius: 50 }} startIcon ={<Group/>} >

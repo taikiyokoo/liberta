@@ -1,5 +1,5 @@
-import { ExpandLess, ExpandMore, Group, KeyboardArrowUp, PersonOff, Refresh } from '@mui/icons-material'
-import { Box, Button, Chip, Collapse, Fab, Grid, Skeleton, Typography} from '@mui/material'
+import { Clear, ExpandLess, ExpandMore, Group, KeyboardArrowUp, PersonOff, Refresh } from '@mui/icons-material'
+import { Box, Button, Chip, Collapse, Fab, Grid, Skeleton, styled, Typography} from '@mui/material'
 import { grey } from '@mui/material/colors'
 import { SearchStudentsParams, User } from 'interfaces'
 import { getStudents, getUsers, SearchStudents } from 'pages/api/user'
@@ -8,6 +8,32 @@ import { SearchItem } from 'pages/components/Dialog/teacher/SearchItem'
 import { HomeContext, SearchModalContext } from 'pages/_app'
 import React, { use, useContext, useEffect, useMemo, useState } from 'react'
 import useSWR from 'swr'
+
+//高速絞り込みボタンのスタイル
+const FastSearchButton = styled(Button)(({ theme }) => ({
+  maxWidth : "100%",
+  padding: theme.spacing(2, 5),
+  borderRadius: '9999px',
+  backgroundColor: theme.palette.common.white,
+  color: theme.palette.common.black,
+  boxShadow: '0 2px 4px rgba(32,33,36,0.3)', // ここを変更
+  cursor: 'pointer',
+  marginTop: 20,
+  marginBottom: 15,
+  '&:hover': {
+    backgroundColor: theme.palette.common.white,
+    boxShadow: '0 4px 6px rgba(32,33,36,0.4)', // ここを変更
+  },
+  marginRight: theme.spacing(2),
+  display: 'flex',
+  alignItems: 'center',
+
+  [theme.breakpoints.down('sm')]: {
+    maxWidth: '95%',
+    padding: theme.spacing(1.5, 3),
+  },
+  
+}));
 
 const Home:React.FC = () => {
 
@@ -23,6 +49,37 @@ const Home:React.FC = () => {
 
   const [selectedSubjects,setSubject] = useState<string[]>([]) //フロント教科検索用のstate
   const [collapseOpen,setCollapseOpen] = useState<boolean>(false) //フロント教科検索collapseを開くかどうかのstate
+
+  //チップを削除する関数
+  const handleDeleteMajor =()=>{
+    setSearchStudentTerm((prev)=>({...prev,major:""}))
+  }
+  const handleDeleteGrade =()=>{
+    setSearchStudentTerm((prev)=>({...prev,grade:""}))
+  }
+  const handleDeleteDuration =()=>{
+    setSearchStudentTerm((prev)=>({...prev,duration:""}))
+  }
+  const handleDeleteFrequency =()=>{
+    setSearchStudentTerm((prev)=>({...prev,frequency:""}))
+  }
+  const handleDeleteStyle =()=>{
+    setSearchStudentTerm((prev)=>({...prev,style:""}))
+  }
+  const handleDeleteDisiredSchool =()=>{
+    setSearchStudentTerm((prev)=>({...prev,desiredSchool:""}))
+  }
+
+  const handleResetSearchTerm =()=>{
+    setSearchStudentTerm({
+      major: "",
+      grade: "",
+      duration: "",
+      frequency: "",
+      style: "",
+      desiredSchool: "",
+    })
+  }
 
     //フロントで教科で絞る
     const handleSubjectSearch = (subject: string) => {
@@ -48,8 +105,14 @@ const Home:React.FC = () => {
   const {searchStudentTerm,setSearchStudentTerm} = useContext(SearchModalContext)
 
   //検索結果を更新する
-  const fetcher = (searchStudentTerm:SearchStudentsParams) => {
-    return SearchStudents(searchStudentTerm);
+  const fetcher = async(searchStudentTerm:SearchStudentsParams) => {
+    setLoading(true)
+    try{
+      const res = await SearchStudents(searchStudentTerm)
+      return res.data
+    }catch(error){
+      console.log(error)
+    }
   };
 
   //searchStudentTermが変更されたらキャッシュされた検索結果を更新
@@ -62,9 +125,13 @@ const Home:React.FC = () => {
 
   //キャッシュが更新されたらusersを更新
   useEffect(() => {
-    if (!data) return;
-    setUsers(data.data);
-    setLoading(false)
+    if(data){
+      setUsers(() => data);
+      if(searchStudentTerm.duration ==="" && searchStudentTerm.frequency ==="" && searchStudentTerm.style ==="" && searchStudentTerm.desiredSchool ==="" && searchStudentTerm.grade ==="" && searchStudentTerm.major ===""){
+        setSearchState(false)
+      }
+      setLoading(false)
+    }
   }, [data]);
 
   //キャッシュに生徒情報を保存して検索に応じてフィルタリング
@@ -126,7 +193,7 @@ const Home:React.FC = () => {
         </Grid>
       </div>
   )
-   }
+  }
 
   return (
     <div>
@@ -138,74 +205,88 @@ const Home:React.FC = () => {
         width="100%"
         minWidth="80vw"
       >
-          {searchState&&<Grid container spacing={2} justifyContent="center" alignItems="center">
-          <Grid item>
-            <Typography variant="subtitle2" color="teal">
-              現在の検索条件:
-            </Typography>
+          {searchState&&
+          <Box>
+            <Grid container spacing={{xs: 1, sm: 2}} justifyContent="center" alignItems="center">
+              <Grid item>
+                <Typography variant="subtitle2" color="teal">
+                  現在の検索条件:
+                </Typography>
+              </Grid>
+              {searchStudentTerm.grade&&<Grid item>
+                <Chip label={searchStudentTerm.grade} color="primary" variant='outlined' icon={<Clear sx={{fontSize: 'small'}} />} onClick={handleDeleteGrade}/>
+              </Grid>}
+              {searchStudentTerm.major&&<Grid item>
+                <Chip label={searchStudentTerm.major} color="primary" variant='outlined' icon={<Clear sx={{fontSize: 'small'}} />} onClick={handleDeleteMajor}/>
+              </Grid>}
+              {searchStudentTerm.desiredSchool&&<Grid item>
+                <Chip label={searchStudentTerm.desiredSchool} color="primary" variant='outlined' icon={<Clear sx={{fontSize: 'small'}} />} onClick={handleDeleteDisiredSchool}/>
+              </Grid>}
+              {searchStudentTerm.style&&<Grid item>
+                <Chip label={searchStudentTerm.style} color="primary" variant='outlined' icon={<Clear sx={{fontSize: 'small'}} onClick={handleDeleteStyle}/>} />
+              </Grid>}
+              {searchStudentTerm.duration&&<Grid item>
+                <Chip label={searchStudentTerm.duration} color="primary" variant='outlined' icon={<Clear sx={{fontSize: 'small'}} />} onClick={handleDeleteDuration} />
+              </Grid>}
+              {searchStudentTerm.frequency&&<Grid item>
+                <Chip label={searchStudentTerm.frequency} color="primary" variant='outlined'icon={<Clear sx={{fontSize: 'small'}} />} onClick={handleDeleteFrequency} />
+              </Grid>
+              }
           </Grid>
-          {searchStudentTerm.grade&&<Grid item>
-            <Chip label={searchStudentTerm.grade} color="primary" variant='outlined'/>
-          </Grid>}
-          {searchStudentTerm.major&&<Grid item>
-            <Chip label={searchStudentTerm.major} color="primary" variant='outlined'/>
-          </Grid>}
-          {searchStudentTerm.desiredSchool&&<Grid item>
-            <Chip label={searchStudentTerm.desiredSchool} color="primary" variant='outlined'/>
-          </Grid>}
-          {searchStudentTerm.style&&<Grid item>
-            <Chip label={searchStudentTerm.style} color="primary" variant='outlined'/>
-          </Grid>}
-          {searchStudentTerm.duration&&<Grid item>
-            <Chip label={searchStudentTerm.duration} color="primary" variant='outlined'/>
-          </Grid>}
-          {searchStudentTerm.frequency&&<Grid item>
-            <Chip label={searchStudentTerm.frequency} color="primary" variant='outlined'/>
-          </Grid>
-          }
-          <Grid item>
+          <Box display="flex" justifyContent="center" alignItems="center" mt={2}>
             <Button
-              variant="contained"
+              variant="outlined"
               color="error"
-              onClick={() => window.location.reload()}
-              sx={{ borderRadius: 50 }}
+              onClick={handleResetSearchTerm}
+              sx={{borderRadius: 50 }}
               startIcon={<Refresh />}
             >
-              検索条件をリセット
-          </Button>
-          </Grid>
-        </Grid>}
+              全ての検索条件をリセット
+            </Button>
+          </Box>
+          </Box>
+          }
       </Box>
-      <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          sx={{mb:3}}
+      {!collapseOpen&&<Box
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        mt={5}
+      >
+      {filteredUsers.length >0 ? 
+        <Button color= "secondary" variant="text" sx={{ borderRadius: 50 }} startIcon ={<Group/>} >
+          {filteredUsers.length}人の生徒が見つかりました！
+        </Button>
+          : 
+        <Button color= "secondary" variant="text" sx={{ borderRadius: 50 }} startIcon ={<PersonOff/>} >
+          0人の検索結果
+        </Button>
+        }
+      </Box>}
+      {filteredUsers.length >0 &&<Box
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+      >
+        {collapseOpen ?
+        <FastSearchButton
+          onClick={handleCollapseToggle}
+          variant="text"
+          endIcon={<ExpandLess color='primary'/>}
           >
-            {collapseOpen? <Button
-            variant= "contained"
-            color ="primary"
-            sx={{mr: 2,borderRadius: 50 }}
-            endIcon={<ExpandLess />}
-            onClick ={handleCollapseToggle}
-            >
-              閉じる
-            </Button>
-            :
-            <Button
-            variant= "outlined"
-            color ="primary"
-            sx={{mr: 2,borderRadius: 50 }}
-            endIcon={<ExpandMore />}
-            onClick ={handleCollapseToggle}
-            >
-              希望教科から絞る
-            </Button>
-            
-            }
-          {selectedSubjects.length >0 && <Button onClick={handleResetSubjext} color ="error" startIcon={<Refresh />} variant ="outlined"  sx={{ borderRadius: 50 }}>リセット</Button>}
-        </Box>
-        <Collapse in={collapseOpen}>
+          <Typography variant="caption">閉じる</Typography>
+        </FastSearchButton> 
+          :
+        <FastSearchButton
+          onClick={handleCollapseToggle}
+          variant="text"
+          endIcon={<ExpandMore color='primary'/>}
+          >
+          <Typography variant="caption">希望科目から絞り込む</Typography>
+        </FastSearchButton>
+        }
+      </Box>}
+      <Collapse in={collapseOpen}>
           <Grid container spacing={{xs:1,sm:5}} justifyContent="center" sx={{ mb: {xs:5,sm:7},mt: {xs:1,sm:2}}}>
           {subjects.map((subject) => {
             return (
@@ -228,23 +309,24 @@ const Home:React.FC = () => {
             );
             })}
         </Grid>
+        {selectedSubjects.length >0 && <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          mt={5}
+        >
+        {filteredUsers.length >0 ? 
+          <Button color= "secondary" variant="text" sx={{ borderRadius: 50 }} startIcon ={<Group/>} >
+            {filteredUsers.length}人の生徒が見つかりました！
+          </Button>
+            : 
+          <Button color= "secondary" variant="text" sx={{ borderRadius: 50 }} startIcon ={<PersonOff/>} >
+            0人の検索結果
+          </Button>
+          }
+        </Box>}
         </Collapse>
-      <Box
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-        mt={5}
-      >
-      {filteredUsers.length >0 ? 
-        <Button color= "secondary" variant="text" sx={{ borderRadius: 50 }} startIcon ={<Group/>} >
-          {filteredUsers.length}人の生徒が見つかりました！
-        </Button>
-          : 
-        <Button color= "secondary" variant="text" sx={{ borderRadius: 50 }} startIcon ={<PersonOff/>} >
-          0人の検索結果
-        </Button>
-        }
-      </Box>
+
       <Grid container sx={{width: "100%"}} justifyContent="center" rowSpacing={6} columnSpacing={{ xs: 1, sm: 2, md: 4 }} mt={5}>
         {filteredUsers.map((user: User)=>{
           return(
