@@ -8,10 +8,11 @@ const useStyles = makeStyles((theme) => ({
   inputContainer: {
     display: "flex",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "center",
     backgroundColor: "#FFFFFF",
   },
   messageInput: {
+    maxWidth: "80%",
     flexGrow: 1,
     marginLeft: theme.spacing(2),
     backgroundColor: "#F0F2F5",
@@ -24,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#1DA1F2",
     color: "#FFFFFF",
     borderRadius: "50%",
-    marginRight: theme.spacing(1),
+    marginLeft: theme.spacing(3),
     height: 40,
     width: 40,
     '&:hover': {

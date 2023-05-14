@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "dev:local-ip": "next dev -H 192.168.10.37",
+    "dev:local-ip": "dotenv -e .env.local -- bash -c 'next dev -H $NEXT_PUBLIC_IP_ADDRESS'",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -39,6 +39,7 @@
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
-    "@types/js-cookie": "^3.0.3"
+    "@types/js-cookie": "^3.0.3",
+    "dotenv-cli": "^7.2.1"
   }
 }
