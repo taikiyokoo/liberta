@@ -232,18 +232,10 @@ const Home:React.FC = () => {
                 <Chip label={searchStudentTerm.frequency} color="primary" variant='outlined'icon={<Clear sx={{fontSize: 'small'}} />} onClick={handleDeleteFrequency} />
               </Grid>
               }
+              <Grid item>
+                <Chip label="検索条件をクリア" color="error" variant='outlined' icon={<Refresh sx={{fontSize: 'small'}} />} onClick={handleResetSearchTerm} />
+              </Grid>
           </Grid>
-          <Box display="flex" justifyContent="center" alignItems="center" mt={2}>
-            <Button
-              variant="outlined"
-              color="error"
-              onClick={handleResetSearchTerm}
-              sx={{borderRadius: 50 }}
-              startIcon={<Refresh />}
-            >
-              全ての検索条件をリセット
-            </Button>
-          </Box>
           </Box>
           }
       </Box>
@@ -254,16 +246,16 @@ const Home:React.FC = () => {
         mt={5}
       >
       {filteredUsers.length >0 ? 
-        <Button color= "secondary" variant="text" sx={{ borderRadius: 50 }} startIcon ={<Group/>} >
+        <Button color= "primary" variant="text" sx={{ borderRadius: 50 }} startIcon ={<Group/>} >
           {filteredUsers.length}人の生徒が見つかりました！
         </Button>
           : 
-        <Button color= "secondary" variant="text" sx={{ borderRadius: 50 }} startIcon ={<PersonOff/>} >
+        <Button color= "primary" variant="text" sx={{ borderRadius: 50 }} startIcon ={<PersonOff/>} >
           0人の検索結果
         </Button>
         }
       </Box>}
-      {filteredUsers.length >0 &&<Box
+      <Box
         display="flex"
         alignItems="center"
         justifyContent="center"
@@ -277,15 +269,17 @@ const Home:React.FC = () => {
           <Typography variant="caption">閉じる</Typography>
         </FastSearchButton> 
           :
-        <FastSearchButton
-          onClick={handleCollapseToggle}
-          variant="text"
-          endIcon={<ExpandMore color='primary'/>}
-          >
-          <Typography variant="caption">希望科目から絞り込む</Typography>
-        </FastSearchButton>
+          <>
+            {filteredUsers.length >0 &&<FastSearchButton
+              onClick={handleCollapseToggle}
+              variant="text"
+              endIcon={<ExpandMore color='primary'/>}
+              >
+              <Typography variant="caption">希望科目から絞り込む</Typography>
+            </FastSearchButton>}
+          </>
         }
-      </Box>}
+      </Box>
       <Collapse in={collapseOpen}>
           <Grid container spacing={{xs:1,sm:5}} justifyContent="center" sx={{ mb: {xs:5,sm:7},mt: {xs:1,sm:2}}}>
           {subjects.map((subject) => {
@@ -316,11 +310,11 @@ const Home:React.FC = () => {
           mt={5}
         >
         {filteredUsers.length >0 ? 
-          <Button color= "secondary" variant="text" sx={{ borderRadius: 50 }} startIcon ={<Group/>} >
+          <Button color= "primary" variant="text" sx={{ borderRadius: 50 }} startIcon ={<Group/>} >
             {filteredUsers.length}人の生徒が見つかりました！
           </Button>
             : 
-          <Button color= "secondary" variant="text" sx={{ borderRadius: 50 }} startIcon ={<PersonOff/>} >
+          <Button color= "primary" variant="text" sx={{ borderRadius: 50 }} startIcon ={<PersonOff/>} >
             0人の検索結果
           </Button>
           }

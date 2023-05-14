@@ -7,7 +7,7 @@ import { SearchStudentsParams, SearchTeachersParams, User } from 'interfaces';
 import { ThemeProvider } from '@emotion/react';
 import theme from 'theme';
 import Head from 'next/head';
-import { GlobalStyles } from '@mui/material';
+import { Box, CircularProgress, GlobalStyles } from '@mui/material';
 import '../styles/globals.css';
 
 //認証用context
@@ -117,7 +117,18 @@ function MyApp({ Component, pageProps }: AppProps) {
 
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <Box
+      sx={{
+        display: 'flex',
+        height: '100vh',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
+      <CircularProgress />
+    </Box>
+    );
   }
 
   return (
