@@ -1,4 +1,4 @@
-# liberta ※開発中
+# liberta ※開発途中
 フリーランスの教師と生徒のマッチングサービス
 
 ## 開発環境
@@ -17,37 +17,22 @@
 
 ・*TypeScript*
  
-## 実装機能と使用技術
-
-・*ユーザ認証機能（devise_auth_token,cookie）*
-
-・*検索機能（フロント&バックエンド）*
- 
-・*リアルタイムチャット機能(redis,Actioncable)*
-
-・*ユーザーいいね機能*
-
-・*画像アップロード(carrierwave)*
-
 ## 概要
-docker上でrails環境を立ち上げapiエンドポイントを作成し、Next.jsでjsonを受け取り表示。
+Dockerを使用してRails, MySQL, およびRedisの環境を構築し、apiエンドポイントをrailsで作成、Next.jsでデータを受け取り表示。
 
-redisはリアルタイムチャット機能を実現するために使用
-
-## 現段階の実際の画面 
+## 現段階の実際の画面と実装機能
 
 ### トップ画面
+
+##### アニメーションを多用してモダンな雰囲気にした
+
+##### 例）タイトルがフェードイン、アイコンが無限回転、タイピングアニメーション、ホバーアクション
 
 #### デスクトップ
 <img width="600" height="auto" alt="スクリーンショット 2023-05-13 18 47 44" src="https://github.com/taikiyokoo/liberta/assets/110810721/f846fcd5-49bf-4f9f-af8c-30dcc34e45f2">
 
 #### モバイル
 <img width="200" height="auto" src="https://github.com/taikiyokoo/liberta/assets/110810721/bcab6915-f4bb-4224-a610-9df2e0523a78">
-
-
-##### アニメーションを多用してモダンな雰囲気にした
-
-##### 例）　タイトルがフェードイン、アイコンが回ってる、タイピングアニメーション、ホバーアクション
 
 ### ログイン画面
 
@@ -59,17 +44,19 @@ redisはリアルタイムチャット機能を実現するために使用
 
 ### ホーム画面
 
+##### カードにしてホバーアクション、中の科目チップを無限にループさせる、ページ遷移を減らす、ローディング中はスケルトンを表示するなどしてモダンな感じに
+
+##### 検索結果はキャッシュに保存し検索条件に応じて再利用,useMemoを使用してフロント検索を最適化。
+
+###### ※テストデータはChatGPTで適当に生成
+
+###### ※写真はうちの犬
+
 #### デスクトップ
 <img width="600" height="auto" alt="スクリーンショット 2023-05-13 18 26 04" src="https://github.com/taikiyokoo/liberta/assets/110810721/be673cb7-f64d-4d23-a3d6-69a45dcfee75">
 
 #### モバイル
 <img width="200" height="auto" src="https://github.com/taikiyokoo/liberta/assets/110810721/61b39988-f968-4732-80ce-9dcee3b77e16">
-
-##### カードにしてホバーアクション、中のチップを無限にループさせる、ページ遷移を減らす（完全なSPAではない）、ローディング中はスケルトンを表示するなどしてモダンな感じに
-
-###### ※テストデータはChatGPTで適当に生成
-
-###### ※写真はうちの犬
 
 ### 検索モーダル
 
@@ -80,7 +67,7 @@ redisはリアルタイムチャット機能を実現するために使用
 #### 　モバイル
 <img width="200" height="auto" src="https://github.com/taikiyokoo/liberta/assets/110810721/c968940d-3f0a-4a68-adf6-fd05c8de8120">
 
-### ユーザ詳細
+### ユーザ詳細ダイアログ
 
 #### デスクトップ
 <img width="600" height="auto" alt="スクリーンショット 2023-05-13 18 39 18" src="https://github.com/taikiyokoo/liberta/assets/110810721/5e1348d0-a0ee-467a-8ee2-d5364361c4b7">
@@ -107,6 +94,8 @@ redisはリアルタイムチャット機能を実現するために使用
 <img width="200" height="auto" src="https://github.com/taikiyokoo/liberta/assets/110810721/3639f9cb-6439-467f-8825-342118414e78">
 
 ### チャット画面
+
+##### ActionCableを利用し、WebSocketプロトコルに基づく通信を実現することで、リアルタイムにメッセージのやり取りが可能なチャット機能を実装
 
 #### デスクトップ
 <img width="600" height="auto" alt="スクリーンショット 2023-05-13 18 37 08" src="https://github.com/taikiyokoo/liberta/assets/110810721/cfe9cda7-df6f-4757-8901-ca3c65d6f8ee">
