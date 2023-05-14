@@ -1,5 +1,5 @@
-import { ExpandLess, ExpandMore, Group, PersonOff, Refresh } from '@mui/icons-material'
-import { Box, Button, Chip, Collapse, Grid, Skeleton, Typography} from '@mui/material'
+import { ExpandLess, ExpandMore, Group, KeyboardArrowUp, PersonOff, Refresh } from '@mui/icons-material'
+import { Box, Button, Chip, Collapse, Fab, Grid, Skeleton, Typography} from '@mui/material'
 import { grey } from '@mui/material/colors'
 import { SearchStudentsParams, User } from 'interfaces'
 import { getStudents, getUsers, SearchStudents } from 'pages/api/user'
@@ -89,6 +89,28 @@ const Home:React.FC = () => {
     }
   }, [])
 
+    //ある程度スクロールしたら上に戻るボタンを表示
+    const [scroll, setScroll] = useState(false);
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      if (currentScrollY > 300) {
+        setScroll(true);
+      } else {
+        setScroll(false);
+      }
+    };
+    useEffect(() => {
+      window.addEventListener("scroll", handleScroll, { passive: true });
+      return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+  
+    //上に戻るボタンを押したら一番上にスクロール
+    const scrollToTop = () => {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    };
 
   if(loading){
     const skeletonCount = 50;
@@ -232,6 +254,13 @@ const Home:React.FC = () => {
           )
         })}
       </Grid>
+      <Box sx={{position: "fixed",bottom: 20,right: 10}}>
+        {scroll && (
+          <Fab color="primary" size="medium" onClick={scrollToTop}>
+            <KeyboardArrowUp />
+          </Fab>
+        )}
+      </Box>
       <SearchItem
       setUsers={setUsers}
       setLoading={setLoading} 
