@@ -295,7 +295,7 @@ useEffect(() => {
         </Button>
         }
       </Box>}
-      <Box
+      {filteredUsers.length >0 &&<Box
         display="flex"
         alignItems="center"
         justifyContent="center"
@@ -309,17 +309,15 @@ useEffect(() => {
           <Typography variant="caption">閉じる</Typography>
         </FastSearchButton> 
           :
-          <>
-          {filteredUsers.length >0 &&<FastSearchButton
-            onClick={handleCollapseToggle}
-            variant="text"
-            endIcon={<ExpandMore color='primary'/>}
-            >
-            <Typography variant="caption">高速絞り込み</Typography>
-          </FastSearchButton>}
-          </>
+        <FastSearchButton
+          onClick={handleCollapseToggle}
+          variant="text"
+          endIcon={<ExpandMore color='primary'/>}
+          >
+          <Typography variant="caption">高速絞り込み</Typography>
+        </FastSearchButton>
         }
-      </Box>
+      </Box>}
       <Collapse in={collapseOpen}>
         <Box sx={{display: "flex",justifyContent: "center",alignItems: "center"}}>
           <Box 
@@ -327,6 +325,7 @@ useEffect(() => {
             p={2}
             borderRadius={4}
             mb={3}
+            mt={5}
             width={{xs: "80vw", sm: "70vw",md: "60vw"}}
           >
             <Box

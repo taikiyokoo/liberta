@@ -255,7 +255,7 @@ const Home:React.FC = () => {
         </Button>
         }
       </Box>}
-      <Box
+      {filteredUsers.length >0 &&<Box
         display="flex"
         alignItems="center"
         justifyContent="center"
@@ -269,17 +269,15 @@ const Home:React.FC = () => {
           <Typography variant="caption">閉じる</Typography>
         </FastSearchButton> 
           :
-          <>
-            {filteredUsers.length >0 &&<FastSearchButton
-              onClick={handleCollapseToggle}
-              variant="text"
-              endIcon={<ExpandMore color='primary'/>}
-              >
-              <Typography variant="caption">希望科目から絞り込む</Typography>
-            </FastSearchButton>}
-          </>
+        <FastSearchButton
+          onClick={handleCollapseToggle}
+          variant="text"
+          endIcon={<ExpandMore color='primary'/>}
+          >
+          <Typography variant="caption">希望科目から絞り込む</Typography>
+        </FastSearchButton>
         }
-      </Box>
+      </Box>}
       <Collapse in={collapseOpen}>
           <Grid container spacing={{xs:1,sm:5}} justifyContent="center" sx={{ mb: {xs:5,sm:7},mt: {xs:1,sm:2}}}>
           {subjects.map((subject) => {
