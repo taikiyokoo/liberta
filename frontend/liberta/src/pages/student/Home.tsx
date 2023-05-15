@@ -272,19 +272,11 @@ useEffect(() => {
               {!(searchTeacherTerm.hourlyPay[0]===1000 && searchTeacherTerm.hourlyPay[1] === 10000) &&<Grid item>
                 <Chip label={searchTeacherTerm.hourlyPay[0] + "円〜" + searchTeacherTerm.hourlyPay[1] + "円"} color="primary" variant='outlined' onClick={handleDeleteHourlyPay}  icon={<Clear sx={{fontSize: 'small'}} />}/>
               </Grid>}
+              <Grid item>
+                <Chip label="検索条件をクリア" color="error" variant='outlined' icon={<Refresh sx={{fontSize: 'small'}} />} onClick={handleResetSearchTerm} />
+              </Grid>
             </Grid>
-            <Box display="flex" justifyContent="center" alignItems="center" mt={2}>
-            <Button
-              variant="outlined"
-              color="error"
-              onClick={handleResetSearchTerm}
-              sx={{borderRadius: 50 }}
-              startIcon={<Refresh />}
-            >
-              全ての検索条件をリセット
-            </Button>
           </Box>
-        </Box>
         </Box>
         }
       {!collapseOpen&&<Box
@@ -333,6 +325,7 @@ useEffect(() => {
             p={2}
             borderRadius={4}
             mb={3}
+            mt={5}
             width={{xs: "80vw", sm: "70vw",md: "60vw"}}
           >
             <Box
@@ -406,7 +399,7 @@ useEffect(() => {
                 })}
               </Grid>
             </Box>
-            <Box
+            {(selectedSubjects.length >0 || !(slideValue[0]===1000 && slideValue[1]===10000) ) &&<Box
               display="flex"
               alignItems="center"
               justifyContent="center"
@@ -421,7 +414,7 @@ useEffect(() => {
                 0人の検索結果
               </Button>
               }
-            </Box>
+            </Box>}
           </Box>
         </Box>
       </Collapse>
