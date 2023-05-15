@@ -22,14 +22,13 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   sendButton: {
-    backgroundColor: "#1DA1F2",
     color: "#FFFFFF",
     borderRadius: "50%",
     marginLeft: theme.spacing(3),
     height: 40,
     width: 40,
     '&:hover': {
-      backgroundColor: "#1A91DA",
+      
     },
   },
 }));
