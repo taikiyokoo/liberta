@@ -45,7 +45,7 @@ Dockerを使用してRails, MySQL, およびRedisの環境を構築し、apiエ�
 
 ##### カードにしてホバーアクション、中の科目チップを無限にループさせる、ページ遷移を減らす、ローディング中はスケルトンを表示するなどしてモダンな感じに
 
-##### 検索結果はキャッシュに保存し検索条件に応じて再利用,useMemoを使用してフロント検索を最適化。
+##### ユーザデータはキャッシュに保存して再利用
 
 ###### ※テストデータはChatGPTで適当に生成
 
@@ -58,6 +58,8 @@ Dockerを使用してRails, MySQL, およびRedisの環境を構築し、apiエ�
 <img width="200" height="auto" src="https://github.com/taikiyokoo/liberta/assets/110810721/61b39988-f968-4732-80ce-9dcee3b77e16">
 
 ### 検索モーダル
+
+##### 検索結果はキャッシュに保存し検索条件に応じて再利用
 
 #### デスクトップ
 <img width="600" height="auto" alt="スクリーンショット 2023-05-13 18 38 25"
@@ -78,6 +80,8 @@ Dockerを使用してRails, MySQL, およびRedisの環境を構築し、apiエ�
 
 ### フロント検索
 
+##### useMemoを使用して効率化
+
 #### デスクトップ
 <img width="600" height="auto" alt="スクリーンショット 2023-05-13 18 38 56" src="https://github.com/taikiyokoo/liberta/assets/110810721/2b00dcf9-77e8-40ce-98c2-3b94e28a2e59">
 
@@ -97,7 +101,7 @@ Dockerを使用してRails, MySQL, およびRedisの環境を構築し、apiエ�
 ##### ActionCableを利用し、WebSocketプロトコルに基づく通信を実現することで、リアルタイムにメッセージのやり取りが可能なチャット機能を実装
 
 #### デスクトップ
-<img width="600" height="auto" alt="スクリーンショット 2023-05-13 18 37 08" src="https://github.com/taikiyokoo/liberta/assets/110810721/cfe9cda7-df6f-4757-8901-ca3c65d6f8ee">
+<img width="600" height="auto" alt="スクリーンショット 2023-05-13 18 37 08" src="https://github.com/taikiyokoo/liberta/assets/110810721/ffccdfb4-ebb2-4e8f-8c35-8d55d0b85d3f">
 
 #### モバイル
 <img width="200" height="auto" src="https://github.com/taikiyokoo/liberta/assets/110810721/0578950b-dd2d-4bd3-b426-167117a5b649">
