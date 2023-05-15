@@ -3,10 +3,9 @@
 
 ## 開発環境
 
-### バックエンド
-・*Docker*
+### バックエンド ※Docker上で構築
 
-・*Rails*
+・*Rails API*
 
 ・*redis*
 
