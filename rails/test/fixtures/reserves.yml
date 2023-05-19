@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  teacher_id: 1
+  student: 1
+  start_time: 
+  end_time: 
+  fee: 1
+  status: 1
+
+two:
+  teacher_id: 1
+  student: 1
+  start_time: 
+  end_time: 
+  fee: 1
+  status: 1

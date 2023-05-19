@@ -1,5 +1,8 @@
 class TeacherProfile < ApplicationRecord
     self.table_name = 'teacher_profile'
+
+    validates :user_id, presence: true
+    
     belongs_to :user
     enum gender:{ "男性": 0, "女性": 1}
     enum major: { "理系": 0, "文系": 1 }

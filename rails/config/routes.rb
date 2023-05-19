@@ -4,6 +4,14 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :teacher_profiles
       resources :student_profiles
+      resources :reserves do
+        member do
+          get :approve
+          get :reject
+          get :cancel
+          get :complete
+        end
+      end
       resources  :chatrooms do 
         resources :messages
       end
@@ -18,6 +26,9 @@ Rails.application.routes.draw do
           get :check_liked
           get :liked_users
           get :liking_users
+          get :has_requests
+          get :has_reserves
+          get :is_request
         end
       end
       resources :likes
