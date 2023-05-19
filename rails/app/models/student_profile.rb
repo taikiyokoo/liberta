@@ -1,6 +1,9 @@
 class StudentProfile < ActiveRecord::Base
     self.table_name = 'student_profile'
     belongs_to :user
+
+    validates :user_id, presence: true
+
     enum gender:{ male: 0, female: 1}
     enum major: { "理系": 0, "文系": 1 }
     enum style: { "オンライン": 0, "対面": 1 }

@@ -51,6 +51,33 @@ class Api::V1::UsersController < ApplicationController
         render json: users.as_json(include: [:teacher_profile, :student_profile])
     end
 
+    def has_requests
+        user = User.find(params[:id])
+        reserves = user.has_reserves_as_teacher
+        reserves = reserves.where(status: 0) #申請中のものだけを取得
+        render json: reserves
+    end
 
+    def has_reserves
+        user = User.find(params[:id])
+        reserves = user.has_reserves_as_student
+        render json: reserves
+    end
+
+    def is_request
+        user  = User.find(params[:id])
+        res = user.requested?(params[:teacher_id])
+        if res
+            reserve = Reserve.where(teacher_id: params[:teacher_id], student_id: params[:id], status: 0).first
+            render json: {
+                is_request: true,
+                show: reserve
+            }
+        else
+            render json:{
+                is_request: false
+            }
+        end
+    end
 
 end

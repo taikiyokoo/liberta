@@ -6,6 +6,11 @@ class Chatroom < ApplicationRecord
     # チャットルームに関連するメッセージを取得する
     has_many :messages, dependent: :destroy
 
+    #validate
+    validates :user1_id, presence: true
+    validates :user2_id, presence: true
+    
+
 
     def self.find_existing_room(user1_id, user2_id)
         where(

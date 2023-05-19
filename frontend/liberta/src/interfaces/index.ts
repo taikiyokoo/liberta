@@ -113,3 +113,18 @@ export interface Message {
   content: string;
   createdAt: string;
 }
+
+export interface CreateReserveParams{
+  student_id: number
+  teacher_id: number
+  start_time: string
+  end_time: string
+  fee: number
+  status: number
+}
+
+export interface RequestConfirm {
+  startTime: string
+  endTime: string
+  fee: number
+}

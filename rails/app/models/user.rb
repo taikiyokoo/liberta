@@ -25,6 +25,17 @@ class User < ActiveRecord::Base
 
   enum user_type: { teacher: 0, student: 1 }
 
+  #予約関連付け
+  has_many :reserves_as_teacher, class_name: 'Reserve', foreign_key: 'teacher_id', dependent: :destroy
+  has_many :reserves_as_student, class_name: 'Reserve', foreign_key: 'student_id', dependent: :destroy
+
+  #validate
+  validates :email, presence: true, uniqueness: true
+  validates :user_type, presence: true
+  validates :password, presence: true, length: { minimum: 6 }, on: :create
+  validates :password_confirmation, presence: true, on: :create
+  validates :name, presence: true, length: { maximum: 20 }
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -95,5 +106,11 @@ class User < ActiveRecord::Base
   def chatrooms
     Chatroom.where('user1_id = ? OR user2_id = ?', self.id, self.id)
   end
+
+  #生徒がその先生に予約を入れているかどうか
+  def requested?(teacher_id)
+    reserves_as_student.where(teacher_id: teacher_id,status: 0).exists?
+  end
+
   
 end
