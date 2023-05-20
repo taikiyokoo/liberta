@@ -79,7 +79,7 @@ const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 const chips = (
   <>
     {user.teacherProfile.subjects.map((subject) => {
-      return <Chip label={subject} color="primary" variant="outlined" sx={{ marginRight: 1 }} />;
+      return <Chip label={subject} color="primary" variant="outlined" sx={{ marginRight: 1 }} key={subject}/>;
     })}
     <Chip color="primary" variant="outlined" sx={{ marginRight: 1 }}  label={user.teacherProfile.gender} />
     <Chip color="primary" variant="outlined" sx={{ marginRight: 1 }}  label={user.teacherProfile.style} />
@@ -115,11 +115,11 @@ const [open,setOpen] = React.useState(false)
       />
           {isMobile?
               <CardContent sx={{height: 250}}>
-                <Typography variant="caption">{user.teacherProfile.introduction}</Typography>
+                <Typography variant="subtitle2" sx={{fontSize: '0.9em'}}>{user.teacherProfile.introduction}</Typography>
               </CardContent>
               : 
               <CardContent sx={{height: 300}}>
-                <Typography variant="caption">{user.teacherProfile.introduction}</Typography>
+                <Typography variant="subtitle2" sx={{fontSize: '0.9em'}}>{user.teacherProfile.introduction}</Typography>
               </CardContent>
             }
           <Box>

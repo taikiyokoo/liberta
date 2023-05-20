@@ -56,7 +56,7 @@ const MessageList: React.FC<MessageListProps> = ({ messages, currentUser }) => {
           {message.userId === currentUser?.id ? (
             <>
             <Box display="flex" justifyContent="center" alignItems="center">
-              <Typography sx ={{mr: 1}} variant='caption'>{formatDate(message.createdAt)}</Typography>
+              <Typography sx ={{mr: 1}} variant='subtitle2'>{formatDate(message.createdAt)}</Typography>
               <Typography
                 sx={{ mb: 2, mr: { xs: 3, md: 10 }, padding: { xs: 1, md: 2 } }}
                 className={`${classes.message} ${classes.sentMessage}`}
@@ -75,7 +75,7 @@ const MessageList: React.FC<MessageListProps> = ({ messages, currentUser }) => {
               >
                 {message.content}
               </Typography>
-              <Typography variant='caption'>{formatDate(message?.createdAt)}</Typography>
+              <Typography variant='subtitle2'>{formatDate(message?.createdAt)}</Typography>
             </Box>
             </>
           )}

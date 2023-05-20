@@ -266,7 +266,7 @@ const Home:React.FC = () => {
           variant="text"
           endIcon={<ExpandLess color='primary'/>}
           >
-          <Typography variant="caption">閉じる</Typography>
+          <Typography variant="subtitle2">閉じる</Typography>
         </FastSearchButton> 
           :
         <FastSearchButton
@@ -274,7 +274,7 @@ const Home:React.FC = () => {
           variant="text"
           endIcon={<ExpandMore color='primary'/>}
           >
-          <Typography variant="caption">希望科目から絞り込む</Typography>
+          <Typography variant="subtitle2">希望科目から絞り込む</Typography>
         </FastSearchButton>
         }
       </Box>}

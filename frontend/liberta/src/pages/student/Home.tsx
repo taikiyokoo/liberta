@@ -306,7 +306,7 @@ useEffect(() => {
           variant="text"
           endIcon={<ExpandLess color='primary'/>}
           >
-          <Typography variant="caption">閉じる</Typography>
+          <Typography variant="subtitle2">閉じる</Typography>
         </FastSearchButton> 
           :
         <FastSearchButton
@@ -314,7 +314,7 @@ useEffect(() => {
           variant="text"
           endIcon={<ExpandMore color='primary'/>}
           >
-          <Typography variant="caption">高速絞り込み</Typography>
+          <Typography variant="subtitle2">高速絞り込み</Typography>
         </FastSearchButton>
         }
       </Box>}
