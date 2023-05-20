@@ -203,11 +203,11 @@ const handleSignOut = async()=>{
         <Toolbar>
             <Box sx={{ flexGrow: 1,}}>
                 <Typography
-                variant="h6"
-                component= "caption"
+                variant="subtitle1"
                 sx={{
                     cursor: 'pointer',
                     transition: 'transform 0.3s',
+                    fontSize: '1.2rem',
                     '&:hover': {
                     transform: 'translateY(-2px)',
                     },

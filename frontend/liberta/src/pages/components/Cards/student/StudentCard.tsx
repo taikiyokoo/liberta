@@ -112,7 +112,7 @@ const [open, setOpen] = React.useState(false);
             subheader={user.studentProfile?.school}
           />
               <CardContent sx={{height: 300}}>
-                <Typography variant="caption">{user.studentProfile.introduction}</Typography>
+                <Typography variant="subtitle2" sx={{fontSize: '0.9em'}}>{user.studentProfile.introduction}</Typography>
               </CardContent>
               <CardActions className={classes.slideChips}>
               <Box className={classes.chipGroup}>{chips}</Box>

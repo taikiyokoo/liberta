@@ -62,7 +62,7 @@ const SearchBar:React.FC = () => {
         >
           {isMobile?
             <>
-            <Typography variant="caption" sx={{ marginRight: 3,fontSize: "0.8rem" }}>
+            <Typography variant="subtitle2" sx={{ marginRight: 3,fontSize: "0.9em" }}>
               条件から検索
             </Typography>
             <SearchIconWrapper>
